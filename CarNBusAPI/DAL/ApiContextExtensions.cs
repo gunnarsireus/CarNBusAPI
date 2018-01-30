@@ -4,7 +4,7 @@ using CarNBusAPI.Models;
 
 namespace CarNBusAPI.DAL
 {
-	public static class CarNBusAPIExtensions
+	public static class ApiContextExtensions
 	{
 		public static void EnsureSeedData(this ApiContext context)
 		{

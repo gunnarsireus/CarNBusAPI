@@ -6,12 +6,12 @@ using CarNBusAPI.Models;
 
 namespace CarNBusAPI.DAL
 {
-    public class CarDataAccess
+    public class DataAccess
     {
         private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder =
             new DbContextOptionsBuilder<ApiContext>();
 
-        public CarDataAccess()
+        public DataAccess()
         {
             _optionsBuilder.UseSqlite("DataSource=App_Data/Car.db");
         }
