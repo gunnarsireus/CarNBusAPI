@@ -1,20 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using CarNBusAPI.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPI.DAL
 {
     public class DataAccess
     {
-        private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder =
+	    public DataAccess(IConfigurationRoot configuration)
+	    {
+		    Configuration = configuration;
+	    }
+	    IConfigurationRoot Configuration { get; set; }
+
+		private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder =
             new DbContextOptionsBuilder<ApiContext>();
 
         public DataAccess()
         {
-            _optionsBuilder.UseSqlite("DataSource=App_Data/Car.db");
-        }
+            _optionsBuilder.UseSqlite("DataSource="+ Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+
+		}
 
 	    public ICollection<Car> GetCars()
 	    {
