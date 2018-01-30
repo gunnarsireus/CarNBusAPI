@@ -8,8 +8,8 @@ namespace CarNBusAPI.DAL
 {
     public class CarDataAccess
     {
-        private readonly DbContextOptionsBuilder<CarNBusAPIContext> _optionsBuilder =
-            new DbContextOptionsBuilder<CarNBusAPIContext>();
+        private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder =
+            new DbContextOptionsBuilder<ApiContext>();
 
         public CarDataAccess()
         {
@@ -18,7 +18,7 @@ namespace CarNBusAPI.DAL
 
 	    public ICollection<Car> GetCars()
 	    {
-		    using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
 			    return context.Cars.ToList();
 		    }
@@ -26,7 +26,7 @@ namespace CarNBusAPI.DAL
 
 	    public Car GetCar(Guid id)
 	    {
-		    using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
 			    return context.Cars.SingleOrDefault(o => o.Id == id);
 		    }
@@ -34,7 +34,7 @@ namespace CarNBusAPI.DAL
 
 	    public void AddCar(Car car)
 	    {
-		    using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
 			    context.Cars.Add(car);
 			    context.SaveChanges();
@@ -43,7 +43,7 @@ namespace CarNBusAPI.DAL
 
 	    public void DeleteCar(Guid id)
 	    {
-		    using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
 			    var Car = GetCar(id);
 			    context.Cars.Remove(Car);
@@ -53,7 +53,7 @@ namespace CarNBusAPI.DAL
 
 	    public void UpdateCar(Car car)
 	    {
-		    using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
 			    context.Cars.Update(car);
 			    context.SaveChanges();
@@ -62,7 +62,7 @@ namespace CarNBusAPI.DAL
 
 		public ICollection<Company> GetCompanies()
         {
-            using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+            using (var context = new ApiContext(_optionsBuilder.Options))
             {
                 return context.Companies.ToList();
             }
@@ -70,7 +70,7 @@ namespace CarNBusAPI.DAL
 
         public Company GetCompany(Guid id)
         {
-            using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+            using (var context = new ApiContext(_optionsBuilder.Options))
             {
                 return context.Companies.SingleOrDefault(o => o.Id == id);
             }
@@ -78,7 +78,7 @@ namespace CarNBusAPI.DAL
 
         public void AddCompany(Company company)
         {
-            using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+            using (var context = new ApiContext(_optionsBuilder.Options))
             {
                 context.Companies.Add(company);
                 context.SaveChanges();
@@ -87,7 +87,7 @@ namespace CarNBusAPI.DAL
 
         public void DeleteCompany(Guid id)
         {
-            using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+            using (var context = new ApiContext(_optionsBuilder.Options))
             {
                 var cars = GetCars().Where(c => c.CompanyId == id);
                 foreach (var car in cars)
@@ -103,7 +103,7 @@ namespace CarNBusAPI.DAL
 
         public void UpdateCompany(Company company)
         {
-            using (var context = new CarNBusAPIContext(_optionsBuilder.Options))
+            using (var context = new ApiContext(_optionsBuilder.Options))
             {
                 context.Companies.Update(company);
                 context.SaveChanges();

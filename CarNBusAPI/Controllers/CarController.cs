@@ -12,7 +12,7 @@ namespace CarNBusAPI.Controllers
     public class CarController : Controller
     {
 	    private readonly CarUnitOfWork _unitOfWork;
-		public CarController(CarNBusAPIContext context)
+		public CarController(ApiContext context)
 	    {
 			_unitOfWork = new CarUnitOfWork(context);
 		}

@@ -6,7 +6,7 @@ namespace CarNBusAPI.DAL
 {
 	public static class CarNBusAPIExtensions
 	{
-		public static void EnsureSeedData(this CarNBusAPIContext context)
+		public static void EnsureSeedData(this ApiContext context)
 		{
 			if (!context.Cars.Any() || !context.Companies.Any())
 			{

@@ -19,16 +19,16 @@ namespace CarNBusAPITest
 			connection.Open();
 			try
 			{
-				var options = new DbContextOptionsBuilder<CarNBusAPIContext>()
+				var options = new DbContextOptionsBuilder<ApiContext>()
 					.UseSqlite(connection)
 					.Options;
 
 				// Create the schema in the database
-				using (var context = new CarNBusAPIContext(options))
+				using (var context = new ApiContext(options))
 				{
 					context.Database.EnsureCreated();
 				}
-				using (var context = new CarNBusAPIContext(options))
+				using (var context = new ApiContext(options))
 				{
 					var companyId = Guid.NewGuid();
 					var company = new Company { Id = companyId };
@@ -40,7 +40,7 @@ namespace CarNBusAPITest
 					context.SaveChanges();
 				}
 
-				using (var context = new CarNBusAPIContext(options))
+				using (var context = new ApiContext(options))
 				{
 					var bc = new CarController(context);
 					var result = bc.GetCars();

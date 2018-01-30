@@ -5,11 +5,11 @@ namespace CarNBusAPI.Data
 {
 	public class CarRepository : Repository<Car>, ICarRepository
 	{
-		public CarRepository(CarNBusAPIContext context) : base(context)
+		public CarRepository(ApiContext context) : base(context)
 		{
 		}
 
-		public CarNBusAPIContext CarNBusAPIContext => Context as CarNBusAPIContext;
+		public ApiContext ApiContext => Context as ApiContext;
 
 	}
 }

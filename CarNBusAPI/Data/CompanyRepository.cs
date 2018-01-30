@@ -6,11 +6,11 @@ namespace CarNBusAPI.Data
 {
 	public class CompanyRepository : Repository<Company>, ICompanyRepository
 	{
-		public CompanyRepository(CarNBusAPIContext context) : base(context)
+		public CompanyRepository(ApiContext context) : base(context)
 		{
 		}
 
-		public CarNBusAPIContext CarNBusAPIContext => Context as CarNBusAPIContext;
+		public ApiContext ApiContext => Context as ApiContext;
 
 	}
 }

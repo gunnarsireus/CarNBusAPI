@@ -3,9 +3,9 @@ using CarNBusAPI.Models;
 
 namespace CarNBusAPI.DAL
 {
-    public class CarNBusAPIContext : DbContext
+    public class ApiContext : DbContext
     {
-        public CarNBusAPIContext(DbContextOptions options)
+        public ApiContext(DbContextOptions options)
             : base(options)
         {
         }

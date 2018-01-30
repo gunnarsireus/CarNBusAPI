@@ -4,9 +4,9 @@ namespace CarNBusAPI.Data
 {
     public class CarUnitOfWork:ICarUnitOfWork
     {
-	    private readonly CarNBusAPIContext _context;
+	    private readonly ApiContext _context;
 
-	    public CarUnitOfWork(CarNBusAPIContext context)
+	    public CarUnitOfWork(ApiContext context)
 	    {
 		    _context = context;
 		    Cars = new CarRepository(_context);

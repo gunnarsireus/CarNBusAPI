@@ -29,7 +29,7 @@ namespace CarNBusAPI
 			services.AddSingleton(Configuration);
 			services.AddSingleton<IConfiguration>(Configuration);
 
-			services.AddDbContext<CarNBusAPIContext>(options =>
+			services.AddDbContext<ApiContext>(options =>
 				options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
 
 			services.AddMvc();
@@ -72,7 +72,7 @@ namespace CarNBusAPI
 
 			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 			{
-				var context = serviceScope.ServiceProvider.GetService<CarNBusAPIContext>();
+				var context = serviceScope.ServiceProvider.GetService<ApiContext>();
 				context.Database.EnsureCreated();
 				context.EnsureSeedData();
 			}
