@@ -19,7 +19,7 @@ namespace CarNBusAPI.Controllers
 		[EnableCors("AllowAllOrigins")]
 		public string GetAspNetDb()
 		{
-			return Directory.GetCurrentDirectory() + Configuration["AppSettings:DbLocation"] + @"\AspNet.db";
+			return Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "AspNet.db";
 		}
 	}
 }
