@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarNBusAPI", "CarNBusAPI\Ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarNBusAPITest", "CarNBusAPITest\CarNBusAPITest.csproj", "{00A57667-EADF-46EF-B179-4FAB0FF23958}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{B0D40173-D44F-483A-8DC5-AD74856549AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{00A57667-EADF-46EF-B179-4FAB0FF23958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00A57667-EADF-46EF-B179-4FAB0FF23958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00A57667-EADF-46EF-B179-4FAB0FF23958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0D40173-D44F-483A-8DC5-AD74856549AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0D40173-D44F-483A-8DC5-AD74856549AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0D40173-D44F-483A-8DC5-AD74856549AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0D40173-D44F-483A-8DC5-AD74856549AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

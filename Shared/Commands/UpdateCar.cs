@@ -1,15 +1,11 @@
-﻿using System;
-using System.Globalization;
-
-namespace CarNBusAPI.Models
+namespace Shared.Commands
 {
-	public class Car
+	using System;
+
+// What does update mean anyway?
+	public class UpdateCar
 	{
-		public Car()
-		{
-			CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
-			Online = true;
-		}
+		public Guid DataId { get; set; }
 		public Guid Id { get; set; }
 		public Guid CompanyId { get; set; }
 		public string CreationTime { get; set; }
