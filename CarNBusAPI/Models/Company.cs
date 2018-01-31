@@ -9,6 +9,7 @@ namespace CarNBusAPI.Models
 		public Company()
 		{
 			CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
+			Pending = "";
 		}
 		public Guid Id { get; set; }
 
@@ -18,5 +19,6 @@ namespace CarNBusAPI.Models
 		public string Address { get; set; }
 
 		public ICollection<Car> Cars { get; set; }
+		public string Pending { get; set; }  //Pending change sin database
 	}
 }

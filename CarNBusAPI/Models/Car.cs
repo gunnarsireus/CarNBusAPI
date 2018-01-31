@@ -9,6 +9,7 @@ namespace CarNBusAPI.Models
 		{
 			CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
 			Online = true;
+			Pending = "";
 		}
 		public Guid Id { get; set; }
 		public Guid CompanyId { get; set; }
@@ -17,5 +18,6 @@ namespace CarNBusAPI.Models
 		public string RegNr { get; set; }
 		public bool Online { get; set; }
 		public bool Disabled { get; set; } //Used to block changes of Online/Offline status
+		public string Pending { get; set; }  //Pending change sin database
 	}
 }
