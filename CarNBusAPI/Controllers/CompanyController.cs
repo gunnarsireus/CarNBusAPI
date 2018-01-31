@@ -4,6 +4,7 @@ using CarNBusAPI.Data;
 using CarNBusAPI.DAL;
 using CarNBusAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using NServiceBus;
 
 namespace CarNBusAPI.Controllers
 {
@@ -11,10 +12,13 @@ namespace CarNBusAPI.Controllers
     public class CompanyController : Controller
     {
 	    private readonly CarUnitOfWork _unitOfWork;
+		readonly IEndpointInstance _endpointInstance;
+
 		public CompanyController(ApiContext context)
 	    {
 			_unitOfWork = new CarUnitOfWork(context);
 		}
+
         // GET api/Company
         [HttpGet]
         public IEnumerable<Company> GetCompanies()

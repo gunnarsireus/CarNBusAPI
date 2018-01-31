@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using CarNBusAPI.Data;
 using CarNBusAPI.DAL;
 using CarNBusAPI.Models;
+using NServiceBus;
 using Microsoft.AspNetCore.Cors;
 
 namespace CarNBusAPI.Controllers
@@ -12,6 +13,7 @@ namespace CarNBusAPI.Controllers
     public class CarController : Controller
     {
 	    private readonly CarUnitOfWork _unitOfWork;
+        readonly IEndpointInstance _endpointInstance;
 		public CarController(ApiContext context)
 	    {
 			_unitOfWork = new CarUnitOfWork(context);

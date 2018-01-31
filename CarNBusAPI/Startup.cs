@@ -9,6 +9,9 @@ using CarNBusAPI.DAL;
 
 namespace CarNBusAPI
 {
+	using Microsoft.AspNetCore.Identity;
+	using NServiceBus;
+
 	public class Startup
 	{
 
@@ -20,17 +23,28 @@ namespace CarNBusAPI
 				.AddEnvironmentVariables();
 			Configuration = builder.Build();
 		}
-
+        IEndpointInstance EndpointInstance { get; set; }
 		IContainer ApplicationContainer { get; set; }
 		IConfigurationRoot Configuration { get; set; }
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+            var endpointConfiguration = new EndpointConfiguration("NServiceBusCore.Client");
 			services.AddSingleton(Configuration);
 			services.AddSingleton<IConfiguration>(Configuration);
+			endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
 
-			services.AddDbContext<ApiContext>(options =>
-				options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
+            EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+            services.AddSingleton(EndpointInstance);
+
+            //// Add application services.
+            // services.AddTransient<IEmailSender, EmailSender>();
+			services.AddDbContext<ApiContext>(options => options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
 
 			services.AddMvc();
 
