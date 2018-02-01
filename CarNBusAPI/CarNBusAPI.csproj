@@ -19,4 +19,8 @@
     <Folder Include="CommandHandlers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+  </ItemGroup>
+
 </Project>

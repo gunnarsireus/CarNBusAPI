@@ -6,10 +6,11 @@ namespace Server.Requesthandler
 	using NServiceBus;
 	using NServiceBus.Logging;
 	using Server.Data;
-	using Shared.DAL;
+	using Server.DAL;
 	using Shared.Models;
+    using Server.DAL;
 
-	public class UpdateCarOnlineStatusHandler : IHandleMessages<UpdateCarOnlineStatus>
+    public class UpdateCarOnlineStatusHandler : IHandleMessages<UpdateCarOnlineStatus>
 	{
 		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
 		// What does update mean?

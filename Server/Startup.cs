@@ -4,7 +4,7 @@ using NServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Shared.DAL;
+using Server.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -52,7 +52,7 @@ namespace Server
 
 			Container = builder.Build();
 
-			var endpointConfiguration = new EndpointConfiguration("NServiceBusCore.Server");
+			var endpointConfiguration = new EndpointConfiguration("CarNBusAPIServer");
 
 			endpointConfiguration.UsePersistence<LearningPersistence>();
 

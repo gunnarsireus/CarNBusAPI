@@ -4,7 +4,7 @@ using Shared.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Shared.DAL
+namespace Server.DAL
 {
 	public class CarDataAccess
 	{

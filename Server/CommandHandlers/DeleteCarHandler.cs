@@ -6,9 +6,10 @@ namespace Server.Requesthandler
 	using NServiceBus;
 	using NServiceBus.Logging;
 	using Server.Data;
-	using Shared.DAL;
+	using Server.DAL;
+    using Server.DAL;
 
-	public class DeleteCarHandler : IHandleMessages<DeleteCar>
+    public class DeleteCarHandler : IHandleMessages<DeleteCar>
 	{
 		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
 		public DeleteCarHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)

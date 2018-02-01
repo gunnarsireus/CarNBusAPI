@@ -6,10 +6,11 @@ namespace Server.CommandHandlers
 	using NServiceBus;
 	using NServiceBus.Logging;
 	using Server.Data;
-	using Shared.DAL;
+	using Server.DAL;
 	using Shared.Models;
+    using Server.DAL;
 
-	public class CreateCompanyHandler : IHandleMessages<CreateCompany>
+    public class CreateCompanyHandler : IHandleMessages<CreateCompany>
 	{
 		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
 		public CreateCompanyHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)

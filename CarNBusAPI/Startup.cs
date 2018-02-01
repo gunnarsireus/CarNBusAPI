@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using CarNBusAPI.DAL;
+using Messages.Commands;
 
 namespace CarNBusAPI
 {
@@ -32,11 +33,14 @@ namespace CarNBusAPI
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
-            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
+            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
 
             endpointConfiguration.UsePersistence<LearningPersistence>();
 
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            endpointConfiguration.UseTransport<LearningTransport>()
+            .Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
+
 
             endpointConfiguration.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&

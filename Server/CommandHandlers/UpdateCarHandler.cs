@@ -6,7 +6,7 @@ namespace Server.Requesthandler
 	using NServiceBus;
 	using NServiceBus.Logging;
 	using Server.Data;
-	using Shared.DAL;
+	using Server.DAL;
 	using Shared.Models;
 
 	public class UpdateCarHandler : IHandleMessages<UpdateCar>
