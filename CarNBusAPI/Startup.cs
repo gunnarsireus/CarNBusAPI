@@ -29,10 +29,16 @@ namespace CarNBusAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-            var endpointConfiguration = new EndpointConfiguration("NServiceBusCore.Client");
-			services.AddSingleton(Configuration);
-			services.AddSingleton<IConfiguration>(Configuration);
-			endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
+
+            endpointConfiguration.UsePersistence<LearningPersistence>();
+
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+
+            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
                 .DefiningEventsAs(t =>

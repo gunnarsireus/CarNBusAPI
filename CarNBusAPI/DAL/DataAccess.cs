@@ -33,11 +33,11 @@ namespace CarNBusAPI.DAL
 		    }
 	    }
 
-	    public Car GetCar(Guid id)
+	    public Car GetCar(Guid carId)
 	    {
 		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
-			    return context.Cars.SingleOrDefault(o => o.Id == id);
+			    return context.Cars.SingleOrDefault(o => o.Id == carId);
 		    }
 	    }
 
@@ -50,11 +50,11 @@ namespace CarNBusAPI.DAL
 		    }
 	    }
 
-	    public void DeleteCar(Guid id)
+	    public void DeleteCar(Guid carId)
 	    {
 		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
-			    var Car = GetCar(id);
+			    var Car = GetCar(carId);
 			    context.Cars.Remove(Car);
 			    context.SaveChanges();
 		    }
@@ -77,11 +77,11 @@ namespace CarNBusAPI.DAL
             }
         }
 
-        public Company GetCompany(Guid id)
+        public Company GetCompany(Guid companyId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.Companies.SingleOrDefault(o => o.Id == id);
+                return context.Companies.SingleOrDefault(o => o.Id == companyId);
             }
         }
 
@@ -94,17 +94,17 @@ namespace CarNBusAPI.DAL
             }
         }
 
-        public void DeleteCompany(Guid id)
+        public void DeleteCompany(Guid companyId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var cars = GetCars().Where(c => c.CompanyId == id);
+                var cars = GetCars().Where(c => c.CompanyId == companyId);
                 foreach (var car in cars)
                 {
                     context.Cars.Remove(car);
                 }
 
-                var company = GetCompany(id);
+                var company = GetCompany(companyId);
                 context.Companies.Remove(company);
                 context.SaveChanges();
             }
