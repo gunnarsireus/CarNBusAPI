@@ -10,7 +10,7 @@ namespace Server.Data
 		{
 		}
 
-		public CarApiContext CarApiContext => Context as CarApiContext;
+		public ApiContext CarApiContext => Context as ApiContext;
 
 	}
 }

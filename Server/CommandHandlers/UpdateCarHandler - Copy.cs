@@ -8,13 +8,12 @@ namespace Server.Requesthandler
 	using Server.Data;
 	using Server.DAL;
 	using Shared.Models;
-    using Server.DAL;
 
     public class UpdateCarOnlineStatusHandler : IHandleMessages<UpdateCarOnlineStatus>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
 		// What does update mean?
-		public UpdateCarOnlineStatusHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		public UpdateCarOnlineStatusHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -29,7 +28,7 @@ namespace Server.Requesthandler
 			car.Online = message.Online;
 			// TODO: map object and massege
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				// TODO: fix the unit of work
 				// unitOfWork.Cars.Update(car);

@@ -9,78 +9,86 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Server
 {
-	public class Startup
-	{
-		public Startup(IHostingEnvironment env)
-		{
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(env.ContentRootPath)
-				.AddJsonFile("appsettings.json")
-				.AddEnvironmentVariables();
-			Configuration = builder.Build();
-		}
+    public class Startup
+    {
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
 
-		IContainer Container { get; set; }
-		IConfigurationRoot Configuration { get; set; }
+        IContainer Container { get; set; }
+        IConfigurationRoot Configuration { get; set; }
 
-		//private readonly IOptions<AppSettings> _appSettings;
+        //private readonly IOptions<AppSettings> _appSettings;
 
-		// This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container.
 
-		public IServiceProvider ConfigureServices(IServiceCollection services)
-		{
-			var dbContextOptionsBuilder = new DbContextOptionsBuilder<CarApiContext>();
-			dbContextOptionsBuilder.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db");
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
 
-			using (var context = new CarApiContext(dbContextOptionsBuilder.Options))
-			{
-				context.Database.EnsureCreated();
-				context.EnsureSeedData();
-			}
+            services.AddDbContext<ApiContext>(options =>
+                    options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
 
-			var builder = new ContainerBuilder();
-			builder.Populate(services);
-			builder.RegisterType<DbContextOptionsBuilder<CarApiContext>>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
+            var tmp = "DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db";
+            dbContextOptionsBuilder.UseSqlite(tmp);
 
-			IEndpointInstance endpoint = null;
-			builder.Register(c => endpoint)
-				.As<IEndpointInstance>()
-				.SingleInstance();
+            using (var context = new ApiContext(dbContextOptionsBuilder.Options))
+            {
+                context.Database.EnsureCreated();
+                context.EnsureSeedData();
+            }
 
-			Container = builder.Build();
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterType<DbContextOptionsBuilder<ApiContext>>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
 
-			var endpointConfiguration = new EndpointConfiguration("CarNBusAPIServer");
+            IEndpointInstance endpoint = null;
+            builder.Register(c => endpoint)
+                .As<IEndpointInstance>()
+                .SingleInstance();
 
-			endpointConfiguration.UsePersistence<LearningPersistence>();
+            Container = builder.Build();
 
-			var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            var endpointConfiguration = new EndpointConfiguration("CarNBusAPIServer");
 
-			endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-					t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-					(t.Namespace.EndsWith("Commands")))
-				.DefiningEventsAs(t =>
-					t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-					t.Namespace.EndsWith("Events"));
+            endpointConfiguration.UsePersistence<LearningPersistence>();
 
-			endpointConfiguration.UseContainer<AutofacBuilder>(
-				customizations: customizations =>
-				{
-					customizations.ExistingLifetimeScope(Container);
-				});
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
 
-			Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
 
-			return new AutofacServiceProvider(Container);
-		}
+            endpointConfiguration.UseContainer<AutofacBuilder>(
+                customizations: customizations =>
+                {
+                    customizations.ExistingLifetimeScope(Container);
+                });
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
-		{
-			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-			loggerFactory.AddDebug();
-			appLifetime.ApplicationStopped.Register(() => Container.Dispose());
-		}
-	}
+            Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+            return new AutofacServiceProvider(Container);
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+            appLifetime.ApplicationStopped.Register(() => Container.Dispose());
+        }
+    }
 }

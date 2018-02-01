@@ -11,9 +11,9 @@ namespace Server.Requesthandler
 
 	public class UpdateCarHandler : IHandleMessages<UpdateCar>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
 		// What does update mean?
-		public UpdateCarHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		public UpdateCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -29,7 +29,7 @@ namespace Server.Requesthandler
 
 			car.Id = message.Id;
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Cars.Update(car);
 				unitOfWork.Complete();

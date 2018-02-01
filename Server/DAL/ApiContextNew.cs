@@ -3,9 +3,9 @@ using Shared.Models;
 
 namespace Server.DAL
 {
-	public class CarApiContext : DbContext
+	public class ApiContextNew : DbContext
 	{
-		public CarApiContext(DbContextOptions<CarApiContext> options)
+		public ApiContextNew(DbContextOptions<ApiContextNew> options)
 			: base(options)
 		{
 		}

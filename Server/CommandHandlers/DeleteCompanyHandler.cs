@@ -7,12 +7,11 @@ namespace Server.Requesthandler
 	using NServiceBus.Logging;
 	using Server.Data;
 	using Server.DAL;
-    using Server.DAL;
 
     public class DeleteCompanyHandler : IHandleMessages<DeleteCompany>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
-		public DeleteCompanyHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+		public DeleteCompanyHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -22,7 +21,7 @@ namespace Server.Requesthandler
 		public Task Handle(DeleteCompany message, IMessageHandlerContext context)
 		{
 			log.Info("Received DeleteCompanyRequest");
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Companies.Remove(unitOfWork.Companies.Get(message.CompanyId));
 				unitOfWork.Complete();

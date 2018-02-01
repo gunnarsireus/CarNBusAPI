@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPI.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	public class AspNetDbController : Controller
 	{
 		public AspNetDbController(IConfigurationRoot configuration)
@@ -19,7 +18,8 @@ namespace CarNBusAPI.Controllers
 		[EnableCors("AllowAllOrigins")]
 		public string GetAspNetDb()
 		{
-			return Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "AspNet.db";
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            return serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "AspNet.db";
 		}
 	}
 }

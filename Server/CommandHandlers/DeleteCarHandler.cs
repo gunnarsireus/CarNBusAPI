@@ -7,12 +7,11 @@ namespace Server.Requesthandler
 	using NServiceBus.Logging;
 	using Server.Data;
 	using Server.DAL;
-    using Server.DAL;
 
     public class DeleteCarHandler : IHandleMessages<DeleteCar>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
-		public DeleteCarHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+		public DeleteCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -23,7 +22,7 @@ namespace Server.Requesthandler
 		{
 			log.Info("Received DeleteCarRequest.");
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Cars.Remove(unitOfWork.Cars.Get(message.CarId));
 				unitOfWork.Complete();

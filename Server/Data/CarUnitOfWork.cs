@@ -4,9 +4,9 @@ namespace Server.Data
 {
 	public class CarUnitOfWork:ICarUnitOfWork
     {
-	    readonly CarApiContext _context;
+	    readonly ApiContext _context;
 
-	    public CarUnitOfWork(CarApiContext context)
+	    public CarUnitOfWork(ApiContext context)
 	    {
 		    _context = context;
 		    Cars = new CarRepository(_context);

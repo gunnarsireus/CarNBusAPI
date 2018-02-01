@@ -11,8 +11,8 @@ namespace Server.Requesthandler
 
 	public class UpdateCompanyHandler : IHandleMessages<UpdateCompany>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
-		public UpdateCompanyHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+		public UpdateCompanyHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -25,7 +25,7 @@ namespace Server.Requesthandler
 			var company = new Company(message.Id);
 			// TODO: map object and massege
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Companies.Update(company);
 				unitOfWork.Complete();

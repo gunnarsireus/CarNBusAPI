@@ -11,6 +11,6 @@ namespace Messages.Commands
 		public string VIN { get; set; }
 		public string RegNr { get; set; }
 		public bool Online { get; set; }
-		public bool Disabled { get; set; } //Used to block changes of Online/Offline status
+		public bool Locked { get; set; } //Used to block changes of Online/Offline status
 	}
 }

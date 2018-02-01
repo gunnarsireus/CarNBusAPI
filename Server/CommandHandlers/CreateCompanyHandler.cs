@@ -1,19 +1,18 @@
+using System.Threading.Tasks;
+using Shared.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+using Shared.Models;
+
 namespace Server.CommandHandlers
 {
-	using System.Threading.Tasks;
-	using Shared.Commands;
-	using Microsoft.EntityFrameworkCore;
-	using NServiceBus;
-	using NServiceBus.Logging;
-	using Server.Data;
-	using Server.DAL;
-	using Shared.Models;
-    using Server.DAL;
-
     public class CreateCompanyHandler : IHandleMessages<CreateCompany>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
-		public CreateCompanyHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+		public CreateCompanyHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -27,7 +26,7 @@ namespace Server.CommandHandlers
 			var company = new Company(message.Id);
 			// TODO: map object and massege
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Companies.Add(company);
 				unitOfWork.Complete();

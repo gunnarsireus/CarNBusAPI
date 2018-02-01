@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using CarNBusAPI.Models;
+using Shared.Models;
 
-namespace CarNBusAPI.DAL
+namespace Server.DAL
 {
     public class ApiContext : DbContext
     {

@@ -6,7 +6,7 @@ namespace Server.DAL
 {
 	public static class ServerExtensions
 	{
-		public static void EnsureSeedData(this CarApiContext context)
+		public static void EnsureSeedData(this ApiContextNew context)
 		{
 			if (!context.Cars.Any() || !context.Companies.Any())
 			{

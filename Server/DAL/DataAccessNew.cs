@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Server.DAL
 {
-	public class CarDataAccess
+	public class DataAccessNew
 	{
-		readonly CarApiContext _carApiContext;
+		readonly ApiContextNew _carApiContext;
 
-		public CarDataAccess(CarApiContext carApiContext)
+		public DataAccessNew(ApiContextNew carApiContext)
 		{
 			_carApiContext = carApiContext;
 		}

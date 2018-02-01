@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using CarNBusAPI.Models;
+using Shared.Models;
 using Microsoft.Extensions.Configuration;
+using Autofac;
+using System.IO;
 
-namespace CarNBusAPI.DAL
+namespace Server.DAL
 {
     public class DataAccess
     {
 	    public DataAccess(IConfigurationRoot configuration)
 	    {
 		    Configuration = configuration;
-	    }
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            _optionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+        }
 	    IConfigurationRoot Configuration { get; set; }
 
-		private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder =
-            new DbContextOptionsBuilder<ApiContext>();
+		private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder = new DbContextOptionsBuilder<ApiContext>();
 
-        public DataAccess()
-        {
-            _optionsBuilder.UseSqlite("DataSource="+ Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
-
-		}
 
 	    public ICollection<Car> GetCars()
 	    {

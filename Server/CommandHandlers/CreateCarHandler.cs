@@ -11,8 +11,8 @@ namespace Server.CommandHandlers
 
 	public class CreateCarHandler : IHandleMessages<CreateCar>
 	{
-		readonly DbContextOptionsBuilder<CarApiContext> _dbContextOptionsBuilder;
-		public CreateCarHandler(DbContextOptionsBuilder<CarApiContext> dbContextOptionsBuilder)
+		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+		public CreateCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
@@ -27,7 +27,7 @@ namespace Server.CommandHandlers
 			car.Id = message.Id;
 			// TODO: map object and massege
 
-			using (var unitOfWork = new CarUnitOfWork(new CarApiContext(_dbContextOptionsBuilder.Options)))
+			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Cars.Add(car);
 				unitOfWork.Complete();

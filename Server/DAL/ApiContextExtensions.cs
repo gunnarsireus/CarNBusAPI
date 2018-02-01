@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using CarNBusAPI.Models;
+using Shared.Models;
 
-namespace CarNBusAPI.DAL
+namespace Server.DAL
 {
 	public static class ApiContextExtensions
 	{
@@ -72,7 +72,7 @@ namespace CarNBusAPI.DAL
             {
                 foreach (var car in context.Cars)
                 {
-                    car.Disabled = false;
+                    car.Locked = false;
                 }
             }
             context.SaveChanges();
