@@ -1,14 +1,13 @@
-namespace Server.Requesthandler
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+using Shared.Models;
+namespace Server.CommandHandlers
 {
-	using System.Threading.Tasks;
-	using Shared.Commands;
-	using Microsoft.EntityFrameworkCore;
-	using NServiceBus;
-	using NServiceBus.Logging;
-	using Server.Data;
-	using Server.DAL;
-	using Shared.Models;
-
 	public class UpdateCompanyHandler : IHandleMessages<UpdateCompany>
 	{
 		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;

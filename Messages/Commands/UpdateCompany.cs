@@ -1,11 +1,17 @@
+using NServiceBus;
+using System;
+using System.Collections.Generic;
+
 namespace Messages.Commands
 {
-	using System;
-	using System.Collections.Generic;
-
-	// What does update mean anyway?
-	public class UpdateCompany
-	{
+    // What does update mean anyway?
+    [Serializable]
+    public class UpdateCompany : IMessage
+    {
+        public UpdateCompany()
+        {
+            DataId = Guid.NewGuid();
+        }
 		public Guid DataId { get; set; }
 		public Guid Id { get; set; }
 		public string CreationTime { get; set; }

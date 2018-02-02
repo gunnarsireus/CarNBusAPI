@@ -64,7 +64,12 @@ namespace CarNBusAPI.Controllers
             var message = new UpdateCar
             {
                 Online = car.Online,
-                Locked = false //?? Enable updates of Online/Offline when editing done
+                Locked = car.Locked, //?? Enable updates of Online/Offline when editing done
+                CompanyId = car.CompanyId,
+                CreationTime = car.CreationTime,
+                Id = car.Id,
+                RegNr = car.RegNr,
+                VIN = car.VIN
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

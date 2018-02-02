@@ -1,10 +1,15 @@
+using NServiceBus;
+using System;
+using System.Collections.Generic;
 namespace Messages.Commands
 {
-	using System;
-	using System.Collections.Generic;
-
-	public class CreateCompany
+    [Serializable]
+    public class CreateCompany: IMessage
 	{
+        public CreateCompany()
+        {
+            DataId = Guid.NewGuid();
+        }
 		public Guid DataId { get; set; }
 		public Guid Id { get; set; }
 		public string CreationTime { get; set; }

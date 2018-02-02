@@ -11,6 +11,9 @@ using NServiceBus;
 using System.Threading.Tasks;
 using System;
 using System.IO;
+using Autofac;
+using Server.CommandHandlers;
+using Autofac.Extensions.DependencyInjection;
 
 namespace CarNBusAPI
 {
@@ -27,7 +30,7 @@ namespace CarNBusAPI
             Configuration = builder.Build();
         }
         IEndpointInstance EndpointInstance { get; set; }
-        IContainer ApplicationContainer { get; set; }
+        Autofac.IContainer Container { get; set; }
         IConfigurationRoot Configuration { get; set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,6 +38,19 @@ namespace CarNBusAPI
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(services);
+
+            IEndpointInstance endpoint = null;
+            containerBuilder.Register(c => endpoint)
+                .As<IEndpointInstance>()
+                .SingleInstance();
+
+            Container = containerBuilder.Build();
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
 
             endpointConfiguration.UsePersistence<LearningPersistence>();
@@ -50,7 +66,8 @@ namespace CarNBusAPI
                 .DefiningEventsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     t.Namespace.EndsWith("Events"));
-
+            endpointConfiguration.UsePersistence<LearningPersistence>();
+            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
             services.AddSingleton(EndpointInstance);
 

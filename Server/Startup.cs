@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Server.CommandHandlers;
 
 namespace Server
 {
@@ -50,8 +51,8 @@ namespace Server
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            builder.RegisterType<DbContextOptionsBuilder<ApiContext>>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
-
+            builder.RegisterType<UpdateCarHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<DeleteCarHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             IEndpointInstance endpoint = null;
             builder.Register(c => endpoint)
                 .As<IEndpointInstance>()
@@ -59,7 +60,7 @@ namespace Server
 
             Container = builder.Build();
 
-            var endpointConfiguration = new EndpointConfiguration("CarNBusAPIServer");
+            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
 
             endpointConfiguration.UsePersistence<LearningPersistence>();
 

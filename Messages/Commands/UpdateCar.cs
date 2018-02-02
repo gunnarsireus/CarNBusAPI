@@ -1,10 +1,15 @@
+using NServiceBus;
+using System;
 namespace Messages.Commands
 {
-	using System;
-
-// What does update mean anyway?
-	public class UpdateCar
+    // What does update mean anyway?
+    [Serializable]
+    public class UpdateCar : IMessage
 	{
+        public UpdateCar()
+        {
+            DataId = Guid.NewGuid();
+        }
 		public Guid DataId { get; set; }
 		public Guid Id { get; set; }
 		public Guid CompanyId { get; set; }

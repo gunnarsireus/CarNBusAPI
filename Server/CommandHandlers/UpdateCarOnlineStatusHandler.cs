@@ -1,7 +1,7 @@
-namespace Server.Requesthandler
+namespace Server.CommandHandlers
 {
 	using System.Threading.Tasks;
-	using Shared.Commands;
+	using Messages.Commands;
 	using Microsoft.EntityFrameworkCore;
 	using NServiceBus;
 	using NServiceBus.Logging;
@@ -18,7 +18,7 @@ namespace Server.Requesthandler
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 		}
 
-		static ILog log = LogManager.GetLogger<UpdateCarHandler>();
+		static ILog log = LogManager.GetLogger<UpdateCarOnlineStatusHandler>();
 
 		public Task Handle(UpdateCarOnlineStatus message, IMessageHandlerContext context)
 		{

@@ -1,9 +1,15 @@
+using NServiceBus;
+using System;
 namespace Messages.Commands
 {
-	using System;
 
-	public class DeleteCompany
-	{
+    [Serializable]
+    public class DeleteCompany : IMessage
+    {
+        public DeleteCompany()
+        {
+            DataId = Guid.NewGuid();
+        }
 		public Guid DataId { get; set; }
 		public Guid CompanyId { get; set; }
 	}

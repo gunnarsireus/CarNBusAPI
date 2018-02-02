@@ -2,10 +2,11 @@ using NServiceBus;
 using System;
 namespace Messages.Commands
 {
+    // What does update mean anyway?
     [Serializable]
-    public class CreateCar : IMessage
-    {
-        public CreateCar()
+    public class UpdateCarOnlineStatus : IMessage
+	{
+        public UpdateCarOnlineStatus()
         {
             DataId = Guid.NewGuid();
         }
