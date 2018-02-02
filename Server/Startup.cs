@@ -28,8 +28,6 @@ namespace Server
         IContainer Container { get; set; }
         IConfigurationRoot Configuration { get; set; }
 
-        //private readonly IOptions<AppSettings> _appSettings;
-
         // This method gets called by the runtime. Use this method to add services to the container.
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -87,22 +85,7 @@ namespace Server
             appLifetime.ApplicationStopped.Register(() => Container.Dispose());
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                //var connection = new SqliteConnection("DataSource =:memory:");
-                //connection.Open();
-
-                //var options = new DbContextOptionsBuilder<AspNetContext>()
-                //	.UseSqlite(connection)
-                //    .Options;
-
-                //// Create the schema in the database
-                //using (var context = new AspNetContext(options))
-                //{
-                //	context.Database.EnsureCreated();
-                //	context.EnsureSeedData();
-                //}
-
                 var context = serviceScope.ServiceProvider.GetService<ApiContext>();
-                //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 context.EnsureSeedData();
             }

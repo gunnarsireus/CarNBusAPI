@@ -2,11 +2,10 @@
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPI
 {
-	using Microsoft.Extensions.Configuration;
-
 	public class Program
     {
 	    public static void Main(string[] args)

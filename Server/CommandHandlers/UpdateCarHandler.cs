@@ -1,14 +1,14 @@
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+using Shared.Models;
+
 namespace Server.CommandHandlers
 {
-    using System.Threading.Tasks;
-    using Messages.Commands;
-    using Microsoft.EntityFrameworkCore;
-    using NServiceBus;
-    using NServiceBus.Logging;
-    using Server.Data;
-    using Server.DAL;
-    using Shared.Models;
-
     public class UpdateCarHandler : IHandleMessages<UpdateCar>
     {
         readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;

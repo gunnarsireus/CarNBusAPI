@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,13 +7,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using Server.DAL;
 using Messages.Commands;
 using NServiceBus;
-using System.Threading.Tasks;
-using System;
 using System.IO;
 using Autofac;
-using Server.CommandHandlers;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace CarNBusAPI
 {

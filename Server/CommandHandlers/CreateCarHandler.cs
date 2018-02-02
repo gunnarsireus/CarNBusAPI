@@ -1,15 +1,14 @@
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.DAL;
+using Shared.Models;
+
 namespace Server.CommandHandlers
 {
-	using System.Threading.Tasks;
-	using Messages.Commands;
-	using Microsoft.EntityFrameworkCore;
-	using NServiceBus;
-	using NServiceBus.Logging;
-	using Server.Data;
-	using Server.DAL;
-	using Shared.Models;
-
-	public class CreateCarHandler : IHandleMessages<CreateCar>
+    public class CreateCarHandler : IHandleMessages<CreateCar>
 	{
 		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
 		public CreateCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
@@ -21,7 +20,7 @@ namespace Server.CommandHandlers
 
 		public Task Handle(CreateCar message, IMessageHandlerContext context)
 		{
-			log.Info("Received CreateCar.");
+			log.Info("Received CreateCar");
 
             var car = new Car
             {

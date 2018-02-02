@@ -19,7 +19,7 @@ namespace Server.CommandHandlers
 
 		public Task Handle(UpdateCompany message, IMessageHandlerContext context)
 		{
-			log.Info("Received UpdateCompanyRequest");
+			log.Info("Received UpdateCompany");
 
             var company = new Company
             {

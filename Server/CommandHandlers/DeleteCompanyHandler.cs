@@ -1,13 +1,13 @@
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+
 namespace Server.CommandHandlers
 {
-	using System.Threading.Tasks;
-	using Messages.Commands;
-	using Microsoft.EntityFrameworkCore;
-	using NServiceBus;
-	using NServiceBus.Logging;
-	using Server.Data;
-	using Server.DAL;
-
     public class DeleteCompanyHandler : IHandleMessages<DeleteCompany>
 	{
 		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
@@ -20,7 +20,7 @@ namespace Server.CommandHandlers
 
 		public Task Handle(DeleteCompany message, IMessageHandlerContext context)
 		{
-			log.Info("Received DeleteCompanyRequest");
+			log.Info("Received DeleteCompany");
 			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Companies.Remove(unitOfWork.Companies.Get(message.CompanyId));

@@ -1,13 +1,13 @@
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+
 namespace Server.CommandHandlers
 {
-	using System.Threading.Tasks;
-	using Messages.Commands;
-	using Microsoft.EntityFrameworkCore;
-	using NServiceBus;
-	using NServiceBus.Logging;
-	using Server.Data;
-	using Server.DAL;
-
     public class DeleteCarHandler : IHandleMessages<DeleteCar>
 	{
 		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
@@ -20,7 +20,7 @@ namespace Server.CommandHandlers
 
 		public Task Handle(DeleteCar message, IMessageHandlerContext context)
 		{
-			log.Info("Received DeleteCarRequest.");
+			log.Info("Received DeleteCar.");
 
 			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
