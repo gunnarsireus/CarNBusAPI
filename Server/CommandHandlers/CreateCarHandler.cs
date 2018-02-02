@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NServiceBus;
 using NServiceBus.Logging;
 using Server.DAL;
+using Server.Data;
 using Shared.Models;
 
 namespace Server.CommandHandlers
@@ -32,7 +33,11 @@ namespace Server.CommandHandlers
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };
-
+            using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
+            {
+                unitOfWork.Cars.Add(car);
+                unitOfWork.Complete();
+            }
             // Publish an event that a car was created?
             return Task.CompletedTask;
 		}
