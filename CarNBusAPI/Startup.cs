@@ -14,6 +14,7 @@ using System.IO;
 using Autofac;
 using Server.CommandHandlers;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CarNBusAPI
 {
@@ -35,12 +36,20 @@ namespace CarNBusAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
+            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            endpointConfiguration.UsePersistence<LearningPersistence>();
+            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
 
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
+
+            EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
@@ -51,26 +60,15 @@ namespace CarNBusAPI
                 .SingleInstance();
 
             Container = containerBuilder.Build();
-            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
-
-            endpointConfiguration.UsePersistence<LearningPersistence>();
-
-            var transport = endpointConfiguration.UseTransport<LearningTransport>();
-            endpointConfiguration.UseTransport<LearningTransport>()
-            .Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
-
-
-            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
-            endpointConfiguration.UsePersistence<LearningPersistence>();
-            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
-            EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
             services.AddSingleton(EndpointInstance);
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
 
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+
+            services.AddSingleton(EndpointInstance);
             services.AddMvc();
 
             // Register the Swagger generator, defining one or more Swagger documents
@@ -102,19 +100,34 @@ namespace CarNBusAPI
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarNBusAPI V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarNBusApi V1");
             });
 
             app.UseMvc();
 
             app.UseCors("AllowAllOrigins");
 
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    var context = serviceScope.ServiceProvider.GetService<ApiContext>();
-            //    context.Database.EnsureCreated();
-            //    context.EnsureSeedData();
-            //}
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                //var connection = new SqliteConnection("DataSource =:memory:");
+                //connection.Open();
+
+                //var options = new DbContextOptionsBuilder<AspNetContext>()
+                //	.UseSqlite(connection)
+                //    .Options;
+
+                //// Create the schema in the database
+                //using (var context = new AspNetContext(options))
+                //{
+                //	context.Database.EnsureCreated();
+                //	context.EnsureSeedData();
+                //}
+
+                //var context = serviceScope.ServiceProvider.GetService<ApiContext>();
+                ////context.Database.EnsureDeleted();
+                //context.Database.EnsureCreated();
+                //context.EnsureSeedData();
+            }
         }
     }
 }

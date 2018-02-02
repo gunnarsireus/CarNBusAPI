@@ -34,38 +34,29 @@ namespace Server
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddDbContext<ApiContext>(options =>
-                    options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
-
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             dbContextOptionsBuilder.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db");
-
-            using (var context = new ApiContext(dbContextOptionsBuilder.Options))
-            {
-                context.Database.EnsureCreated();
-                context.EnsureSeedData();
-            }
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterType<UpdateCarHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             builder.RegisterType<DeleteCarHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<CreateCarHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<UpdateCompanyHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<DeleteCompanyHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<CreateCompanyHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+
+            Container = builder.Build();
+
             IEndpointInstance endpoint = null;
             builder.Register(c => endpoint)
                 .As<IEndpointInstance>()
                 .SingleInstance();
 
-            Container = builder.Build();
-
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
-
             endpointConfiguration.UsePersistence<LearningPersistence>();
-
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
-
+            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             endpointConfiguration.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
@@ -80,6 +71,19 @@ namespace Server
                 });
 
             Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddDbContext<ApiContext>(options =>
+                    options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
+
+
+            using (var context = new ApiContext(dbContextOptionsBuilder.Options))
+            {
+                context.Database.EnsureCreated();
+                context.EnsureSeedData();
+            }
 
             return new AutofacServiceProvider(Container);
         }
