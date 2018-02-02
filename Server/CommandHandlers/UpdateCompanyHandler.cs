@@ -21,10 +21,15 @@ namespace Server.CommandHandlers
 		{
 			log.Info("Received UpdateCompanyRequest");
 
-			var company = new Company(message.Id);
-			// TODO: map object and massege
+            var company = new Company
+            {
+                Address = message.Address,
+                CreationTime = message.CreationTime,
+                Id = message.Id,
+                Name = message.Name
+            };
 
-			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
+            using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Companies.Update(company);
 				unitOfWork.Complete();

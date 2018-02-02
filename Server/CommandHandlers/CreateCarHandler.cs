@@ -23,18 +23,19 @@ namespace Server.CommandHandlers
 		{
 			log.Info("Received CreateCar.");
 
-			var car = new Car();
-			car.Id = message.Id;
-			// TODO: map object and massege
+            var car = new Car
+            {
+                CompanyId = message.CompanyId,
+                CreationTime = message.CreationTime,
+                Id = message.Id,
+                Locked = message.Locked,
+                Online = message.Online,
+                RegNr = message.RegNr,
+                VIN = message.VIN
+            };
 
-			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
-			{
-				unitOfWork.Cars.Add(car);
-				unitOfWork.Complete();
-			}
-
-			// Publish an event that a car was created?
-			return Task.CompletedTask;
+            // Publish an event that a car was created?
+            return Task.CompletedTask;
 		}
 	}
 }
