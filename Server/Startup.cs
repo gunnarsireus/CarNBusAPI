@@ -40,8 +40,7 @@ namespace Server
                     options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
 
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            var tmp = "DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db";
-            dbContextOptionsBuilder.UseSqlite(tmp);
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db");
 
             using (var context = new ApiContext(dbContextOptionsBuilder.Options))
             {

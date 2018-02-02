@@ -6,12 +6,16 @@ using CarNBusAPI.Controllers;
 using Server.DAL;
 using Shared.Models;
 using Xunit;
+using NServiceBus;
+using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPITest
 {
 	public class UnitTest1
 	{
-		[Fact(DisplayName = "Create a company and a vehicle")]
+        readonly IEndpointInstance _endpointInstance;
+        IConfigurationRoot Configuration { get; set; }
+        [Fact(DisplayName = "Create a company and a vehicle")]
 		public void Test1()
 		{
 			// In-memory database only exists while the connection is open
@@ -40,15 +44,15 @@ namespace CarNBusAPITest
 					context.SaveChanges();
 				}
 
-				//using (var context = new ApiContext(options))
-				//{
-				//	var bc = new CarController(context);
-				//	var result = bc.GetCars();
-				//	Assert.NotNull(result);
-				//	Assert.Equal(result.Count(), 1);
-				//}
+                using (var context = new ApiContext(options))
+                {
+                    var bc = new CarController(_endpointInstance, Configuration);
+                    var result = bc.GetCars();
+                    Assert.NotNull(result);
+                    Assert.Equal(result.Count(), 1);
+                }
 
-			}
+            }
 			finally
 			{
 				connection.Close();
