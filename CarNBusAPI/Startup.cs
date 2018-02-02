@@ -42,12 +42,12 @@ namespace CarNBusAPI
             endpointConfiguration.MakeInstanceUniquelyAddressable("1");
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
 
-            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
+            //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        (t.Namespace.EndsWith("Commands")))
+            //    .DefiningEventsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        t.Namespace.EndsWith("Events"));
 
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
@@ -106,28 +106,6 @@ namespace CarNBusAPI
             app.UseMvc();
 
             app.UseCors("AllowAllOrigins");
-
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                //var connection = new SqliteConnection("DataSource =:memory:");
-                //connection.Open();
-
-                //var options = new DbContextOptionsBuilder<AspNetContext>()
-                //	.UseSqlite(connection)
-                //    .Options;
-
-                //// Create the schema in the database
-                //using (var context = new AspNetContext(options))
-                //{
-                //	context.Database.EnsureCreated();
-                //	context.EnsureSeedData();
-                //}
-
-                //var context = serviceScope.ServiceProvider.GetService<ApiContext>();
-                ////context.Database.EnsureDeleted();
-                //context.Database.EnsureCreated();
-                //context.EnsureSeedData();
-            }
         }
     }
 }

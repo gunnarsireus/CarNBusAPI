@@ -35,7 +35,13 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db");
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddDbContext<ApiContext>(options =>
+                    options.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db"));
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -57,12 +63,12 @@ namespace Server
             endpointConfiguration.UsePersistence<LearningPersistence>();
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             endpointConfiguration.MakeInstanceUniquelyAddressable("1");
-            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
+            //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        (t.Namespace.EndsWith("Commands")))
+            //    .DefiningEventsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
@@ -71,20 +77,6 @@ namespace Server
                 });
 
             Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddDbContext<ApiContext>(options =>
-                    options.UseSqlite("DataSource=" + Configuration["AppSettings:DbLocation"] + "/Car.db"));
-
-
-            using (var context = new ApiContext(dbContextOptionsBuilder.Options))
-            {
-                context.Database.EnsureCreated();
-                context.EnsureSeedData();
-            }
-
             return new AutofacServiceProvider(Container);
         }
 
@@ -93,6 +85,27 @@ namespace Server
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             appLifetime.ApplicationStopped.Register(() => Container.Dispose());
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                //var connection = new SqliteConnection("DataSource =:memory:");
+                //connection.Open();
+
+                //var options = new DbContextOptionsBuilder<AspNetContext>()
+                //	.UseSqlite(connection)
+                //    .Options;
+
+                //// Create the schema in the database
+                //using (var context = new AspNetContext(options))
+                //{
+                //	context.Database.EnsureCreated();
+                //	context.EnsureSeedData();
+                //}
+
+                var context = serviceScope.ServiceProvider.GetService<ApiContext>();
+                //context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                context.EnsureSeedData();
+            }
         }
     }
 }
