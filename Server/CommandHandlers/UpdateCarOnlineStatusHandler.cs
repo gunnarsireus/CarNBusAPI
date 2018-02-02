@@ -22,7 +22,7 @@ namespace Server.CommandHandlers
 
 		public Task Handle(UpdateCarOnlineStatus message, IMessageHandlerContext context)
 		{
-			log.Info("Received UpdateCar.");
+			log.Info("Received UpdateCarOnlineStatus");
 
 			var car = new CarOnlineStatus();
 			car.Online = message.Online;

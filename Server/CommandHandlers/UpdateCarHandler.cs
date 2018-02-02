@@ -22,7 +22,7 @@ namespace Server.CommandHandlers
 
         public Task Handle(UpdateCar message, IMessageHandlerContext context)
         {
-            log.Info("Received UpdateCar.");
+            log.Info("Received UpdateCar");
 
             var car = new Car
             {
