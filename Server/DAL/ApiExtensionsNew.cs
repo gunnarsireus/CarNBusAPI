@@ -32,7 +32,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -55,7 +55,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -78,7 +78,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -105,7 +105,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -128,7 +128,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -154,7 +154,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -177,7 +177,7 @@ namespace Server.DAL
 				context.CarDisabledStatus.Add(new CarDisabledStatus
 				{
 					Id = carID,
-					Disabled = false
+					Locked = false
 				});
 				context.CarOnlineStatus.Add(new CarOnlineStatus
 				{
@@ -189,7 +189,7 @@ namespace Server.DAL
 			{
 				foreach (var car in context.CarDisabledStatus)
 				{
-					car.Disabled = false;
+					car.Locked = false;
 				}
 			}
 			context.SaveChanges();
