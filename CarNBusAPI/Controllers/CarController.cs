@@ -61,6 +61,7 @@ namespace CarNBusAPI.Controllers
         [EnableCors("AllowAllOrigins")]
         public void UpdateCar([FromBody] Car car)
         {
+            if (GetCar(car.Id.ToString()) == null) return;
             var message = new UpdateCar
             {
                 Online = car.Online,
@@ -80,6 +81,7 @@ namespace CarNBusAPI.Controllers
         [EnableCors("AllowAllOrigins")]
         public void DeleteCar(string id)
         {
+            if (GetCar(id) == null) return;
             var message = new DeleteCar() { CarId = new Guid(id) };
             _endpointInstance.Send(message).ConfigureAwait(false);
         }

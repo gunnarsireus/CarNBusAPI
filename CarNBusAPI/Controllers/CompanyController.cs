@@ -55,6 +55,7 @@ namespace CarNBusAPI.Controllers
         [HttpPut("{id}")]
         public void UpdateCompany([FromBody] Company company)
         {
+            if (GetCompany(company.Id.ToString()) == null) return;
             var message = new UpdateCompany
             {
                 DataId = new Guid(),
@@ -71,6 +72,7 @@ namespace CarNBusAPI.Controllers
         [HttpDelete("{id}")]
         public void DeleteCompany(string id)
         {
+            if (GetCompany(id) == null) return;
             var message = new DeleteCompany
             {
                 DataId = new Guid(),

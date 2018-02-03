@@ -34,7 +34,7 @@ namespace CarNBusAPI
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             endpointConfiguration.UsePersistence<LearningPersistence>();
-            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
 
             //endpointConfiguration.Conventions().DefiningCommandsAs(t =>

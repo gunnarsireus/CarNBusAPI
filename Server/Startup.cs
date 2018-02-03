@@ -60,7 +60,7 @@ namespace Server
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
             endpointConfiguration.UsePersistence<LearningPersistence>();
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
-            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+
             //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
             //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
             //        (t.Namespace.EndsWith("Commands")))
