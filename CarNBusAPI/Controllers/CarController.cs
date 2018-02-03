@@ -43,15 +43,23 @@ namespace CarNBusAPI.Controllers
         {
             var message = new CreateCar
             {
-                CompanyId = car.CompanyId,
+                _CarCompany = new CarCompany
+                {
+                    CompanyId = car._CarCompany.CompanyId,
+                },
+                _CarLockedStatus = new CarLockedStatus
+                {
+                    Locked = car._CarLockedStatus.Locked
+                },
+                _CarOnlineStatus = new CarOnlineStatus
+                {
+                    Online = car._CarOnlineStatus.Online
+                },
                 CreationTime = car.CreationTime,
-                DataId = Guid.NewGuid(),
-                Locked = car.Locked,
-                Id = car.Id,  //To do new Guid?
-                Online = car.Online,
+                CarId = car.CarId,
                 RegNr = car.RegNr,
                 VIN = car.VIN
-            };
+              };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
@@ -61,16 +69,11 @@ namespace CarNBusAPI.Controllers
         [EnableCors("AllowAllOrigins")]
         public void UpdateCar([FromBody] Car car)
         {
-            if (GetCar(car.Id.ToString()) == null) return;
-            var message = new UpdateCar
+            if (GetCar(car.CarId.ToString()) == null) return;
+            var message = new UpdateCarOnlineStatus
             {
-                Online = car.Online,
-                Locked = car.Locked, //?? Enable updates of Online/Offline when editing done
-                CompanyId = car.CompanyId,
-                CreationTime = car.CreationTime,
-                Id = car.Id,
-                RegNr = car.RegNr,
-                VIN = car.VIN
+                 OnlineStatus = car._CarOnlineStatus.Online,
+                CarId = car.CarId
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

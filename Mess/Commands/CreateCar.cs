@@ -3,11 +3,10 @@ using System;
 using Shared.Models;
 namespace Messages.Commands
 {
-    // What does update mean anyway?
     [Serializable]
-    public class UpdateCar : IMessage
-	{
-        public UpdateCar()
+    public class CreateCar : IMessage
+    {
+        public CreateCar()
         {
             DataId = Guid.NewGuid();
         }

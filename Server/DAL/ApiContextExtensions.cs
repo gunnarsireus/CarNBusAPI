@@ -14,23 +14,29 @@ namespace Server.DAL
 				context.Companies.Add(new Company() { Id = companyId, Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "YS2R4X20005399401",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "YS2R4X20005399401",
 					RegNr = "ABC123"
 				});
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "VLUR4X20009093588",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "VLUR4X20009093588",
 					RegNr = "DEF456"
 				});
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "VLUR4X20009048066",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "VLUR4X20009048066",
 					RegNr = "GHI789"
 				});
 
@@ -38,16 +44,20 @@ namespace Server.DAL
 				context.Companies.Add(new Company() { Id = companyId, Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "YS2R4X20005388011",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "YS2R4X20005388011",
 					RegNr = "JKL012"
 				});
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "YS2R4X20005387949",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "YS2R4X20005387949",
 					RegNr = "MNO345"
 				});
 
@@ -55,16 +65,20 @@ namespace Server.DAL
 				context.Companies.Add(new Company() { Id = companyId, Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "YS2R4X20005387765",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "YS2R4X20005387765",
 					RegNr = "PQR678"
 				});
 				context.Cars.Add(new Car
 				{
-					Id = Guid.NewGuid(),
-					CompanyId = companyId,
-					VIN = "YS2R4X20005387055",
+                    _CarCompany = new CarCompany
+                    {
+                        CompanyId = companyId,
+                    },
+                    VIN = "YS2R4X20005387055",
 					RegNr = "STU901"
 				});
 			}
@@ -72,7 +86,7 @@ namespace Server.DAL
             {
                 foreach (var car in context.Cars)
                 {
-                    car.Locked = false;
+                    car._CarLockedStatus.Locked = false;
                 }
             }
             context.SaveChanges();

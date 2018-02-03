@@ -19,7 +19,8 @@ namespace Server.Data
 	    }
 
 	    public ICarRepository Cars { get; private set; }
-	    public ICompanyRepository Companies { get; private set; }
+        public ICarOnlineStatusRepository CarOnlineStatus { get; private set; }
+        public ICompanyRepository Companies { get; private set; }
 
 		public ApiContext Context => Context1;
 

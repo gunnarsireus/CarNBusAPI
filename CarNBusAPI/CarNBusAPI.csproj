@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
     <PackageReference Include="NServiceBus" Version="7.0.0-beta0012" />
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\Mess\Messages.csproj" />
     <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

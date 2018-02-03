@@ -4,12 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.Models
 {
-    public class CarOnlineStatus
+    public class CarLockedStatus
 	{
-        [Key, ForeignKey("OnlineStatusOf")]
+        [Key, ForeignKey("LockedStatusOf")]
         public Guid CarId { get; set; }
-        public bool Online { get; set; }
-        public Car OnlineStatusOf { get; set; }
-
-	}
+        public bool Locked { get; set; }
+        public Car LockedStatusOf { get; set; }
+    }
 }

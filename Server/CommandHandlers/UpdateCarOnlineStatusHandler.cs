@@ -24,14 +24,15 @@ namespace Server.CommandHandlers
 		{
 			log.Info("Received UpdateCarOnlineStatus");
 
-			var car = new CarOnlineStatus();
-			car.Online = message.Online;
-			// TODO: map object and massege
+			var carOnlineStatus = new CarOnlineStatus();
+			carOnlineStatus.Online = message.OnlineStatus;
+            carOnlineStatus.CarId = message.CarId;
 
-			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
+
+            using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				// TODO: fix the unit of work
-				// unitOfWork.Cars.Update(car);
+			    unitOfWork.CarOnlineStatus.Update(carOnlineStatus);
 				unitOfWork.Complete();
 			}
 

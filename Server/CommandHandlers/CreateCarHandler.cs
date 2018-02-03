@@ -10,26 +10,35 @@ using Shared.Models;
 namespace Server.CommandHandlers
 {
     public class CreateCarHandler : IHandleMessages<CreateCar>
-	{
-		readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
-		public CreateCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
-		{
-			_dbContextOptionsBuilder = dbContextOptionsBuilder;
-		}
+    {
+        readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
+        public CreateCarHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
+        {
+            _dbContextOptionsBuilder = dbContextOptionsBuilder;
+        }
 
-		static ILog log = LogManager.GetLogger<CreateCarHandler>();
+        static ILog log = LogManager.GetLogger<CreateCarHandler>();
 
-		public Task Handle(CreateCar message, IMessageHandlerContext context)
-		{
-			log.Info("Received CreateCar");
+        public Task Handle(CreateCar message, IMessageHandlerContext context)
+        {
+            log.Info("Received CreateCar");
 
             var car = new Car
             {
-                CompanyId = message.CompanyId,
+                _CarCompany = new CarCompany
+                {
+                    CompanyId = message._CarCompany.CompanyId,
+                },
+                _CarLockedStatus = new CarLockedStatus
+                {
+                    Locked = message._CarLockedStatus.Locked
+                },
+                _CarOnlineStatus = new CarOnlineStatus
+                {
+                    Online = message._CarOnlineStatus.Online
+                },
                 CreationTime = message.CreationTime,
-                Id = message.Id,
-                Locked = message.Locked,
-                Online = message.Online,
+                CarId = message.CarId,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };
@@ -40,6 +49,6 @@ namespace Server.CommandHandlers
             }
             // Publish an event that a car was created?
             return Task.CompletedTask;
-		}
-	}
+        }
+    }
 }
