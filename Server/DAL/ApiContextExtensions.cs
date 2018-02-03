@@ -4,84 +4,84 @@ using Shared.Models;
 
 namespace Server.DAL
 {
-	public static class ApiContextExtensions
-	{
-		public static void EnsureSeedData(this ApiContext context)
-		{
-			if (!context.Cars.Any() || !context.Companies.Any())
-			{
-				var companyId = Guid.NewGuid();
-				context.Companies.Add(new Company() { Id = companyId, Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
-				context.Cars.Add(new Car
-				{
+    public static class ApiContextExtensions
+    {
+        public static void EnsureSeedData(this ApiContext context)
+        {
+            if (!context.Cars.Any() || !context.Companies.Any())
+            {
+                var companyId = Guid.NewGuid();
+                context.Companies.Add(new Company() { Id = companyId, Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "YS2R4X20005399401",
-					RegNr = "ABC123"
-				});
-				context.Cars.Add(new Car
-				{
+                    RegNr = "ABC123"
+                });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "VLUR4X20009093588",
-					RegNr = "DEF456"
-				});
-				context.Cars.Add(new Car
-				{
+                    RegNr = "DEF456"
+                });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "VLUR4X20009048066",
-					RegNr = "GHI789"
-				});
+                    RegNr = "GHI789"
+                });
 
-				companyId = Guid.NewGuid();
-				context.Companies.Add(new Company() { Id = companyId, Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
-				context.Cars.Add(new Car
-				{
+                companyId = Guid.NewGuid();
+                context.Companies.Add(new Company() { Id = companyId, Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "YS2R4X20005388011",
-					RegNr = "JKL012"
-				});
-				context.Cars.Add(new Car
-				{
+                    RegNr = "JKL012"
+                });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "YS2R4X20005387949",
-					RegNr = "MNO345"
-				});
+                    RegNr = "MNO345"
+                });
 
-				companyId = Guid.NewGuid();
-				context.Companies.Add(new Company() { Id = companyId, Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
-				context.Cars.Add(new Car
-				{
+                companyId = Guid.NewGuid();
+                context.Companies.Add(new Company() { Id = companyId, Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "YS2R4X20005387765",
-					RegNr = "PQR678"
-				});
-				context.Cars.Add(new Car
-				{
+                    RegNr = "PQR678"
+                });
+                context.Cars.Add(new Car
+                {
                     _CarCompany = new CarCompany
                     {
-                        CompanyId = companyId,
+                        CompanyId = companyId
                     },
                     VIN = "YS2R4X20005387055",
-					RegNr = "STU901"
-				});
-			}
+                    RegNr = "STU901"
+                });
+            }
             else
             {
                 foreach (var car in context.Cars)
@@ -91,5 +91,5 @@ namespace Server.DAL
             }
             context.SaveChanges();
         }
-	}
+    }
 }

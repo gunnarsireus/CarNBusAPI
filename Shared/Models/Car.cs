@@ -13,13 +13,21 @@ namespace Shared.Models
             CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
             _CarOnlineStatus = new CarOnlineStatus
             {
-                Online = true
+                Online = true,
+                CarId = CarId
             };
             _CarLockedStatus = new CarLockedStatus
             {
-                Locked = false
+                Locked = false,
+                CarId = CarId
             };
+            _CarCompany = new CarCompany
+            {
+                CarId = CarId
+            };
+
         }
+
         public Guid CarId { get; set; }
 
         [Display(Name = "Created date")]
