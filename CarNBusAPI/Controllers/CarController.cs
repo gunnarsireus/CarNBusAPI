@@ -23,77 +23,112 @@ namespace CarNBusAPI.Controllers
         // GET api/Car
         [HttpGet]
         [EnableCors("AllowAllOrigins")]
-        public IEnumerable<Car> GetCars()
+        public IEnumerable<ClientCar> GetCars()
         {
             var cars = _dataAccess.GetCars();
+            var list = new List<ClientCar>();
             foreach (var car in cars)
             {
                 car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
                 car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
+                list.Add(new ClientCar
+                {
+                    CarId = car.CarId,
+                    CompanyId = car.CompanyId,
+                    CreationTime = car.CreationTime,
+                    Locked = car._CarLockedStatus.Locked,
+                    Online = car._CarOnlineStatus.Online,
+                    RegNr = car.RegNr,
+                    VIN = car.VIN
+                });
             }
-            return cars;
+            return list;
         }
 
         // GET api/Car/5
         [HttpGet("{id}")]
         [EnableCors("AllowAllOrigins")]
-        public Car GetCar(string id)
+        public ClientCar GetCar(string id)
         {
             var car = _dataAccess.GetCar(new Guid(id));
             car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
             car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
-            return car;
-        }
-
-        // POST api/Car
-        [HttpPost]
-        [EnableCors("AllowAllOrigins")]
-        public void AddCar([FromBody] Car car)
-        {
-            var message = new CreateCar
+            var clientCar = new ClientCar
             {
-                CompanyId = car.CompanyId,
-
-                _CarLockedStatus = new CarLockedStatus
-                {
-                    Locked = car._CarLockedStatus.Locked
-                },
-                _CarOnlineStatus = new CarOnlineStatus
-                {
-                    Online = car._CarOnlineStatus.Online
-                },
-                CreationTime = car.CreationTime,
                 CarId = car.CarId,
+                CompanyId = car.CompanyId,
+                CreationTime = car.CreationTime,
+                Locked = car._CarLockedStatus.Locked,
+                Online = car._CarOnlineStatus.Online,
                 RegNr = car.RegNr,
                 VIN = car.VIN
             };
-
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            return clientCar;
         }
 
-        // PUT api/Car/5
-        [HttpPut("{id}")]
-        [EnableCors("AllowAllOrigins")]
-        public void UpdateCar([FromBody] Car car)
+    // POST api/Car
+    [HttpPost]
+    [EnableCors("AllowAllOrigins")]
+    public void AddCar([FromBody] ClientCar clientCar)
+    {
+        var message = new CreateCar
         {
-            if (GetCar(car.CarId.ToString()) == null) return;
+            CompanyId = clientCar.CompanyId,
+
+            _CarLockedStatus = new CarLockedStatus
+            {
+                Locked = clientCar.Locked
+            },
+            _CarOnlineStatus = new CarOnlineStatus
+            {
+                Online = clientCar.Online
+            },
+            CreationTime = clientCar.CreationTime,
+            CarId = clientCar.CarId,
+            RegNr = clientCar.RegNr,
+            VIN = clientCar.VIN
+        };
+
+        _endpointInstance.Send(message).ConfigureAwait(false);
+    }
+
+    // PUT api/Car/5
+    [HttpPut("{id}")]
+    [EnableCors("AllowAllOrigins")]
+    public void UpdateCar([FromBody] ClientCar clientCar)
+    {
+        var oldCar = GetCar(clientCar.CarId.ToString());
+        if (oldCar == null) return;
+        if (oldCar.Online != clientCar.Online)
+        {
             var message = new UpdateCarOnlineStatus
             {
-                OnlineStatus = car._CarOnlineStatus.Online,
-                CarId = car.CarId
+                OnlineStatus = clientCar.Online,
+                CarId = clientCar.CarId
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
-
-        // DELETE api/Car/5
-        [HttpDelete("{id}")]
-        [EnableCors("AllowAllOrigins")]
-        public void DeleteCar(string id)
+        if (oldCar.Locked != clientCar.Locked)
         {
-            if (GetCar(id) == null) return;
-            var message = new DeleteCar() { CarId = new Guid(id) };
+            var message = new UpdateCarLockedStatus
+            {
+                LockedStatus = clientCar.Locked,
+                CarId = clientCar.CarId
+            };
+
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
     }
+
+    // DELETE api/Car/5
+    [HttpDelete("{id}")]
+    [EnableCors("AllowAllOrigins")]
+    public void DeleteCar(string id)
+    {
+        if (GetCar(id) == null) return;
+        var message = new DeleteCar() { CarId = new Guid(id) };
+        _endpointInstance.Send(message).ConfigureAwait(false);
+    }
+}
 }
