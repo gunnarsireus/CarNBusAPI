@@ -27,7 +27,7 @@ namespace Server.CommandHandlers
             {
                 Address = message.Address,
                 CreationTime = message.CreationTime,
-                Id = message.Id,
+                CompanyId = message.CompanyId,
                 Name = message.Name
             };
 

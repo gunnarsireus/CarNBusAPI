@@ -17,6 +17,6 @@ namespace Messages.Commands
 		public string RegNr { get; set; }
         public CarOnlineStatus _CarOnlineStatus { get; set; }
         public CarLockedStatus _CarLockedStatus { get; set; }
-        public CarCompany _CarCompany { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

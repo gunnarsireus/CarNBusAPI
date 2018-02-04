@@ -10,11 +10,11 @@ namespace Shared.Models
         {
             CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
         }
-        public Company(Guid id) : this()
+        public Company(Guid companyId) : this()
         {
-            Id = id;
+            CompanyId = companyId;
         }
-        public Guid Id { get; set; }
+        public Guid CompanyId { get; set; }
 
 		public string CreationTime { get; set; }
 		public string Name { get; set; }

@@ -35,10 +35,10 @@ namespace CarNBusAPITest
 				using (var context = new ApiContext(options))
 				{
 					var companyId = Guid.NewGuid();
-					var company = new Company { Id = companyId };
+					var company = new Company { CompanyId = companyId };
 					context.Companies.Add(company);
 
-					var car = new Car { _CarCompany = new CarCompany { CompanyId = company.Id }, VIN = "xxx", RegNr = "ABC123" };
+					var car = new Car { CompanyId = company.CompanyId, VIN = "xxx", RegNr = "ABC123" };
 					context.Cars.Add(car);
 
 					context.SaveChanges();

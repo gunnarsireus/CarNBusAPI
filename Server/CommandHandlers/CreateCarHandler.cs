@@ -25,10 +25,7 @@ namespace Server.CommandHandlers
 
             var car = new Car
             {
-                _CarCompany = new CarCompany
-                {
-                    CompanyId = message._CarCompany.CompanyId,
-                },
+                CompanyId = message.CompanyId,
                 _CarLockedStatus = new CarLockedStatus
                 {
                     Locked = message._CarLockedStatus.Locked

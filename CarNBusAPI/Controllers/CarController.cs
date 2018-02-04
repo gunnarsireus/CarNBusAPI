@@ -43,10 +43,8 @@ namespace CarNBusAPI.Controllers
         {
             var message = new CreateCar
             {
-                _CarCompany = new CarCompany
-                {
-                    CompanyId = car._CarCompany.CompanyId,
-                },
+                CompanyId = car.CompanyId,
+
                 _CarLockedStatus = new CarLockedStatus
                 {
                     Locked = car._CarLockedStatus.Locked
@@ -59,7 +57,7 @@ namespace CarNBusAPI.Controllers
                 CarId = car.CarId,
                 RegNr = car.RegNr,
                 VIN = car.VIN
-              };
+            };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
@@ -72,7 +70,7 @@ namespace CarNBusAPI.Controllers
             if (GetCar(car.CarId.ToString()) == null) return;
             var message = new UpdateCarOnlineStatus
             {
-                 OnlineStatus = car._CarOnlineStatus.Online,
+                OnlineStatus = car._CarOnlineStatus.Online,
                 CarId = car.CarId
             };
 

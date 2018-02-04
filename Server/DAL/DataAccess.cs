@@ -78,7 +78,7 @@ namespace Server.DAL
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.Companies.SingleOrDefault(o => o.Id == companyId);
+                return context.Companies.SingleOrDefault(o => o.CompanyId == companyId);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Server.DAL
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var cars = GetCars().Where(c => c._CarCompany.CompanyId == companyId);
+                var cars = GetCars().Where(c => c.CompanyId == companyId);
                 foreach (var car in cars)
                 {
                     context.Cars.Remove(car);

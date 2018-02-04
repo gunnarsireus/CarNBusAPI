@@ -44,7 +44,7 @@ namespace CarNBusAPI.Controllers
                 Address = company.Address,
                 Name = company.Name,
                 CreationTime = company.CreationTime,
-                Id = company.Id   //Todo check if new Guid?
+                CompanyId = company.CompanyId   //Todo check if new Guid?
             };
             // TODO: map object and massege
 
@@ -55,11 +55,11 @@ namespace CarNBusAPI.Controllers
         [HttpPut("{id}")]
         public void UpdateCompany([FromBody] Company company)
         {
-            if (GetCompany(company.Id.ToString()) == null) return;
+            if (GetCompany(company.CompanyId.ToString()) == null) return;
             var message = new UpdateCompany
             {
                 DataId = new Guid(),
-                Id = company.Id,
+                Id = company.CompanyId,
                 Address = company.Address,
                 CreationTime = company.CreationTime,
                 Name = company.Name

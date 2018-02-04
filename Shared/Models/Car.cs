@@ -21,14 +21,10 @@ namespace Shared.Models
                 Locked = false,
                 CarId = CarId
             };
-            _CarCompany = new CarCompany
-            {
-                CarId = CarId
-            };
-
         }
 
         public Guid CarId { get; set; }
+        public Guid CompanyId { get; set; }
 
         [Display(Name = "Created date")]
         public string CreationTime { get; set; }
@@ -46,7 +42,6 @@ namespace Shared.Models
         public CarOnlineStatus _CarOnlineStatus { get; set; }
         [Required]
         public CarLockedStatus _CarLockedStatus { get; set; }
-        [Required]
-        public CarCompany _CarCompany { get; set; }
+        public Company CarOf { get; set; }
     }
 }
