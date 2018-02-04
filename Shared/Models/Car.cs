@@ -9,17 +9,14 @@ namespace Shared.Models
     {
         public Car()
         {
-            CarId = Guid.NewGuid();
             CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
             _CarOnlineStatus = new CarOnlineStatus
             {
                 Online = true,
-                CarId = CarId
             };
             _CarLockedStatus = new CarLockedStatus
             {
                 Locked = false,
-                CarId = CarId
             };
         }
 

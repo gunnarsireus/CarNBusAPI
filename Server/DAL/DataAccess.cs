@@ -30,7 +30,23 @@ namespace Server.DAL
 		    }
 	    }
 
-	    public Car GetCar(Guid carId)
+        public CarOnlineStatus GetCarOnlineStatus(Guid carId)
+        {
+            using (var context = new ApiContext(_optionsBuilder.Options))
+            {
+                return context.CarOnlineStatus.FirstOrDefault(c=>c.CarId==carId);
+            }
+        }
+
+        public CarLockedStatus GetCarLockedStatus(Guid carId)
+        {
+            using (var context = new ApiContext(_optionsBuilder.Options))
+            {
+                return context.CarLockedStatus.FirstOrDefault(c => c.CarId == carId);
+            }
+        }
+
+        public Car GetCar(Guid carId)
 	    {
 		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {

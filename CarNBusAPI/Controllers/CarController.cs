@@ -25,7 +25,13 @@ namespace CarNBusAPI.Controllers
         [EnableCors("AllowAllOrigins")]
         public IEnumerable<Car> GetCars()
         {
-            return _dataAccess.GetCars();
+            var cars = _dataAccess.GetCars();
+            foreach (var car in cars)
+            {
+                car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
+                car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
+            }
+            return cars;
         }
 
         // GET api/Car/5
@@ -33,7 +39,10 @@ namespace CarNBusAPI.Controllers
         [EnableCors("AllowAllOrigins")]
         public Car GetCar(string id)
         {
-            return _dataAccess.GetCar(new Guid(id));
+            var car = _dataAccess.GetCar(new Guid(id));
+            car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
+            car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
+            return car;
         }
 
         // POST api/Car
