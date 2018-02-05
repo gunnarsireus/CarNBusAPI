@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Models
 {
@@ -13,5 +11,6 @@ namespace Shared.Models
         public string RegNr { get; set; }
         public bool Online { get; set; }
         public bool Locked { get; set; }
+        public long Speed { get; set; }
     }
 }
