@@ -34,7 +34,7 @@ namespace CarNBusAPI.Controllers
                 car._CarSpeed = _dataAccess.GetCarSpeed(car.CarId);
                 if (car._CarLockedStatus.Locked)
                 {
-                    if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(60000) < DateTime.Now)
+                    if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                     {  //Lock timeouted can be ignored and set to false
                         var message = new UpdateCarLockedStatus
                         {
@@ -73,7 +73,7 @@ namespace CarNBusAPI.Controllers
             car._CarSpeed = _dataAccess.GetCarSpeed(car.CarId);
             if (car._CarLockedStatus.Locked)
             {
-                if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(60000) < DateTime.Now)
+                if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                 {  //Lock timeouted can be ignored and set to false
                     var message = new UpdateCarLockedStatus
                     {
