@@ -45,6 +45,13 @@ namespace Server.DAL
                 return context.CarLockedStatus.FirstOrDefault(c => c.CarId == carId);
             }
         }
+        public CarSpeed GetCarSpeed(Guid carId)
+        {
+            using (var context = new ApiContext(_optionsBuilder.Options))
+            {
+                return context.CarSpeeds.FirstOrDefault(c => c.CarId == carId);
+            }
+        }
 
         public Car GetCar(Guid carId)
 	    {

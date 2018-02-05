@@ -19,6 +19,10 @@ namespace Shared.Models
                 Locked = false,
                 LockedTimeStamp = DateTime.Now.Ticks
             };
+            _CarSpeed = new CarSpeed
+            {
+                Speed = 576
+            };
         }
 
         public Guid CarId { get; set; }
@@ -40,6 +44,8 @@ namespace Shared.Models
         public CarOnlineStatus _CarOnlineStatus { get; set; }
         [Required]
         public CarLockedStatus _CarLockedStatus { get; set; }
+        [Required]
+        public CarSpeed _CarSpeed { get; set; }
         public Company CarOf { get; set; }
     }
 }
