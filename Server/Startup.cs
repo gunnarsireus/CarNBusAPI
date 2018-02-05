@@ -61,6 +61,7 @@ namespace Server
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
             endpointConfiguration.UsePersistence<LearningPersistence>();
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            endpointConfiguration.PurgeOnStartup(true);  //Only for demos!!
 
             //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
             //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
