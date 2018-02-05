@@ -36,7 +36,7 @@ namespace CarNBusAPI
             endpointConfiguration.UsePersistence<LearningPersistence>();
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
-            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCarLockedStatus).Assembly, destination: "CarNBusAPI.ServerPriority");
+            transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "CarNBusAPI.ServerPriority");
             //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
             //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
             //        (t.Namespace.EndsWith("Commands")))
