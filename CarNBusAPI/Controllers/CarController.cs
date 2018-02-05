@@ -31,6 +31,21 @@ namespace CarNBusAPI.Controllers
             {
                 car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
                 car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
+                if (car._CarLockedStatus.Locked)
+                {
+                    if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(60000) < DateTime.Now)
+                    {  //Lock timeouted can be ignored and set to false
+                        var message = new UpdateCarLockedStatus
+                        {
+                            LockedStatus = false,
+                            CarId = car.CarId
+                        };
+
+                        _endpointInstance.Send(message).ConfigureAwait(false);
+                        car._CarLockedStatus.Locked = false;
+                    }
+                }
+
                 list.Add(new ClientCar
                 {
                     CarId = car.CarId,
@@ -53,6 +68,21 @@ namespace CarNBusAPI.Controllers
             var car = _dataAccess.GetCar(new Guid(id));
             car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
             car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
+            if (car._CarLockedStatus.Locked)
+            {
+                if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(60000) < DateTime.Now)
+                {  //Lock timeouted can be ignored and set to false
+                    var message = new UpdateCarLockedStatus
+                    {
+                        LockedStatus = false,
+                        CarId = car.CarId
+                    };
+
+                    _endpointInstance.Send(message).ConfigureAwait(false);
+                    car._CarLockedStatus.Locked = false;
+                }
+            }
+
             var clientCar = new ClientCar
             {
                 CarId = car.CarId,

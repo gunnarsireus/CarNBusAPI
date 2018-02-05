@@ -50,7 +50,7 @@ namespace Server.DAL
 	    {
 		    using (var context = new ApiContext(_optionsBuilder.Options))
 		    {
-			    return context.Cars.SingleOrDefault(o => o.CarId == carId);
+			    return context.Cars.FirstOrDefault(o => o.CarId == carId);
 		    }
 	    }
 
@@ -94,7 +94,7 @@ namespace Server.DAL
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.Companies.SingleOrDefault(o => o.CompanyId == companyId);
+                return context.Companies.FirstOrDefault(o => o.CompanyId == companyId);
             }
         }
 
