@@ -78,6 +78,26 @@ namespace Server
                 });
 
             Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+            var endpointConfigurationPriority = new EndpointConfiguration("CarNBusAPI.ServerPriority");
+            endpointConfigurationPriority.UsePersistence<LearningPersistence>();
+            var transportPriority = endpointConfigurationPriority.UseTransport<LearningTransport>();
+            endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
+
+            //endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        (t.Namespace.EndsWith("Commands")))
+            //    .DefiningEventsAs(t =>
+            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+            //        t.Namespace.EndsWith("Events"));
+
+            endpointConfigurationPriority.UseContainer<AutofacBuilder>(
+                customizations: customizations =>
+                {
+                    customizations.ExistingLifetimeScope(Container);
+                });
+
+            Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
             return new AutofacServiceProvider(Container);
         }
 

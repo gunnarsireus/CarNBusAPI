@@ -14,10 +14,12 @@ namespace CarNBusAPI.Controllers
     public class CarController : Controller
     {
         readonly IEndpointInstance _endpointInstance;
+        readonly IEndpointInstance _endpointInstancePriority;
         readonly DataAccess _dataAccess;
-        public CarController(IEndpointInstance endpointInstance, IConfigurationRoot configuration)
+        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfigurationRoot configuration)
         {
             _endpointInstance = endpointInstance;
+            _endpointInstancePriority = endpointInstancePriority;
             _dataAccess = new DataAccess(configuration);
         }
         // GET api/Car
@@ -42,7 +44,7 @@ namespace CarNBusAPI.Controllers
                             CarId = car.CarId
                         };
 
-                        _endpointInstance.Send(message).ConfigureAwait(false);
+                        _endpointInstancePriority.Send(message).ConfigureAwait(false);
                         car._CarLockedStatus.Locked = false;
                     }
                 }
@@ -81,7 +83,7 @@ namespace CarNBusAPI.Controllers
                         CarId = car.CarId
                     };
 
-                    _endpointInstance.Send(message).ConfigureAwait(false);
+                    _endpointInstancePriority.Send(message).ConfigureAwait(false);
                     car._CarLockedStatus.Locked = false;
                 }
             }
@@ -151,7 +153,7 @@ namespace CarNBusAPI.Controllers
                     CarId = clientCar.CarId
                 };
 
-                _endpointInstance.Send(message).ConfigureAwait(false);
+                _endpointInstancePriority.Send(message).ConfigureAwait(false);
             }
             if (oldCar.Speed != clientCar.Speed)
             {
