@@ -9,6 +9,6 @@ namespace Messages.Commands
         }
         public Guid DataId { get; set; }
         public Guid CarId { get; set; }
-        public long Speed { get; set; }
+        public int Speed { get; set; }
     }
 }

@@ -26,19 +26,21 @@ namespace Server.CommandHandlers
             var car = new Car
             {
                 CompanyId = message.CompanyId,
-                _CarLockedStatus = new CarLockedStatus
-                {
-                    Locked = message._CarLockedStatus
-                },
-                _CarOnlineStatus = new CarOnlineStatus
-                {
-                    Online = message._CarOnlineStatus
-                },
+                // todo: separate messages from the api
+                //_CarLockedStatus = new CarLockedStatus
+                //{
+                //    Locked = message._CarLockedStatus
+                //},
+                //_CarOnlineStatus = new CarOnlineStatus
+                //{
+                //    Online = message._CarOnlineStatus
+                //},
                 CreationTime = message.CreationTime,
                 CarId = message.CarId,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };
+            // todo: add the same data to the CarReadModel 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.Cars.Add(car);

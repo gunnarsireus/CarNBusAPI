@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Cors;
 using Messages.Commands;
 using Microsoft.Extensions.Configuration;
 
-namespace CarNBusAPI.Controllers
+namespace CarNBusAPI.Read.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/read/[controller]")]
     public class CarController : Controller
     {
         readonly IEndpointInstance _endpointInstance;
@@ -100,74 +100,6 @@ namespace CarNBusAPI.Controllers
                 VIN = car.VIN
             };
             return clientCar;
-        }
-
-        // POST api/Car
-        [HttpPost]
-        [EnableCors("AllowAllOrigins")]
-        public void AddCar([FromBody] ClientCar clientCar)
-        {
-            var message = new CreateCar
-            {
-                CompanyId = clientCar.CompanyId,
-                _CarLockedStatus = clientCar.Locked,
-                _CarOnlineStatus = clientCar.Online,
-                CreationTime = clientCar.CreationTime,
-                CarId = clientCar.CarId,
-                RegNr = clientCar.RegNr,
-                VIN = clientCar.VIN
-            };
-
-            _endpointInstance.Send(message).ConfigureAwait(false);
-        }
-
-        // PUT api/Car/5
-        [HttpPut("{id}")]
-        [EnableCors("AllowAllOrigins")]
-        public void UpdateCar([FromBody] ClientCar clientCar)
-        {
-            var oldCar = GetCar(clientCar.CarId.ToString());
-            if (oldCar == null) return;
-            if (oldCar.Online != clientCar.Online)
-            {
-                var message = new UpdateCarOnlineStatus
-                {
-                    OnlineStatus = clientCar.Online,
-                    CarId = clientCar.CarId
-                };
-
-                _endpointInstance.Send(message).ConfigureAwait(false);
-            }
-            if (oldCar.Locked != clientCar.Locked)
-            {
-                var message = new UpdateCarLockedStatus
-                {
-                    LockedStatus = clientCar.Locked,
-                    CarId = clientCar.CarId
-                };
-
-                _endpointInstancePriority.Send(message).ConfigureAwait(false);
-            }
-            if (oldCar.Speed != clientCar.Speed)
-            {
-                var message = new UpdateCarSpeed
-                {
-                    Speed = clientCar.Speed,
-                    CarId = clientCar.CarId
-                };
-
-                _endpointInstance.Send(message).ConfigureAwait(false);
-            }
-        }
-
-        // DELETE api/Car/5
-        [HttpDelete("{id}")]
-        [EnableCors("AllowAllOrigins")]
-        public void DeleteCar(string id)
-        {
-            if (GetCar(id) == null) return;
-            var message = new DeleteCar() { CarId = new Guid(id) };
-            _endpointInstance.Send(message).ConfigureAwait(false);
         }
     }
 }

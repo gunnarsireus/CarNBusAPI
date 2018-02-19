@@ -11,6 +11,6 @@ namespace Shared.Models
         public string RegNr { get; set; }
         public bool Online { get; set; }
         public bool Locked { get; set; }
-        public long Speed { get; set; }
+        public int Speed { get; set; }
     }
 }

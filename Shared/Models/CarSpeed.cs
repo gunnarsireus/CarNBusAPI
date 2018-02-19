@@ -8,7 +8,7 @@ namespace Shared.Models
 	{
         [Key, ForeignKey("SpeedOf")]
         public Guid CarId { get; set; }
-        public long Speed { get; set; }
+        public int Speed { get; set; }
         public Car SpeedOf { get; set; }
     }
 }
