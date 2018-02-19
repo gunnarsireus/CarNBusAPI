@@ -64,12 +64,12 @@ namespace Server
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             endpointConfiguration.PurgeOnStartup(true);  //Only for demos!!
 
-            //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        (t.Namespace.EndsWith("Commands")))
-            //    .DefiningEventsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        t.Namespace.EndsWith("Events"));
+            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
@@ -84,12 +84,12 @@ namespace Server
             var transportPriority = endpointConfigurationPriority.UseTransport<LearningTransport>();
             endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
 
-            //endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        (t.Namespace.EndsWith("Commands")))
-            //    .DefiningEventsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        t.Namespace.EndsWith("Events"));
+            endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
 
             endpointConfigurationPriority.UseContainer<AutofacBuilder>(
                 customizations: customizations =>

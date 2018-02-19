@@ -110,15 +110,8 @@ namespace CarNBusAPI.Controllers
             var message = new CreateCar
             {
                 CompanyId = clientCar.CompanyId,
-
-                _CarLockedStatus = new CarLockedStatus
-                {
-                    Locked = clientCar.Locked
-                },
-                _CarOnlineStatus = new CarOnlineStatus
-                {
-                    Online = clientCar.Online
-                },
+                _CarLockedStatus = clientCar.Locked,
+                _CarOnlineStatus = clientCar.Online,
                 CreationTime = clientCar.CreationTime,
                 CarId = clientCar.CarId,
                 RegNr = clientCar.RegNr,

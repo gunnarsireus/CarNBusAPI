@@ -1,10 +1,8 @@
-using NServiceBus;
 using System;
 using System.Collections.Generic;
 namespace Messages.Commands
 {
-    [Serializable]
-    public class CreateCompany: IMessage
+    public class CreateCompany
 	{
         public CreateCompany()
         {

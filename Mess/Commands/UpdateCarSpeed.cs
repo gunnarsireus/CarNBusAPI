@@ -1,10 +1,7 @@
-using NServiceBus;
 using System;
 namespace Messages.Commands
 {
-    // What does update mean anyway?
-    [Serializable]
-    public class UpdateCarSpeed : IMessage
+    public class UpdateCarSpeed 
     {
         public UpdateCarSpeed()
         {

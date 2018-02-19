@@ -14,6 +14,7 @@ namespace CarNBusAPITest
 	public class UnitTest1
 	{
         readonly IEndpointInstance _endpointInstance;
+        readonly IEndpointInstance _endpointInstancePriority;
         IConfigurationRoot Configuration { get; set; }
         [Fact(DisplayName = "Create a company and a vehicle")]
 		public void Test1()
@@ -46,7 +47,7 @@ namespace CarNBusAPITest
 
                 using (var context = new ApiContext(options))
                 {
-                    var bc = new CarController(_endpointInstance, Configuration);
+                    var bc = new CarController(_endpointInstance, _endpointInstancePriority, Configuration);
                     var result = bc.GetCars();
                     Assert.NotNull(result);
                     Assert.Equal(result.Count(), 1);

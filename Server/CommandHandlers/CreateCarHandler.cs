@@ -28,11 +28,11 @@ namespace Server.CommandHandlers
                 CompanyId = message.CompanyId,
                 _CarLockedStatus = new CarLockedStatus
                 {
-                    Locked = message._CarLockedStatus.Locked
+                    Locked = message._CarLockedStatus
                 },
                 _CarOnlineStatus = new CarOnlineStatus
                 {
-                    Online = message._CarOnlineStatus.Online
+                    Online = message._CarOnlineStatus
                 },
                 CreationTime = message.CreationTime,
                 CarId = message.CarId,

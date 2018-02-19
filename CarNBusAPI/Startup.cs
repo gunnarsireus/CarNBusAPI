@@ -37,12 +37,12 @@ namespace CarNBusAPI
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
             transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "CarNBusAPI.ServerPriority");
-            //endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        (t.Namespace.EndsWith("Commands")))
-            //    .DefiningEventsAs(t =>
-            //        t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-            //        t.Namespace.EndsWith("Events"));
+            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    (t.Namespace.EndsWith("Commands")))
+                .DefiningEventsAs(t =>
+                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace.EndsWith("Events"));
 
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
