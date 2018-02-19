@@ -43,42 +43,43 @@ namespace CarNBusAPI.Write.Controllers
         }
         // Todo: Separeta to UpdateOnline, UpdateLocked and UpdateSpeed
         // PUT api/Car/5
-        [HttpPut("{id}")]
+        [HttpPut("/api/write/Car/online/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCar([FromBody] ClientCar clientCar)
+        public void UpdateCarOnline([FromBody] ClientCar clientCar)
         {
-            var oldCar = GetCar(clientCar.CarId.ToString());
-            if (oldCar == null) return;
-            if (oldCar.Online != clientCar.Online)
+            var message = new UpdateCarOnlineStatus
             {
-                var message = new UpdateCarOnlineStatus
-                {
-                    OnlineStatus = clientCar.Online,
-                    CarId = clientCar.CarId
-                };
+                OnlineStatus = clientCar.Online,
+                CarId = clientCar.CarId
+            };
 
-                _endpointInstance.Send(message).ConfigureAwait(false);
-            }
-            if (oldCar.Locked != clientCar.Locked)
+            _endpointInstance.Send(message).ConfigureAwait(false);
+        }
+
+        [HttpPut("/api/write/Car/locked/{id}")]
+        [EnableCors("AllowAllOrigins")]
+        public void UpdateCarLocked([FromBody] ClientCar clientCar)
+        {
+            var message = new UpdateCarLockedStatus
             {
-                var message = new UpdateCarLockedStatus
-                {
-                    LockedStatus = clientCar.Locked,
-                    CarId = clientCar.CarId
-                };
+                LockedStatus = clientCar.Locked,
+                CarId = clientCar.CarId
+            };
 
-                _endpointInstancePriority.Send(message).ConfigureAwait(false);
-            }
-            if (oldCar.Speed != clientCar.Speed)
+            _endpointInstancePriority.Send(message).ConfigureAwait(false);
+        }
+
+        [HttpPut("/api/write/Car/speed/{id}")]
+        [EnableCors("AllowAllOrigins")]
+        public void UpdateCarSpeed([FromBody] ClientCar clientCar)
+        {
+            var message = new UpdateCarSpeed
             {
-                var message = new UpdateCarSpeed
-                {
-                    Speed = clientCar.Speed,
-                    CarId = clientCar.CarId
-                };
+                Speed = clientCar.Speed,
+                CarId = clientCar.CarId
+            };
 
-                _endpointInstance.Send(message).ConfigureAwait(false);
-            }
+            _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         // DELETE api/Car/5
@@ -86,44 +87,8 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void DeleteCar(string id)
         {
-            if (GetCar(id) == null) return;
             var message = new DeleteCar() { CarId = new Guid(id) };
             _endpointInstance.Send(message).ConfigureAwait(false);
-        }
-
-        ClientCar GetCar(string id)
-        {
-            var car = _dataAccess.GetCar(new Guid(id));
-            car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
-            car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
-            car._CarSpeed = _dataAccess.GetCarSpeed(car.CarId);
-            if (car._CarLockedStatus.Locked)
-            {
-                if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
-                {  //Lock timeouted can be ignored and set to false
-                    var message = new UpdateCarLockedStatus
-                    {
-                        LockedStatus = false,
-                        CarId = car.CarId
-                    };
-
-                    _endpointInstancePriority.Send(message).ConfigureAwait(false);
-                    car._CarLockedStatus.Locked = false;
-                }
-            }
-
-            var clientCar = new ClientCar
-            {
-                CarId = car.CarId,
-                CompanyId = car.CompanyId,
-                CreationTime = car.CreationTime,
-                Locked = car._CarLockedStatus.Locked,
-                Online = car._CarOnlineStatus.Online,
-                Speed = car._CarSpeed.Speed,
-                RegNr = car.RegNr,
-                VIN = car.VIN
-            };
-            return clientCar;
         }
     }
 }
