@@ -1,9 +1,7 @@
-using NServiceBus;
 using System;
 namespace Messages.Commands
 {
-    [Serializable]
-    public class DeleteCar : IMessage
+    public class DeleteCar
     {
         public DeleteCar()
         {

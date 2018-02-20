@@ -43,7 +43,7 @@ namespace CarNBusAPI.Write.Controllers
         }
         // Todo: Separeta to UpdateOnline, UpdateLocked and UpdateSpeed
         // PUT api/Car/5
-        [HttpPut("/api/write/Car/online/{id}")]
+        [HttpPut("/api/write/car/online/{id}")]
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarOnline([FromBody] ClientCar clientCar)
         {
@@ -56,7 +56,7 @@ namespace CarNBusAPI.Write.Controllers
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
-        [HttpPut("/api/write/Car/locked/{id}")]
+        [HttpPut("/api/write/car/locked/{id}")]
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarLocked([FromBody] ClientCar clientCar)
         {
@@ -69,7 +69,7 @@ namespace CarNBusAPI.Write.Controllers
             _endpointInstancePriority.Send(message).ConfigureAwait(false);
         }
 
-        [HttpPut("/api/write/Car/speed/{id}")]
+        [HttpPut("/api/write/car/speed/{id}")]
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarSpeed([FromBody] ClientCar clientCar)
         {

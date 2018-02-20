@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using CarNBusAPI.Controllers;
+using CarNBusAPI.Read.Controllers;
 using Server.DAL;
 using Shared.Models;
 using Xunit;

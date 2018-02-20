@@ -1,12 +1,9 @@
-using NServiceBus;
 using System;
 using System.Collections.Generic;
 
 namespace Messages.Commands
 {
-    // What does update mean anyway?
-    [Serializable]
-    public class UpdateCompany : IMessage
+    public class UpdateCompany 
     {
         public UpdateCompany()
         {

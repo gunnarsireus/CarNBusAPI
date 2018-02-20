@@ -1,10 +1,9 @@
-using NServiceBus;
 using System;
 namespace Messages.Commands
 {
 
     [Serializable]
-    public class DeleteCompany : IMessage
+    public class DeleteCompany 
     {
         public DeleteCompany()
         {

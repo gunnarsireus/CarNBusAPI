@@ -1,9 +1,7 @@
-using NServiceBus;
 using System;
 namespace Messages.Commands
 {
-    [Serializable]
-    public class CreateCar : IMessage
+    public class CreateCar 
     {
         public CreateCar()
         {
@@ -14,8 +12,8 @@ namespace Messages.Commands
 		public string CreationTime { get; set; }
 		public string VIN { get; set; }
 		public string RegNr { get; set; }
-        public Shared.Models.CarOnlineStatus _CarOnlineStatus { get; set; }
-        public Shared.Models.CarLockedStatus _CarLockedStatus { get; set; }
-        public Shared.Models.CarCompany _CarCompany { get; set; }
+        public bool _CarOnlineStatus { get; set; }
+        public bool _CarLockedStatus { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }
