@@ -27,13 +27,17 @@ namespace Server.CommandHandlers
 
             log.Info("Received UpdateCarSpeed");
 
-            var CarSpeed = new CarSpeed();
-            CarSpeed.Speed = message.Speed;
-            CarSpeed.CarId = message.CarId;
+            var carSpeed = new CarSpeed
+            {
+                Speed = message.Speed,
+                CarId = message.CarId
+            };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                unitOfWork.CarSpeed.Update(CarSpeed);
+                var listOfOldItems = unitOfWork.CarSpeed.GetAllOrdered(message.CarId);
+                unitOfWork.CarSpeed.Add(carSpeed);
+                unitOfWork.CarSpeed.RemoveRange(listOfOldItems);
                 unitOfWork.Complete();
             }
 

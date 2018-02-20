@@ -1,5 +1,8 @@
 ﻿using Shared.Models;
 using Server.DAL;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace Server.Data
 {
@@ -11,5 +14,9 @@ namespace Server.Data
 
 		public ApiContext ApiContext => Context as ApiContext;
 
-	}
+        public List<CarLockedStatus> GetAllOrdered(Guid CarId)
+        {
+            return GetAll().Where(o => o.CarId == CarId).OrderBy(o => o.LockedTimeStamp).ToList();
+        }
+    }
 }

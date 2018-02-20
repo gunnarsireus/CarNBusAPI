@@ -21,7 +21,6 @@ namespace Shared.Models
                 new CarLockedStatus
                 {
                     Locked = false,
-                    LockedTimeStamp = DateTime.Now.Ticks
                 }
             };
 

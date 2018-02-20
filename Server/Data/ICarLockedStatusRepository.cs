@@ -1,9 +1,11 @@
 ﻿using Shared.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Server.Data
 {
-	public interface ICarLockedStatusRepository:IRepository<CarLockedStatus>
+    public interface ICarLockedStatusRepository : IRepository<CarLockedStatus>
     {
-	    //Todo, if more advanced filtering is needed;
-	}
+        List<CarLockedStatus> GetAllOrdered(Guid CarId);
+    }
 }

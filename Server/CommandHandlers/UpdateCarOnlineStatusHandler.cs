@@ -24,16 +24,19 @@ namespace Server.CommandHandlers
 		{
 			log.Info("Received UpdateCarOnlineStatus");
 
-			var carOnlineStatus = new CarOnlineStatus();
-			carOnlineStatus.Online = message.OnlineStatus;
-            carOnlineStatus.CarId = message.CarId;
+            var carOnlineStatus = new CarOnlineStatus
+            {
+                Online = message.OnlineStatus,
+                CarId = message.CarId
+            };
 
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
-				// TODO: fix the unit of work
-			    unitOfWork.CarOnlineStatus.Update(carOnlineStatus);
-				unitOfWork.Complete();
+                var listOfOldItems = unitOfWork.CarOnlineStatus.GetAllOrdered(message.CarId);
+                unitOfWork.CarOnlineStatus.Add(carOnlineStatus);
+                unitOfWork.CarOnlineStatus.RemoveRange(listOfOldItems);
+                unitOfWork.Complete();
 			}
 
 			return Task.CompletedTask;

@@ -34,7 +34,7 @@ namespace Server.DAL
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarOnlineStatuses.Where(c=>c.CarId==carId).ToList();
+                return context.CarOnlineStatuses.Where(c=>c.CarId==carId).OrderBy(o=>o.OnlineTimeStamp).ToList();
             }
         }
 
@@ -42,14 +42,14 @@ namespace Server.DAL
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarLockedStatuses.Where(c => c.CarId == carId).ToList();
+                return context.CarLockedStatuses.Where(c => c.CarId == carId).OrderBy(o => o.LockedTimeStamp).ToList();
             }
         }
         public List<CarSpeed> GetCarSpeeds(Guid carId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarSpeeds.Where(c => c.CarId == carId).ToList();
+                return context.CarSpeeds.Where(c => c.CarId == carId).OrderBy(o => o.SpeedTimeStamp).ToList();
             }
         }
 

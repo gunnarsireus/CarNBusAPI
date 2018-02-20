@@ -8,7 +8,7 @@ namespace Server.CommandHandlers
     using Server.Data;
     using Server.DAL;
     using Shared.Models;
-    using System;
+    using System.Linq;
     using System.Globalization;
 
     public class UpdateCarLockedStatusHandler : IHandleMessages<UpdateCarLockedStatus>
@@ -27,14 +27,17 @@ namespace Server.CommandHandlers
 
             log.Info("Received UpdateCarLockedStatus");
 
-            var carLockedStatus = new CarLockedStatus();
-            carLockedStatus.Locked = message.LockedStatus;
-            carLockedStatus.CarId = message.CarId;
-            carLockedStatus.LockedTimeStamp = DateTime.Now.Ticks;
+            var carLockedStatus = new CarLockedStatus
+            {
+                Locked = message.LockedStatus,
+                CarId = message.CarId
+            };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                unitOfWork.CarLockedStatus.Update(carLockedStatus);
+                var listOfOldItems = unitOfWork.CarLockedStatus.GetAllOrdered(message.CarId);
+                unitOfWork.CarLockedStatus.Add(carLockedStatus);
+                unitOfWork.CarLockedStatus.RemoveRange(listOfOldItems);
                 unitOfWork.Complete();
             }
 
