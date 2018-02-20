@@ -1,9 +1,11 @@
 ﻿using Shared.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Server.Data
 {
 	public interface ICarRepository:IRepository<Car>
     {
-	    //Todo, if more advanced filtering is needed;
-	}
+        List<Car> GetAllByCompanyId(Guid CompanyId);
+    }
 }

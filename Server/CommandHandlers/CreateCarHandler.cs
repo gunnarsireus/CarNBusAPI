@@ -23,7 +23,7 @@ namespace Server.CommandHandlers
         {
             log.Info("Received CreateCar");
 
-            var car = new Car
+            var car = new Car(message.CarId)
             {
                 CompanyId = message.CompanyId,
                 // todo: separate messages from the api
@@ -36,7 +36,6 @@ namespace Server.CommandHandlers
                 //    Online = message._CarOnlineStatus
                 //},
                 CreationTime = message.CreationTime,
-                CarId = message.CarId,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };

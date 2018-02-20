@@ -39,7 +39,7 @@ namespace CarNBusAPITest
 					var company = new Company { CompanyId = companyId };
 					context.Companies.Add(company);
 
-					var car = new Car { CompanyId = company.CompanyId, VIN = "xxx", RegNr = "ABC123" };
+					var car = new Car(Guid.NewGuid()) { CompanyId = company.CompanyId, VIN = "xxx", RegNr = "ABC123" };
 					context.Cars.Add(car);
 
 					context.SaveChanges();

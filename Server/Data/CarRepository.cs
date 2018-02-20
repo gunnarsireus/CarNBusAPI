@@ -1,5 +1,8 @@
 ﻿using Shared.Models;
 using Server.DAL;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Server.Data
 {
@@ -11,5 +14,9 @@ namespace Server.Data
 
 		public ApiContext ApiContext => Context as ApiContext;
 
-	}
+        public List<Car> GetAllByCompanyId(Guid CompanyId)
+        {
+            return GetAll().Where(o => o.CompanyId == CompanyId).ToList();
+        }
+    }
 }

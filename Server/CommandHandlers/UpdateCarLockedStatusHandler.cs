@@ -35,8 +35,11 @@ namespace Server.CommandHandlers
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
+                var car = unitOfWork.Cars.Get(message.CarId);
+                if (car == null) return Task.CompletedTask;
                 var listOfOldItems = unitOfWork.CarLockedStatus.GetAllOrdered(message.CarId);
                 unitOfWork.CarLockedStatus.Add(carLockedStatus);
+                unitOfWork.Complete();
                 unitOfWork.CarLockedStatus.RemoveRange(listOfOldItems);
                 unitOfWork.Complete();
             }

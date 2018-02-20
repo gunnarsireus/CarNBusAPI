@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Shared.Models
 {
@@ -11,17 +12,22 @@ namespace Shared.Models
     {
         public Car()
         {
+        }
+
+        public Car(Guid carId)
+        {
+            CarId = carId;
             CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
             CarOnlineStatuses = new List<CarOnlineStatus>
             {
-                new CarOnlineStatus { Online = true }
+                new CarOnlineStatus { Online = true,CarId = carId   }
             };
 
             CarLockedStatuses = new List<CarLockedStatus>
             {
                 new CarLockedStatus
                 {
-                    Locked = false,
+                    Locked = false,CarId = carId
                 }
             };
 
@@ -29,7 +35,7 @@ namespace Shared.Models
             {
                 new CarSpeed
                 {
-                    Speed = 576
+                    Speed = 576,CarId = carId
                 }
             };
         }
@@ -59,6 +65,7 @@ namespace Shared.Models
         public Company CarOf { get; set; }
 
         [NotMapped]
+        [JsonIgnore]
         public bool Locked
         {
             get { return CarLockedStatuses[CarLockedStatuses.Count - 1].Locked; }
@@ -67,18 +74,21 @@ namespace Shared.Models
         }
 
         [NotMapped]
+        [JsonIgnore]
         public long LockedTimeStamp
         {
             get { return CarLockedStatuses[CarLockedStatuses.Count - 1].LockedTimeStamp; }
         }
 
         [NotMapped]
+        [JsonIgnore]
         public bool Online
         {
             get { return CarOnlineStatuses[CarOnlineStatuses.Count - 1].Online; }
         }
 
         [NotMapped]
+        [JsonIgnore]
         public int Speed
         {
             get { return CarSpeeds[CarSpeeds.Count - 1].Speed; }
