@@ -34,9 +34,9 @@ namespace CarNBusAPI.Read.Controllers
                 car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatuses(car.CarId);
                 car.CarLockedStatuses = _dataAccess.GetCarLockedStatuses(car.CarId);
                 car.CarSpeeds = _dataAccess.GetCarSpeeds(car.CarId);
-                if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
+                if (car.Locked)
                 {
-                    if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                    if (new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                     {  //Lock timeouted can be ignored and set to false
                         var message = new UpdateCarLockedStatus
                         {
@@ -45,7 +45,7 @@ namespace CarNBusAPI.Read.Controllers
                         };
 
                         _endpointInstancePriority.Send(message).ConfigureAwait(false);
-                        car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
+                        car.Locked = false;
                     }
                 }
 
@@ -54,9 +54,9 @@ namespace CarNBusAPI.Read.Controllers
                     CarId = car.CarId,
                     CompanyId = car.CompanyId,
                     CreationTime = car.CreationTime,
-                    Locked = car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked,
-                    Online = car.CarOnlineStatuses[car.CarOnlineStatuses.Count - 1].Online,
-                    Speed = car.CarSpeeds[car.CarSpeeds.Count - 1].Speed,
+                    Locked = car.Locked,
+                    Online = car.Online,
+                    Speed = car.Speed,
                     RegNr = car.RegNr,
                     VIN = car.VIN
                 });
@@ -73,9 +73,9 @@ namespace CarNBusAPI.Read.Controllers
             car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatuses(car.CarId);
             car.CarLockedStatuses = _dataAccess.GetCarLockedStatuses(car.CarId);
             car.CarSpeeds = _dataAccess.GetCarSpeeds(car.CarId);
-            if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
+            if (car.Locked)
             {
-                if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                if (new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                 {  //Lock timeouted can be ignored and set to false
                     var message = new UpdateCarLockedStatus
                     {
@@ -84,7 +84,7 @@ namespace CarNBusAPI.Read.Controllers
                     };
 
                     _endpointInstancePriority.Send(message).ConfigureAwait(false);
-                    car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
+                    car.Locked = false;
                 }
             }
 
@@ -93,9 +93,9 @@ namespace CarNBusAPI.Read.Controllers
                 CarId = car.CarId,
                 CompanyId = car.CompanyId,
                 CreationTime = car.CreationTime,
-                Locked = car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked,
-                Online = car.CarOnlineStatuses[car.CarOnlineStatuses.Count - 1].Online,
-                Speed = car.CarSpeeds[car.CarSpeeds.Count - 1].Speed,
+                Locked = car.Locked,
+                Online = car.Online,
+                Speed = car.Speed,
                 RegNr = car.RegNr,
                 VIN = car.VIN
             };

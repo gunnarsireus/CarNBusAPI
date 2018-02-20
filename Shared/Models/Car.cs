@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,33 @@ namespace Shared.Models
         public List<CarLockedStatus> CarLockedStatuses { get; set; }
         [Required]
         public List<CarSpeed> CarSpeeds { get; set; }
+
         public Company CarOf { get; set; }
+
+        [NotMapped]
+        public bool Locked
+        {
+            get { return CarLockedStatuses[CarLockedStatuses.Count - 1].Locked; }
+            set { CarLockedStatuses[CarLockedStatuses.Count - 1].Locked = value; }
+
+        }
+
+        [NotMapped]
+        public long LockedTimeStamp
+        {
+            get { return CarLockedStatuses[CarLockedStatuses.Count - 1].LockedTimeStamp; }
+        }
+
+        [NotMapped]
+        public bool Online
+        {
+            get { return CarOnlineStatuses[CarOnlineStatuses.Count - 1].Online; }
+        }
+
+        [NotMapped]
+        public int Speed
+        {
+            get { return CarSpeeds[CarSpeeds.Count - 1].Speed; }
+        }
     }
 }

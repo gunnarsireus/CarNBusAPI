@@ -92,7 +92,7 @@ namespace Server.DAL
             {
                 foreach (var car in context.Cars)
                 {
-                    car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
+                    car.Locked = false;
                 }
             }
             context.SaveChanges();
