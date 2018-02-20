@@ -31,9 +31,9 @@ namespace CarNBusAPI.Read.Controllers
             var list = new List<ClientCar>();
             foreach (var car in cars)
             {
-                car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatus(car.CarId);
-                car.CarLockedStatuses = _dataAccess.GetCarLockedStatus(car.CarId);
-                car.CarSpeeds = _dataAccess.GetCarSpeed(car.CarId);
+                car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatuses(car.CarId);
+                car.CarLockedStatuses = _dataAccess.GetCarLockedStatuses(car.CarId);
+                car.CarSpeeds = _dataAccess.GetCarSpeeds(car.CarId);
                 if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
                 {
                     if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
@@ -70,9 +70,9 @@ namespace CarNBusAPI.Read.Controllers
         public ClientCar GetCar(string id)
         {
             var car = _dataAccess.GetCar(new Guid(id));
-            car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatus(car.CarId);
-            car.CarLockedStatuses = _dataAccess.GetCarLockedStatus(car.CarId);
-            car.CarSpeeds = _dataAccess.GetCarSpeed(car.CarId);
+            car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatuses(car.CarId);
+            car.CarLockedStatuses = _dataAccess.GetCarLockedStatuses(car.CarId);
+            car.CarSpeeds = _dataAccess.GetCarSpeeds(car.CarId);
             if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
             {
                 if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
