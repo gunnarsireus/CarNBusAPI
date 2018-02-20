@@ -31,12 +31,12 @@ namespace CarNBusAPI.Read.Controllers
             var list = new List<ClientCar>();
             foreach (var car in cars)
             {
-                car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
-                car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
-                car._CarSpeed = _dataAccess.GetCarSpeed(car.CarId);
-                if (car._CarLockedStatus.Locked)
+                car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatus(car.CarId);
+                car.CarLockedStatuses = _dataAccess.GetCarLockedStatus(car.CarId);
+                car.CarSpeeds = _dataAccess.GetCarSpeed(car.CarId);
+                if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
                 {
-                    if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                    if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                     {  //Lock timeouted can be ignored and set to false
                         var message = new UpdateCarLockedStatus
                         {
@@ -45,7 +45,7 @@ namespace CarNBusAPI.Read.Controllers
                         };
 
                         _endpointInstancePriority.Send(message).ConfigureAwait(false);
-                        car._CarLockedStatus.Locked = false;
+                        car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
                     }
                 }
 
@@ -54,9 +54,9 @@ namespace CarNBusAPI.Read.Controllers
                     CarId = car.CarId,
                     CompanyId = car.CompanyId,
                     CreationTime = car.CreationTime,
-                    Locked = car._CarLockedStatus.Locked,
-                    Online = car._CarOnlineStatus.Online,
-                    Speed = car._CarSpeed.Speed,
+                    Locked = car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked,
+                    Online = car.CarOnlineStatuses[car.CarOnlineStatuses.Count - 1].Online,
+                    Speed = car.CarSpeeds[car.CarSpeeds.Count - 1].Speed,
                     RegNr = car.RegNr,
                     VIN = car.VIN
                 });
@@ -70,12 +70,12 @@ namespace CarNBusAPI.Read.Controllers
         public ClientCar GetCar(string id)
         {
             var car = _dataAccess.GetCar(new Guid(id));
-            car._CarOnlineStatus = _dataAccess.GetCarOnlineStatus(car.CarId);
-            car._CarLockedStatus = _dataAccess.GetCarLockedStatus(car.CarId);
-            car._CarSpeed = _dataAccess.GetCarSpeed(car.CarId);
-            if (car._CarLockedStatus.Locked)
+            car.CarOnlineStatuses = _dataAccess.GetCarOnlineStatus(car.CarId);
+            car.CarLockedStatuses = _dataAccess.GetCarLockedStatus(car.CarId);
+            car.CarSpeeds = _dataAccess.GetCarSpeed(car.CarId);
+            if (car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked)
             {
-                if (new DateTime(car._CarLockedStatus.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                if (new DateTime(car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                 {  //Lock timeouted can be ignored and set to false
                     var message = new UpdateCarLockedStatus
                     {
@@ -84,7 +84,7 @@ namespace CarNBusAPI.Read.Controllers
                     };
 
                     _endpointInstancePriority.Send(message).ConfigureAwait(false);
-                    car._CarLockedStatus.Locked = false;
+                    car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
                 }
             }
 
@@ -93,9 +93,9 @@ namespace CarNBusAPI.Read.Controllers
                 CarId = car.CarId,
                 CompanyId = car.CompanyId,
                 CreationTime = car.CreationTime,
-                Locked = car._CarLockedStatus.Locked,
-                Online = car._CarOnlineStatus.Online,
-                Speed = car._CarSpeed.Speed,
+                Locked = car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked,
+                Online = car.CarOnlineStatuses[car.CarOnlineStatuses.Count - 1].Online,
+                Speed = car.CarSpeeds[car.CarSpeeds.Count - 1].Speed,
                 RegNr = car.RegNr,
                 VIN = car.VIN
             };

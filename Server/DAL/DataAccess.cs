@@ -30,26 +30,26 @@ namespace Server.DAL
 		    }
 	    }
 
-        public CarOnlineStatus GetCarOnlineStatus(Guid carId)
+        public List<CarOnlineStatus> GetCarOnlineStatus(Guid carId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarOnlineStatus.FirstOrDefault(c=>c.CarId==carId);
+                return context.CarOnlineStatus.Where(c=>c.CarId==carId).ToList();
             }
         }
 
-        public CarLockedStatus GetCarLockedStatus(Guid carId)
+        public List<CarLockedStatus> GetCarLockedStatus(Guid carId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarLockedStatus.FirstOrDefault(c => c.CarId == carId);
+                return context.CarLockedStatus.Where(c => c.CarId == carId).ToList();
             }
         }
-        public CarSpeed GetCarSpeed(Guid carId)
+        public List<CarSpeed> GetCarSpeed(Guid carId)
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CarSpeeds.FirstOrDefault(c => c.CarId == carId);
+                return context.CarSpeeds.Where(c => c.CarId == carId).ToList();
             }
         }
 

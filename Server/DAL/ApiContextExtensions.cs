@@ -21,7 +21,6 @@ namespace Server.DAL
                     RegNr = "ABC123"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 carId = Guid.NewGuid();
                 car = new Car
@@ -32,7 +31,6 @@ namespace Server.DAL
                     RegNr = "DEF456"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 carId = Guid.NewGuid();
                 car = new Car
@@ -43,7 +41,6 @@ namespace Server.DAL
                     RegNr = "GHI789"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 companyId = Guid.NewGuid();
                 context.Companies.Add(new Company() { CompanyId = companyId, Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
@@ -57,7 +54,6 @@ namespace Server.DAL
                     RegNr = "JKL012"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 carId = Guid.NewGuid();
                 car = new Car
@@ -68,7 +64,6 @@ namespace Server.DAL
                     RegNr = "MNO345"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 companyId = Guid.NewGuid();
                 context.Companies.Add(new Company() { CompanyId = companyId, Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
@@ -82,7 +77,6 @@ namespace Server.DAL
                     RegNr = "PQR678"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
 
                 carId = Guid.NewGuid();
                 car = new Car
@@ -93,13 +87,12 @@ namespace Server.DAL
                     RegNr = "STU901"
                 };
                 context.Cars.Add(car);
-                context.CarReadModels.Add(new CarReadModel(car));
             }
             else
             {
                 foreach (var car in context.Cars)
                 {
-                    car._CarLockedStatus.Locked = false;
+                    car.CarLockedStatuses[car.CarLockedStatuses.Count - 1].Locked = false;
                 }
             }
             context.SaveChanges();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,18 +11,26 @@ namespace Shared.Models
         public Car()
         {
             CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
-            _CarOnlineStatus = new CarOnlineStatus
+            CarOnlineStatuses = new List<CarOnlineStatus>
             {
-                Online = true,
+                new CarOnlineStatus { Online = true }
             };
-            _CarLockedStatus = new CarLockedStatus
+
+            CarLockedStatuses = new List<CarLockedStatus>
             {
-                Locked = false,
-                LockedTimeStamp = DateTime.Now.Ticks
+                new CarLockedStatus
+                {
+                    Locked = false,
+                    LockedTimeStamp = DateTime.Now.Ticks
+                }
             };
-            _CarSpeed = new CarSpeed
+
+            CarSpeeds = new List<CarSpeed>
             {
-                Speed = 576
+                new CarSpeed
+                {
+                    Speed = 576
+                }
             };
         }
 
@@ -41,11 +50,11 @@ namespace Shared.Models
         [Remote("RegNrAvailableAsync", "Car", ErrorMessage = "Registration number taken")]
         public string RegNr { get; set; }
         [Required]
-        public CarOnlineStatus _CarOnlineStatus { get; set; }
+        public List<CarOnlineStatus> CarOnlineStatuses { get; set; }
         [Required]
-        public CarLockedStatus _CarLockedStatus { get; set; }
+        public List<CarLockedStatus> CarLockedStatuses { get; set; }
         [Required]
-        public CarSpeed _CarSpeed { get; set; }
+        public List<CarSpeed> CarSpeeds { get; set; }
         public Company CarOf { get; set; }
     }
 }
