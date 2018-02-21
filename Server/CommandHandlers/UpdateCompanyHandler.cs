@@ -5,7 +5,7 @@ using NServiceBus;
 using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
-using Shared.Models;
+using Shared.Models.Write;
 namespace Server.CommandHandlers
 {
 	public class UpdateCompanyHandler : IHandleMessages<UpdateCompany>

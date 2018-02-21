@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Shared.Models
+namespace Shared.Models.Write
 {
     public class CarSpeed
 	{
@@ -10,11 +9,9 @@ namespace Shared.Models
         {
             SpeedTimeStamp = DateTime.Now.Ticks;
         }
-        //[Key, ForeignKey("SpeedOf")]
-        public Guid Id { get; set; }
+        [Key]
         public Guid CarId { get; set; }
         public long SpeedTimeStamp { get; set; }
         public int Speed { get; set; }
-        //public Car SpeedOf { get; set; }
     }
 }

@@ -5,7 +5,8 @@ using NServiceBus;
 using NServiceBus.Logging;
 using Server.DAL;
 using Server.Data;
-using Shared.Models;
+using Shared.Models.Write;
+using Shared.Models.Read;
 
 namespace Server.CommandHandlers
 {
@@ -26,20 +27,20 @@ namespace Server.CommandHandlers
             var car = new Car(message.CarId)
             {
                 CompanyId = message.CompanyId,
-                // todo: separate messages from the api
-                //_CarLockedStatus = new CarLockedStatus
-                //{
-                //    Locked = message._CarLockedStatus
-                //},
-                //_CarOnlineStatus = new CarOnlineStatus
-                //{
-                //    Online = message._CarOnlineStatus
-                //},
                 CreationTime = message.CreationTime,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };
-            // todo: add the same data to the CarReadModel 
+
+            var carRead = new CarRead(message.CarId)
+            {
+                CompanyId = message.CompanyId,
+                CreationTime = message.CreationTime,
+                RegNr = message.RegNr,
+                VIN = message.VIN
+            };
+
+
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.Cars.Add(car);

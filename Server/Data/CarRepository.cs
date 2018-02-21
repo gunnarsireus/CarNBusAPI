@@ -1,4 +1,4 @@
-﻿using Shared.Models;
+﻿using Shared.Models.Write;
 using Server.DAL;
 using System;
 using System.Linq;
@@ -13,10 +13,5 @@ namespace Server.Data
 		}
 
 		public ApiContext ApiContext => Context as ApiContext;
-
-        public List<Car> GetAllByCompanyId(Guid CompanyId)
-        {
-            return GetAll().Where(o => o.CompanyId == CompanyId).ToList();
-        }
     }
 }

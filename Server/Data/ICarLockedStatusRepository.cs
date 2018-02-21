@@ -1,11 +1,10 @@
-﻿using Shared.Models;
-using System;
-using System.Collections.Generic;
+﻿using Server.DAL;
+using Shared.Models.Write;
 
 namespace Server.Data
 {
-    public interface ICarLockedStatusRepository : IRepository<CarLockedStatus>
+    public interface ICarLockedStatusRepository:IRepository<CarLockedStatus>
     {
-        List<CarLockedStatus> GetAllOrdered(Guid CarId);
+        ApiContext ApiContext { get; }
     }
 }

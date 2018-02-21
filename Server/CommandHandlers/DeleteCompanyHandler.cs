@@ -5,7 +5,7 @@ using NServiceBus;
 using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
-using Shared.Models;
+using Shared.Models.Write;
 
 namespace Server.CommandHandlers
 {
@@ -24,15 +24,8 @@ namespace Server.CommandHandlers
             log.Info("Received DeleteCompany");
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                var allCars = unitOfWork.Cars.GetAllByCompanyId(message.CompanyId);
-                foreach (var car in allCars)
-                {
-                    unitOfWork.CarLockedStatus.Add(new CarLockedStatus { Locked = true, CarId = car.CarId });
-                    unitOfWork.Complete();
-                }
-                unitOfWork.Cars.RemoveRange(allCars);
-                unitOfWork.Complete();
-                unitOfWork.Companies.Remove(unitOfWork.Companies.Get(message.CompanyId));
+                // Send delete all cars command for company
+                unitOfWork.Companies.Remove(new Company(message.CompanyId));
                 unitOfWork.Complete();
             }
 

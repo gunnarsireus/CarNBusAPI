@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Shared.Models
+namespace Shared.Models.Write
 {
     public class CarOnlineStatus
 	{
@@ -10,11 +9,9 @@ namespace Shared.Models
         {
             OnlineTimeStamp = DateTime.Now.Ticks;
         }
-        //[Key, ForeignKey("OnlineStatusOf")]
-        public Guid Id { get; set; }
+        [Key]
         public Guid CarId { get; set; }
         public long OnlineTimeStamp { get; set; }
         public bool Online { get; set; }
-        //public Car OnlineStatusOf { get; set; }
 	}
 }

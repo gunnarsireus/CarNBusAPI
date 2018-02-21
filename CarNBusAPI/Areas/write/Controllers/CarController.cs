@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Server.DAL;
-using Shared.Models;
+using Shared.Models.Read;
+using Shared.Models.Write;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;
 using Messages.Commands;
@@ -15,28 +16,29 @@ namespace CarNBusAPI.Write.Controllers
     {
         readonly IEndpointInstance _endpointInstance;
         readonly IEndpointInstance _endpointInstancePriority;
-        readonly DataAccess _dataAccess;
+        readonly DataAccessWrite _dataAccess;
         public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfigurationRoot configuration)
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
-            _dataAccess = new DataAccess(configuration);
+            _dataAccess = new DataAccessWrite(configuration);
         }
 
         // POST api/Car
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
-        public void AddCar([FromBody] ClientCar clientCar)
+        public void AddCar([FromBody] CarRead carRead)
         {
             var message = new CreateCar
             {
-                CompanyId = clientCar.CompanyId,
-                _CarLockedStatus = clientCar.Locked,
-                _CarOnlineStatus = clientCar.Online,
-                CreationTime = clientCar.CreationTime,
-                CarId = clientCar.CarId,
-                RegNr = clientCar.RegNr,
-                VIN = clientCar.VIN
+                CompanyId = carRead.CompanyId,
+                _CarLockedStatus = carRead.Locked,
+                LockedTimeStamp = carRead.LockedTimeStamp,
+                _CarOnlineStatus = carRead.Online,
+                CreationTime = carRead.CreationTime,
+                CarId = carRead.CarId,
+                RegNr = carRead.RegNr,
+                VIN = carRead.VIN
             };
             //todo: create messages for Online, Locked and Speed
             _endpointInstance.Send(message).ConfigureAwait(false);
@@ -45,25 +47,27 @@ namespace CarNBusAPI.Write.Controllers
         // PUT api/Car/5
         [HttpPut("/api/write/car/online/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarOnline([FromBody] ClientCar clientCar)
+        public void UpdateCarOnline([FromBody] CarRead CarRead)
         {
             var message = new UpdateCarOnlineStatus
             {
-                OnlineStatus = clientCar.Online,
-                CarId = clientCar.CarId
-            };
+                OnlineStatus = CarRead.Online,
+                CarId = CarRead.CarId,
+                OnlineTimeStamp = DateTime.Now.Ticks
+        };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/locked/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarLocked([FromBody] ClientCar clientCar)
+        public void UpdateCarLocked([FromBody] CarRead CarRead)
         {
             var message = new UpdateCarLockedStatus
             {
-                LockedStatus = clientCar.Locked,
-                CarId = clientCar.CarId
+                LockedStatus = CarRead.Locked,
+                CarId = CarRead.CarId,
+                LockedTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstancePriority.Send(message).ConfigureAwait(false);
@@ -71,12 +75,13 @@ namespace CarNBusAPI.Write.Controllers
 
         [HttpPut("/api/write/car/speed/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarSpeed([FromBody] ClientCar clientCar)
+        public void UpdateCarSpeed([FromBody] CarRead CarRead)
         {
             var message = new UpdateCarSpeed
             {
-                Speed = clientCar.Speed,
-                CarId = clientCar.CarId
+                Speed = CarRead.Speed,
+                CarId = CarRead.CarId,
+                SpeedTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

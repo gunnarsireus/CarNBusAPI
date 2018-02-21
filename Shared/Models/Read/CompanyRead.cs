@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace Shared.Models
+namespace Shared.Models.Read
 {
-    public class ClientCompany
+    public class CompanyRead
     {
+        [Key]
         public Guid CompanyId { get; set; }
         public string CreationTime { get; set; }
         public string Name { get; set; }

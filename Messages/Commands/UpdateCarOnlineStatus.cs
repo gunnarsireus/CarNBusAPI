@@ -10,5 +10,6 @@ namespace Messages.Commands
 		public Guid DataId { get; set; }
 		public Guid CarId { get; set; }
         public bool OnlineStatus { get; set; }
+        public long OnlineTimeStamp { get; set; }
     }
 }

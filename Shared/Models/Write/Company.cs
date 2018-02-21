@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Shared.Models
+namespace Shared.Models.Write
 {
 	public class Company
 	{

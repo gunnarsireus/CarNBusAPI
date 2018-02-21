@@ -30,20 +30,6 @@ namespace Server.Data
 			Context.AddRange(entities);
 		}
 
-		public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
-		{
-			return Context.Set<TEntity>().Where(predicate);
-		}
-
-		public TEntity Get(Guid id)
-	    {
-			return Context.Set<TEntity>().Find(id);
-	    }
-	    public IEnumerable<TEntity> GetAll()
-	    {
-		    return Context.Set<TEntity>().ToList();
-	    }
-
 		public void Remove(TEntity entity)
 		{
 			Context.Remove(entity);

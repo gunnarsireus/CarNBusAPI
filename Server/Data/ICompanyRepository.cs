@@ -1,5 +1,4 @@
-﻿using Shared.Models;
-
+﻿using Shared.Models.Write;
 
 namespace Server.Data
 {

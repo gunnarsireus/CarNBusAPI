@@ -1,4 +1,4 @@
-﻿using Shared.Models;
+﻿using Shared.Models.Write;
 using Server.DAL;
 using Microsoft.EntityFrameworkCore;
 

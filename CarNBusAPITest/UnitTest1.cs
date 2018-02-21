@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using CarNBusAPI.Read.Controllers;
 using Server.DAL;
-using Shared.Models;
+using Shared.Models.Write;
 using Xunit;
 using NServiceBus;
 using Microsoft.Extensions.Configuration;

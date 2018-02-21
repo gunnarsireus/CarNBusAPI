@@ -1,16 +1,16 @@
+using System.Threading.Tasks;
+using Messages.Commands;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus;
+using NServiceBus.Logging;
+using Server.Data;
+using Server.DAL;
+using Shared.Models.Write;
+using System.Linq;
+using System.Globalization;
+
 namespace Server.CommandHandlers
 {
-    using System.Threading.Tasks;
-    using Messages.Commands;
-    using Microsoft.EntityFrameworkCore;
-    using NServiceBus;
-    using NServiceBus.Logging;
-    using Server.Data;
-    using Server.DAL;
-    using Shared.Models;
-    using System.Linq;
-    using System.Globalization;
-
     public class UpdateCarLockedStatusHandler : IHandleMessages<UpdateCarLockedStatus>
     {
         readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
@@ -30,17 +30,13 @@ namespace Server.CommandHandlers
             var carLockedStatus = new CarLockedStatus
             {
                 Locked = message.LockedStatus,
-                CarId = message.CarId
+                CarId = message.CarId,
+                LockedTimeStamp = message.LockedTimeStamp
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                var car = unitOfWork.Cars.Get(message.CarId);
-                if (car == null) return Task.CompletedTask;
-                var listOfOldItems = unitOfWork.CarLockedStatus.GetAllOrdered(message.CarId);
-                unitOfWork.CarLockedStatus.Add(carLockedStatus);
-                unitOfWork.Complete();
-                unitOfWork.CarLockedStatus.RemoveRange(listOfOldItems);
+                unitOfWork.CarLockedStatuses.Update(carLockedStatus);
                 unitOfWork.Complete();
             }
 

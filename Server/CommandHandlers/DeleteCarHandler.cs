@@ -5,6 +5,7 @@ using NServiceBus;
 using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
+using Shared.Models.Write;
 
 namespace Server.CommandHandlers
 {
@@ -24,7 +25,7 @@ namespace Server.CommandHandlers
 
 			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
-				unitOfWork.Cars.Remove(unitOfWork.Cars.Get(message.CarId));
+				unitOfWork.Cars.Remove(new Car(message.CarId));
 				unitOfWork.Complete();
 			}
 

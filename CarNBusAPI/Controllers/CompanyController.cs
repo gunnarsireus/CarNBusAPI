@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Server.DAL;
-using Shared.Models;
+using Shared.Models.Read;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus;
 using Messages.Commands;
@@ -13,30 +13,33 @@ namespace CarNBusAPI.Controllers
     public class CompanyController : Controller
     {
         readonly IEndpointInstance _endpointInstance;
-        readonly DataAccess _dataAccess;
+        readonly DataAccessWrite _dataAccessWrite;
+        readonly DataAccessRead _dataAccessRead;
+
         public CompanyController(IEndpointInstance endpointInstance, IConfigurationRoot configuration)
         {
             _endpointInstance = endpointInstance;
-            _dataAccess = new DataAccess(configuration);
+            _dataAccessWrite = new DataAccessWrite(configuration);
+            _dataAccessRead = new DataAccessRead(configuration);
         }
 
         // GET api/Company
         [HttpGet]
-        public IEnumerable<Company> GetCompanies()
+        public IEnumerable<CompanyRead> GetCompanies()
         {
-            return _dataAccess.GetCompanies();
+            return _dataAccessRead.GetCompanies();
         }
 
         // GET api/Company/5
         [HttpGet("{id}")]
-        public Company GetCompany(string id)
+        public CompanyRead GetCompany(string id)
         {
-            return _dataAccess.GetCompany(new Guid(id));
+            return _dataAccessRead.GetCompany(new Guid(id));
         }
 
         // POST api/Company
         [HttpPost]
-        public void AddCompany([FromBody] Company company)
+        public void AddCompany([FromBody] CompanyRead company)
         {
             var message = new CreateCompany
             {
@@ -53,7 +56,7 @@ namespace CarNBusAPI.Controllers
 
         // PUT api/Company/5
         [HttpPut("{id}")]
-        public void UpdateCompany([FromBody] Company company)
+        public void UpdateCompany([FromBody] CompanyRead company)
         {
             if (GetCompany(company.CompanyId.ToString()) == null) return;
             var message = new UpdateCompany
