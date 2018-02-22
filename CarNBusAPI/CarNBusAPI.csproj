@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Configurations>Debug;Release;Production</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,6 +10,11 @@
     <Content Remove="CommandHandlers\**" />
     <EmbeddedResource Remove="CommandHandlers\**" />
     <None Remove="CommandHandlers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\CarNBusAPI - FTP.pubxml" />
+    <None Remove="Properties\PublishProfiles\CarNBusAPI - Web Deploy.pubxml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +35,10 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
     <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 </Project>
