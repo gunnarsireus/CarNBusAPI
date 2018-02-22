@@ -6,8 +6,6 @@ using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
-using System.Linq;
-using System.Globalization;
 
 namespace Server.CommandHandlers
 {
@@ -39,7 +37,6 @@ namespace Server.CommandHandlers
                 unitOfWork.CarLockedStatuses.Update(carLockedStatus);
                 unitOfWork.Complete();
             }
-
             return Task.CompletedTask;
         }
     }

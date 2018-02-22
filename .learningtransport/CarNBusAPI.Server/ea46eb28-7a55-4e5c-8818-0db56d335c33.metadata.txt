@@ -1,0 +1,14 @@
+{
+  "NServiceBus.MessageId": "4082373c-77b0-499a-bfe0-a88e0118a7d4",
+  "NServiceBus.MessageIntent": "Send",
+  "NServiceBus.ConversationId": "c7ec0dee-653d-410f-a632-a88e0118a7d6",
+  "NServiceBus.CorrelationId": "4082373c-77b0-499a-bfe0-a88e0118a7d4",
+  "NServiceBus.OriginatingMachine": "GUNNAR-DELL",
+  "NServiceBus.OriginatingEndpoint": "CarNBusAPI.Client",
+  "$.diagnostics.originating.hostid": "417b210172d7b2876ba2b04095b166e0",
+  "NServiceBus.ReplyToAddress": "CarNBusAPI.Client",
+  "NServiceBus.ContentType": "text\/xml",
+  "NServiceBus.EnclosedMessageTypes": "Messages.Commands.UpdateCarSpeed, Messages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+  "NServiceBus.Version": "7.0.0",
+  "NServiceBus.TimeSent": "2018-02-21 17:01:50:147565 Z"
+}

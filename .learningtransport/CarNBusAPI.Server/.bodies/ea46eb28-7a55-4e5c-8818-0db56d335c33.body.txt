@@ -1,0 +1,1 @@
+<?xml version="1.0"?><UpdateCarSpeed xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://tempuri.net/Messages.Commands"><DataId>00a7f072-459f-4411-b2dd-8828862f9619</DataId><CarId>8288b015-53db-4612-b5a1-4e0e9325844c</CarId><Speed>547</Speed><SpeedTimeStamp>636548329101418047</SpeedTimeStamp></UpdateCarSpeed>
