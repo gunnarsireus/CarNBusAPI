@@ -6,6 +6,8 @@ using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
+using Shared.Models.Read;
+using System;
 
 namespace Server.CommandHandlers
 {
@@ -35,6 +37,15 @@ namespace Server.CommandHandlers
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.Companies.Add(company);
+                unitOfWork.CompaniesRead.Add(new CompanyRead(company.CompanyId)
+                {
+                    Address = company.Address,
+                    ChangeTimeStamp = DateTime.Now.Ticks,
+                    CreationTime = company.CreationTime,
+                    Deleted = false,
+                    Name = company.Name,
+                    Id = Guid.NewGuid(),
+                });
                 unitOfWork.Complete();
             }
 

@@ -34,7 +34,6 @@ namespace CarNBusAPI.Write.Controllers
             var message = new CreateCar
             {
                 CompanyId = carRead.CompanyId,
-
                 CreationTime = carRead.CreationTime,
                 CarId = carRead.CarId,
                 RegNr = carRead.RegNr,

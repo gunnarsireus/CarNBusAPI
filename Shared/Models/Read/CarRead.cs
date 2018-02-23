@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Shared.Models.Read
 {
@@ -7,7 +8,7 @@ namespace Shared.Models.Read
     {
         public CarRead()
         {
-
+            CreationTime = DateTime.Now.ToString(new CultureInfo("sv-SE"));
         }
         public CarRead(Guid carId)
         {

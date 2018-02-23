@@ -12,7 +12,7 @@ namespace Server.Data
 		    _context = context;
 		    Cars = new CarRepository(_context);
             CarsReadNull = new CarReadRepository(_context);
-            CompanyRead = new CompanyReadRepository(_context);
+            CompaniesRead = new CompanyReadRepository(_context);
             CarLockedStatuses = new CarLockedStatusRepository(_context);
             CarOnlineStatuses = new CarOnlineStatusRepository(_context);
             CarSpeeds = new CarSpeedRepository(_context);
@@ -26,7 +26,7 @@ namespace Server.Data
 
 	    public ICarRepository Cars { get; private set; }
         public ICarReadRepository CarsReadNull { get; private set; }
-        public ICompanyReadRepository CompanyRead { get; private set; }
+        public ICompanyReadRepository CompaniesRead { get; private set; }
         public ICarLockedStatusRepository CarLockedStatuses { get; private set; }
         public ICarOnlineStatusRepository CarOnlineStatuses { get; private set; }
         public ICarSpeedRepository CarSpeeds { get; private set; }

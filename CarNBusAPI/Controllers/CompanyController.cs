@@ -50,7 +50,7 @@ namespace CarNBusAPI.Controllers
                 CreationTime = company.CreationTime,
                 CompanyId = company.CompanyId   //Todo check if new Guid?
             };
-            // TODO: map object and massege
+            // TODO: map object and message
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }

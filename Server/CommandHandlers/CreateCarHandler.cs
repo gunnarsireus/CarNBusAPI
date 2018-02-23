@@ -7,6 +7,7 @@ using Server.DAL;
 using Server.Data;
 using Shared.Models.Write;
 using Shared.Models.Read;
+using System;
 
 namespace Server.CommandHandlers
 {
@@ -35,6 +36,7 @@ namespace Server.CommandHandlers
             var carReadNull = new CarReadNull(message.CarId, message.CompanyId)
             {
                 CreationTime = message.CreationTime,
+                ChangeTimeStamp = DateTime.Now.Ticks,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };

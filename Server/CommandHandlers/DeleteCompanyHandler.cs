@@ -27,7 +27,7 @@ namespace Server.CommandHandlers
             {
                 // Send delete all cars command for company
                 unitOfWork.Companies.Remove(new Company(message.CompanyId));
-                unitOfWork.CompanyRead.Add(new CompanyRead(message.CompanyId)
+                unitOfWork.CompaniesRead.Add(new CompanyRead(message.CompanyId)
                 {
                     Deleted = true,
                     ChangeTimeStamp = message.DeleteTimeStamp

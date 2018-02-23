@@ -106,7 +106,6 @@ namespace Server.DAL
                             CreationTime = companyRead.CreationTime,
                             Address = companyRead.Address,
                             Name = companyRead.Name,
-                            Pending = companyRead.Pending,
                             Deleted = companyRead.Deleted
                         });
                     }
@@ -114,7 +113,7 @@ namespace Server.DAL
 
                 return CompanyReads;
             }
-         }
+        }
 
         public CompanyRead GetCompany(Guid companyId)
         {
