@@ -6,6 +6,7 @@ using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
+using Shared.Models.Read;
 
 namespace Server.CommandHandlers
 {
@@ -26,6 +27,11 @@ namespace Server.CommandHandlers
             {
                 // Send delete all cars command for company
                 unitOfWork.Companies.Remove(new Company(message.CompanyId));
+                unitOfWork.CompanyRead.Add(new CompanyRead(message.CompanyId)
+                {
+                    Deleted = true,
+                    ChangeTimeStamp = message.DeleteTimeStamp
+                });
                 unitOfWork.Complete();
             }
 

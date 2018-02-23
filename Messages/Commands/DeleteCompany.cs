@@ -1,8 +1,6 @@
 using System;
 namespace Messages.Commands
 {
-
-    [Serializable]
     public class DeleteCompany 
     {
         public DeleteCompany()
@@ -11,5 +9,6 @@ namespace Messages.Commands
         }
 		public Guid DataId { get; set; }
 		public Guid CompanyId { get; set; }
-	}
+        public long DeleteTimeStamp { get; set; }
+    }
 }

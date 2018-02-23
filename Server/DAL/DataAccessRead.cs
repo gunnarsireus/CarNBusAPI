@@ -60,7 +60,7 @@ namespace Server.DAL
             CarRead carRead = null;
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var carReadNull = context.CarsReadNull.FirstOrDefault(o => o.CarId == carId && !o.Deleted);
+                var carReadNull = context.CarsReadNull.OrderBy(c => c.ChangeTimeStamp).LastOrDefault(o => o.CarId == carId && !o.Deleted);
                 if (carReadNull != null)
                 {
                     var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
@@ -90,17 +90,48 @@ namespace Server.DAL
 
         public ICollection<CompanyRead> GetCompanies()
         {
+            var CompanyReads = new List<CompanyRead>();
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CompaniesRead.ToList();
+                var uniqueCompaniesRead = context.CompaniesRead.GroupBy(i => i.CompanyId).Select(g => g.First()).ToList();
+                foreach (var companyRead in uniqueCompaniesRead)
+                {
+                    var deletedList = context.CompaniesRead.Where(w => w.CompanyId == companyRead.CompanyId).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Deleted).ToList();
+                    if (!deletedList.LastOrDefault())
+                    {
+                        CompanyReads.Add(new CompanyRead(companyRead.CompanyId)
+                        {
+                            ChangeTimeStamp = companyRead.ChangeTimeStamp,
+                            CompanyId = companyRead.CompanyId,
+                            CreationTime = companyRead.CreationTime,
+                            Address = companyRead.Address,
+                            Name = companyRead.Name,
+                            Pending = companyRead.Pending,
+                            Deleted = companyRead.Deleted
+                        });
+                    }
+                }
+
+                return CompanyReads;
             }
-        }
+         }
 
         public CompanyRead GetCompany(Guid companyId)
         {
+            CompanyRead companyRead = null;
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                return context.CompaniesRead.FirstOrDefault(o => o.CompanyId == companyId);
+                companyRead = context.CompaniesRead.OrderBy(c => c.ChangeTimeStamp).LastOrDefault(o => o.CompanyId == companyId && !o.Deleted);
+                if (companyRead != null)
+                {
+                    var deletedList = context.CompaniesRead.Where(w => w.CompanyId == companyId).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Deleted).ToList();
+                    if (!deletedList.LastOrDefault())
+                    {
+                        return companyRead;
+                    }
+                }
+
+                return null;
             }
         }
     }
