@@ -16,12 +16,14 @@ namespace CarNBusAPI.Write.Controllers
     {
         readonly IEndpointInstance _endpointInstance;
         readonly IEndpointInstance _endpointInstancePriority;
-        readonly DataAccessWrite _dataAccess;
+        readonly DataAccessWrite _dataAccessWrite;
+        readonly DataAccessRead _dataAccessRead;
         public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfigurationRoot configuration)
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
-            _dataAccess = new DataAccessWrite(configuration);
+            _dataAccessWrite = new DataAccessWrite(configuration);
+            _dataAccessRead = new DataAccessRead(configuration);
         }
 
         // POST api/Car
@@ -32,16 +34,41 @@ namespace CarNBusAPI.Write.Controllers
             var message = new CreateCar
             {
                 CompanyId = carRead.CompanyId,
-                _CarLockedStatus = carRead.Locked,
-                LockedTimeStamp = carRead.LockedTimeStamp,
-                _CarOnlineStatus = carRead.Online,
+
                 CreationTime = carRead.CreationTime,
                 CarId = carRead.CarId,
                 RegNr = carRead.RegNr,
                 VIN = carRead.VIN
             };
             //todo: create messages for Online, Locked and Speed
+            var createOnlineStatus = new CreateCarOnlineStatus
+            {
+                CarId = carRead.CarId,
+                CompanyId = carRead.CompanyId,
+                OnlineStatus = carRead.Online,
+                CreationTime = carRead.ChangeTimeStamp
+            };
+
+            var createLockedStatus = new CreateCarLockedStatus
+            {
+                CarId = carRead.CarId,
+                CompanyId = carRead.CompanyId,
+                LockedStatus = carRead.Locked,
+                CreationTime = carRead.ChangeTimeStamp
+            };
+
+            var createSpeed = new CreateCarSpeed
+            {
+                CarId = carRead.CarId,
+                CompanyId = carRead.CompanyId,
+                Speed = carRead.Speed,
+                CreationTime = carRead.ChangeTimeStamp
+            };
+
             _endpointInstance.Send(message).ConfigureAwait(false);
+            _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
+            _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
+            _endpointInstance.Send(createSpeed).ConfigureAwait(false);
         }
         // Todo: Separeta to UpdateOnline, UpdateLocked and UpdateSpeed
         // PUT api/Car/5
@@ -53,6 +80,7 @@ namespace CarNBusAPI.Write.Controllers
             {
                 OnlineStatus = CarRead.Online,
                 CarId = CarRead.CarId,
+                CompanyId = CarRead.CompanyId,
                 OnlineTimeStamp = DateTime.Now.Ticks
         };
 
@@ -67,6 +95,7 @@ namespace CarNBusAPI.Write.Controllers
             {
                 LockedStatus = CarRead.Locked,
                 CarId = CarRead.CarId,
+                CompanyId = CarRead.CompanyId,
                 LockedTimeStamp = DateTime.Now.Ticks
             };
 
@@ -81,6 +110,7 @@ namespace CarNBusAPI.Write.Controllers
             {
                 Speed = CarRead.Speed,
                 CarId = CarRead.CarId,
+                CompanyId = CarRead.CompanyId,
                 SpeedTimeStamp = DateTime.Now.Ticks
             };
 
@@ -92,8 +122,14 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void DeleteCar(string id)
         {
-            var message = new DeleteCar() { CarId = new Guid(id) };
+            var oldCar = GetCar(id);
+            var message = new DeleteCar() { CarId = new Guid(id), CompanyId = oldCar.CompanyId };
             _endpointInstance.Send(message).ConfigureAwait(false);
+        }
+
+        CarRead GetCar(string id)
+        {
+           return  _dataAccessRead.GetCar(new Guid(id));
         }
     }
 }

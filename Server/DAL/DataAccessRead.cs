@@ -10,34 +10,75 @@ namespace Server.DAL
 {
     public class DataAccessRead
     {
-	    public DataAccessRead(IConfigurationRoot configuration)
-	    {
-		    Configuration = configuration;
+        public DataAccessRead(IConfigurationRoot configuration)
+        {
+            Configuration = configuration;
             var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
             _optionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
         }
-	    IConfigurationRoot Configuration { get; set; }
+        IConfigurationRoot Configuration { get; set; }
 
-		private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder = new DbContextOptionsBuilder<ApiContext>();
+        private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder = new DbContextOptionsBuilder<ApiContext>();
 
 
-	    public ICollection<CarRead> GetCars()
-	    {
-		    using (var context = new ApiContext(_optionsBuilder.Options))
-		    {
-			    return context.CarsRead.ToList();
-		    }
-	    }
+        public ICollection<CarRead> GetCars()
+        {
+            var carReads = new List<CarRead>();
+            using (var context = new ApiContext(_optionsBuilder.Options))
+            {
+                var uniqueCarIds = context.CarsReadNull.Where(c => !c.Deleted).GroupBy(i => i.CarId).Select(g => g.First()).ToList();
+                foreach (var carId in uniqueCarIds)
+                {
+                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Locked ?? false).ToList();
+                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Speed ?? 0).ToList();
+                    carReads.Add(new CarRead(carId.CarId)
+                    {
+                        ChangeTimeStamp = carId.ChangeTimeStamp,
+                        CompanyId = carId.CompanyId,
+                        CreationTime = carId.CreationTime,
+                        RegNr = carId.RegNr,
+                        VIN = carId.VIN,
+                        Speed = speedList[speedList.Count - 1],
+                        Online = onlineList[onlineList.Count - 1],
+                        Locked = lockedList[lockedList.Count - 1]
+                    });
+                }
+
+                return carReads;
+            }
+        }
 
         public CarRead GetCar(Guid carId)
-	    {
-		    using (var context = new ApiContext(_optionsBuilder.Options))
-		    {
-			    return context.CarsRead.FirstOrDefault(o => o.CarId == carId);
-		    }
-	    }
+        {
 
-		public ICollection<CompanyRead> GetCompanies()
+            CarRead carRead = null;
+            using (var context = new ApiContext(_optionsBuilder.Options))
+            {
+                var carReadNull = context.CarsReadNull.FirstOrDefault(o => o.CarId == carId && !o.Deleted);
+                if (carReadNull != null)
+                {
+                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Locked ?? false).ToList();
+                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Speed ?? 0).ToList();
+                    carRead = new CarRead(carId)
+                    {
+                        ChangeTimeStamp = carReadNull.ChangeTimeStamp,
+                        CompanyId = carReadNull.CompanyId,
+                        CreationTime = carReadNull.CreationTime,
+                        RegNr = carReadNull.RegNr,
+                        VIN = carReadNull.VIN,
+                        Speed = speedList[speedList.Count - 1],
+                        Online = onlineList[onlineList.Count - 1],
+                        Locked = lockedList[lockedList.Count - 1]
+                    };
+                }
+
+                return carRead;
+            }
+        }
+
+        public ICollection<CompanyRead> GetCompanies()
         {
             using (var context = new ApiContext(_optionsBuilder.Options))
             {

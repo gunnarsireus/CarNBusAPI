@@ -6,6 +6,7 @@ using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
+using Shared.Models.Read;
 
 namespace Server.CommandHandlers
 {
@@ -26,7 +27,10 @@ namespace Server.CommandHandlers
 			using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
 			{
 				unitOfWork.Cars.Remove(new Car(message.CarId));
-				unitOfWork.Complete();
+                unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId) {
+                    Deleted = true
+                });
+                unitOfWork.Complete();
 			}
 
 			// publish an event that a car had been deleted?

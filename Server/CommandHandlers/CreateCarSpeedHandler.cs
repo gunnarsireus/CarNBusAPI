@@ -12,36 +12,36 @@ using System.Globalization;
 
 namespace Server.CommandHandlers
 {
-    public class UpdateCarSpeedHandler : IHandleMessages<UpdateCarSpeed>
+    public class CreateCarSpeedHandler : IHandleMessages<CreateCarSpeed>
     {
         readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
-        // What does update mean?
-        public UpdateCarSpeedHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
+        // What does Create mean?
+        public CreateCarSpeedHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
         {
             _dbContextOptionsBuilder = dbContextOptionsBuilder;
         }
 
-        static ILog log = LogManager.GetLogger<UpdateCarSpeedHandler>();
+        static ILog log = LogManager.GetLogger<CreateCarSpeedHandler>();
 
-        public Task Handle(UpdateCarSpeed message, IMessageHandlerContext context)
+        public Task Handle(CreateCarSpeed message, IMessageHandlerContext context)
         {
 
-            log.Info("Received UpdateCarSpeed");
+            log.Info("Received CreateCarSpeed");
 
             var carSpeed = new CarSpeed
             {
                 Speed = message.Speed,
                 CarId = message.CarId,
-                SpeedTimeStamp = message.SpeedTimeStamp
+                SpeedTimeStamp = message.CreationTime
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                unitOfWork.CarSpeeds.Update(carSpeed);
+                unitOfWork.CarSpeeds.Add(carSpeed);
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId, message.CompanyId)
                 {
                     Speed = message.Speed,
-                    ChangeTimeStamp = message.SpeedTimeStamp
+                    ChangeTimeStamp = message.CreationTime
                 });
                 unitOfWork.Complete();
             }

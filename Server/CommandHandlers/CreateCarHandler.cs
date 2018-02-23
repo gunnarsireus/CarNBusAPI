@@ -32,18 +32,17 @@ namespace Server.CommandHandlers
                 VIN = message.VIN
             };
 
-            var carRead = new CarRead(message.CarId)
+            var carReadNull = new CarReadNull(message.CarId, message.CompanyId)
             {
-                CompanyId = message.CompanyId,
                 CreationTime = message.CreationTime,
                 RegNr = message.RegNr,
                 VIN = message.VIN
             };
 
-
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.Cars.Add(car);
+                unitOfWork.CarsReadNull.Add(carReadNull);
                 unitOfWork.Complete();
             }
             // Publish an event that a car was created?

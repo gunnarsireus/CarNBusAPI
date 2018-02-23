@@ -149,7 +149,7 @@ namespace Server.DAL
 
         private static void MapCarToCarRead(ApiContext context, Car car)
         {
-            context.CarsRead.Add(new CarRead(car.CarId)
+            context.CarsReadNull.Add(new CarReadNull(car.CarId,car.CompanyId)
             {
                 CompanyId = car.CompanyId,
                 CreationTime = car.CreationTime,

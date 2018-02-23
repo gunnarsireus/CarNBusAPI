@@ -9,6 +9,7 @@ namespace Messages.Commands
         }
         public Guid DataId { get; set; }
         public Guid CarId { get; set; }
+        public Guid CompanyId { get; set; }
         public long LockedTimeStamp { get; set; }
         public bool LockedStatus { get; set; }
     }

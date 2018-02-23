@@ -6,6 +6,7 @@ using NServiceBus.Logging;
 using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
+using Shared.Models.Read;
 
 namespace Server.CommandHandlers
 {
@@ -35,6 +36,11 @@ namespace Server.CommandHandlers
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.CarLockedStatuses.Update(carLockedStatus);
+                unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId)
+                {
+                    Locked = message.LockedStatus,
+                    ChangeTimeStamp = message.LockedTimeStamp
+                });
                 unitOfWork.Complete();
             }
             return Task.CompletedTask;

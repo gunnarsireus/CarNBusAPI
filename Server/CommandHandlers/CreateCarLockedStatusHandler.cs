@@ -7,43 +7,43 @@ using Server.Data;
 using Server.DAL;
 using Shared.Models.Write;
 using Shared.Models.Read;
+using System;
 
 namespace Server.CommandHandlers
 {
-    public class UpdateCarOnlineStatusHandler : IHandleMessages<UpdateCarOnlineStatus>
+    public class CreateCarLockedStatusHandler : IHandleMessages<CreateCarLockedStatus>
     {
         readonly DbContextOptionsBuilder<ApiContext> _dbContextOptionsBuilder;
         // What does update mean?
-        public UpdateCarOnlineStatusHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
+        public CreateCarLockedStatusHandler(DbContextOptionsBuilder<ApiContext> dbContextOptionsBuilder)
         {
             _dbContextOptionsBuilder = dbContextOptionsBuilder;
         }
 
-        static ILog log = LogManager.GetLogger<UpdateCarOnlineStatusHandler>();
+        static ILog log = LogManager.GetLogger<CreateCarLockedStatusHandler>();
 
-        public Task Handle(UpdateCarOnlineStatus message, IMessageHandlerContext context)
+        public Task Handle(CreateCarLockedStatus message, IMessageHandlerContext context)
         {
-            log.Info("Received UpdateCarOnlineStatus");
 
-            var carOnlineStatus = new CarOnlineStatus
+            log.Info("Received CreateCarLockedStatus");
+
+            var carLockedStatus = new CarLockedStatus
             {
-                Online = message.OnlineStatus,
+                Locked = message.LockedStatus,
                 CarId = message.CarId,
-                OnlineTimeStamp = message.OnlineTimeStamp
+                LockedTimeStamp = message.CreationTime
             };
-
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                unitOfWork.CarOnlineStatuses.Update(carOnlineStatus);
+                unitOfWork.CarLockedStatuses.Update(carLockedStatus);
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId)
                 {
-                    Online = message.OnlineStatus,
-                    ChangeTimeStamp = message.OnlineTimeStamp
+                    Locked = message.LockedStatus,
+                    ChangeTimeStamp = message.CreationTime
                 });
                 unitOfWork.Complete();
             }
-
             return Task.CompletedTask;
         }
     }
