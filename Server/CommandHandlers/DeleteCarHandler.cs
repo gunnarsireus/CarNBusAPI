@@ -28,7 +28,8 @@ namespace Server.CommandHandlers
 			{
 				unitOfWork.Cars.Remove(new Car(message.CarId));
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId) {
-                    Deleted = true
+                    Deleted = true,
+                    ChangeTimeStamp = message.DeleteTimeStamp
                 });
                 unitOfWork.Complete();
 			}

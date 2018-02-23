@@ -82,7 +82,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = CarRead.CarId,
                 CompanyId = CarRead.CompanyId,
                 OnlineTimeStamp = DateTime.Now.Ticks
-        };
+            };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
@@ -123,13 +123,18 @@ namespace CarNBusAPI.Write.Controllers
         public void DeleteCar(string id)
         {
             var oldCar = GetCar(id);
-            var message = new DeleteCar() { CarId = new Guid(id), CompanyId = oldCar.CompanyId };
+            var message = new DeleteCar()
+            {
+                CarId = new Guid(id),
+                CompanyId = oldCar.CompanyId,
+                DeleteTimeStamp = DateTime.Now.Ticks
+            };
             _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         CarRead GetCar(string id)
         {
-           return  _dataAccessRead.GetCar(new Guid(id));
+            return _dataAccessRead.GetCar(new Guid(id));
         }
     }
 }
