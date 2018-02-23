@@ -54,7 +54,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 LockedStatus = carRead.Locked,
-                CreationTime = carRead.ChangeTimeStamp
+                LockedTimeStamp = carRead.LockedTimeStamp,
             };
 
             var createSpeed = new CreateCarSpeed

@@ -26,22 +26,23 @@ namespace Server.DAL
             var carReads = new List<CarRead>();
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var uniqueCarIds = context.CarsReadNull.Where(c => !c.Deleted).GroupBy(i => i.CarId).Select(g => g.First()).ToList();
-                foreach (var carId in uniqueCarIds)
+                var uniqueCarReadNull = context.CarsReadNull.Where(c => !c.Deleted).GroupBy(i => i.CarId).Select(g => g.First()).ToList();
+                foreach (var carReadNull in uniqueCarReadNull)
                 {
-                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Locked ?? false).ToList();
-                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carId.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Speed ?? 0).ToList();
-                    carReads.Add(new CarRead(carId.CarId)
+                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Locked ?? false).ToList();
+                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Speed ?? 0).ToList();
+                    carReads.Add(new CarRead(carReadNull.CarId)
                     {
-                        ChangeTimeStamp = carId.ChangeTimeStamp,
-                        CompanyId = carId.CompanyId,
-                        CreationTime = carId.CreationTime,
-                        RegNr = carId.RegNr,
-                        VIN = carId.VIN,
-                        Speed = speedList[speedList.Count - 1],
-                        Online = onlineList[onlineList.Count - 1],
-                        Locked = lockedList[lockedList.Count - 1]
+                        ChangeTimeStamp = carReadNull.ChangeTimeStamp,
+                        LockedTimeStamp = carReadNull.LockedTimeStamp,
+                        CompanyId = carReadNull.CompanyId,
+                        CreationTime = carReadNull.CreationTime,
+                        RegNr = carReadNull.RegNr,
+                        VIN = carReadNull.VIN,
+                        Speed = speedList.LastOrDefault(),
+                        Online = onlineList.LastOrDefault(),
+                        Locked = lockedList.LastOrDefault()
                     });
                 }
 
@@ -59,18 +60,19 @@ namespace Server.DAL
                 if (carReadNull != null)
                 {
                     var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Locked ?? false).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carId)).OrderBy(c => c.LockedTimeStamp).Select(s => s.Locked ?? false).ToList();
                     var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Speed ?? 0).ToList();
                     carRead = new CarRead(carId)
                     {
                         ChangeTimeStamp = carReadNull.ChangeTimeStamp,
+                        LockedTimeStamp = carReadNull.LockedTimeStamp,
                         CompanyId = carReadNull.CompanyId,
                         CreationTime = carReadNull.CreationTime,
                         RegNr = carReadNull.RegNr,
                         VIN = carReadNull.VIN,
-                        Speed = speedList[speedList.Count - 1],
-                        Online = onlineList[onlineList.Count - 1],
-                        Locked = lockedList[lockedList.Count - 1]
+                        Speed = speedList.LastOrDefault(),
+                        Online = onlineList.LastOrDefault(),
+                        Locked = lockedList.LastOrDefault()
                     };
                 }
 

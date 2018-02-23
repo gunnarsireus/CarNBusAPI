@@ -33,12 +33,14 @@ namespace CarNBusAPI.Read.Controllers
             {
                 if (car.Locked)
                 {
-                    if (new DateTime(car.ChangeTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                    if (new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                     {  //Lock timeouted can be ignored and set to false
                         var message = new UpdateCarLockedStatus
                         {
                             LockedStatus = false,
-                            CarId = car.CarId
+                            CarId = car.CarId,
+                            CompanyId = car.CompanyId,
+                            LockedTimeStamp = DateTime.Now.Ticks
                         };
 
                         _endpointInstancePriority.Send(message).ConfigureAwait(false);
@@ -68,12 +70,14 @@ namespace CarNBusAPI.Read.Controllers
             var car = _dataAccess.GetCar(new Guid(id));
             if (car.Locked)
             {
-                if (new DateTime(car.ChangeTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                if (new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
                 {  //Lock timeouted can be ignored and set to false
                     var message = new UpdateCarLockedStatus
                     {
                         LockedStatus = false,
-                        CarId = car.CarId
+                        CarId = car.CarId,
+                        CompanyId = car.CompanyId,
+                        LockedTimeStamp = DateTime.Now.Ticks
                     };
 
                     _endpointInstancePriority.Send(message).ConfigureAwait(false);
