@@ -60,7 +60,7 @@ namespace Server.DAL
             CarRead carRead = null;
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var carReadNull = context.CarsReadNull.OrderBy(c => c.ChangeTimeStamp).LastOrDefault(o => o.CarId == carId && !o.Deleted);
+                var carReadNull = context.CarsReadNull.OrderBy(c => c.ChangeTimeStamp).FirstOrDefault(o => o.CarId == carId && !o.Deleted);
                 if (carReadNull != null)
                 {
                     var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carId)).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Online ?? false).ToList();
