@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NServiceBus;
 using Messages.Commands;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace CarNBusAPI.Controllers
 {
@@ -76,10 +77,23 @@ namespace CarNBusAPI.Controllers
         public void DeleteCompany(string id)
         {
             if (GetCompany(id) == null) return;
+            var companyId = new Guid(id);
+            var cars = _dataAccessRead.GetCars().Where(c =>c.CompanyId == companyId);
+            foreach (var car in cars)
+            {
+                var deleteCar = new DeleteCar()
+                {
+                    CarId = car.CarId,
+                    CompanyId = car.CompanyId,
+                    DeleteTimeStamp = DateTime.Now.Ticks
+                };
+                _endpointInstance.Send(deleteCar).ConfigureAwait(false);
+            }
             var message = new DeleteCompany
             {
                 DataId = new Guid(),
-                CompanyId = new Guid(id)
+                CompanyId = companyId,
+                DeleteTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

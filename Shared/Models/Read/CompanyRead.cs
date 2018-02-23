@@ -8,13 +8,13 @@ namespace Shared.Models.Read
     {
         public CompanyRead()
         {
-            CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
         }
         public CompanyRead(Guid companyId)
         {
             CompanyId = companyId;
+            Id = Guid.NewGuid();
         }
-        [Key]
+        public Guid Id { get; set; }
         public Guid CompanyId { get; set; }
         public string CreationTime { get; set; }
         public string Name { get; set; }
