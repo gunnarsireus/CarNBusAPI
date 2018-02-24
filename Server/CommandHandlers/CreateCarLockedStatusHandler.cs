@@ -36,7 +36,7 @@ namespace Server.CommandHandlers
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
-                unitOfWork.CarLockedStatuses.Update(carLockedStatus);
+                unitOfWork.CarLockedStatuses.Add(carLockedStatus);
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId)
                 {
                     Locked = message.LockedStatus,

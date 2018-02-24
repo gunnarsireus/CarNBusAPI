@@ -7,13 +7,12 @@ namespace Shared.Models.Read
     {
         public CarReadNull()
         {
-
+            Id = Guid.NewGuid();
         }
-        public CarReadNull(Guid carId, Guid companyId)
+        public CarReadNull(Guid carId, Guid companyId):this()
         {
             CarId = carId;
             CompanyId = companyId;
-            Id = Guid.NewGuid();
         }
         public Guid Id { get; set; }
         public Guid CarId { get; set; }

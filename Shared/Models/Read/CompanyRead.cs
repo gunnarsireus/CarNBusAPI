@@ -9,11 +9,11 @@ namespace Shared.Models.Read
         public CompanyRead()
         {
             CreationTime = DateTime.Now.ToString(new CultureInfo("sv-SE"));
+            Id = Guid.NewGuid();
         }
         public CompanyRead(Guid companyId): this()
         {
             CompanyId = companyId;
-            Id = Guid.NewGuid();
         }
         public Guid Id { get; set; }
         public Guid CompanyId { get; set; }

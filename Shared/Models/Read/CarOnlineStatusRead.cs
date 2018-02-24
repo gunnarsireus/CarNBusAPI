@@ -6,6 +6,7 @@ namespace Shared.Models.Read
 	{
         public CarOnlineStatusRead()
         {
+            Id = Guid.NewGuid();
             OnlineTimeStamp = DateTime.Now.Ticks;
         }
         public Guid Id { get; set; }

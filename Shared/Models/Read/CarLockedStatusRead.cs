@@ -6,6 +6,7 @@ namespace Shared.Models.Read
 	{
         public CarLockedStatusRead()
         {
+            Id = Guid.NewGuid();
             LockedTimeStamp = DateTime.Now.Ticks;
         }
         public Guid Id { get; set; }

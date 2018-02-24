@@ -7,12 +7,12 @@ namespace Shared.Models.Write
     {
         public Car()
         {
+            CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
         }
 
-        public Car(Guid carId)
+        public Car(Guid carId):this()
         {
             CarId = carId;
-            CreationTime = DateTime.Now.ToString(new CultureInfo("se-SE"));
         }
 
         public Guid CarId { get; set; }
