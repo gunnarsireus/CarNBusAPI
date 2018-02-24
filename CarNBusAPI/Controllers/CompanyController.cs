@@ -48,7 +48,7 @@ namespace CarNBusAPI.Controllers
                 Address = company.Address,
                 Name = company.Name,
                 CreationTime = company.CreationTime,
-                CompanyId = company.CompanyId   //Todo check if new Guid?
+                CompanyId = company.CompanyId
             };
             // TODO: map object and message
 
@@ -78,7 +78,7 @@ namespace CarNBusAPI.Controllers
         {
             if (GetCompany(id) == null) return;
             var companyId = new Guid(id);
-            var cars = _dataAccessRead.GetCars().Where(c =>c.CompanyId == companyId);
+            var cars = _dataAccessRead.GetCars().Where(c => c.CompanyId == companyId);
             foreach (var car in cars)
             {
                 var deleteCar = new DeleteCar()

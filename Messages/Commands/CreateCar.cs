@@ -13,5 +13,8 @@ namespace Messages.Commands
 		public string VIN { get; set; }
 		public string RegNr { get; set; }
         public Guid CompanyId { get; set; }
+        public bool Online { get; set; }
+        public bool Locked { get; set; }
+        public int Speed { get; set; }
     }
 }

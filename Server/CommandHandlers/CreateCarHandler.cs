@@ -38,7 +38,10 @@ namespace Server.CommandHandlers
                 CreationTime = message.CreationTime,
                 ChangeTimeStamp = DateTime.Now.Ticks,
                 RegNr = message.RegNr,
-                VIN = message.VIN
+                VIN = message.VIN,
+                Locked = message.Locked,
+                Online = message.Online,
+                Speed = message.Speed
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))

@@ -8,6 +8,7 @@ namespace Shared.Models.Write
 	{
         public Company()
         {
+            CreationTime = DateTime.Now.ToString(new CultureInfo("sv-SE"));
         }
         public Company(Guid companyId) : this()
         {

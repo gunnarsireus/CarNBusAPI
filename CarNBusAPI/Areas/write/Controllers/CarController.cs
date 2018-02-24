@@ -31,13 +31,16 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void AddCar([FromBody] CarRead carRead)
         {
-            var message = new CreateCar
+            var createCar = new CreateCar
             {
                 CompanyId = carRead.CompanyId,
                 CreationTime = carRead.CreationTime,
                 CarId = carRead.CarId,
                 RegNr = carRead.RegNr,
-                VIN = carRead.VIN
+                VIN = carRead.VIN,
+                Locked = carRead.Locked,
+                Online = carRead.Online,
+                Speed = carRead.Speed
             };
             //todo: create messages for Online, Locked and Speed
             var createOnlineStatus = new CreateCarOnlineStatus
@@ -64,12 +67,11 @@ namespace CarNBusAPI.Write.Controllers
                 CreationTime = carRead.ChangedTimeStamp
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            _endpointInstance.Send(createCar).ConfigureAwait(false);
             _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
             _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
             _endpointInstance.Send(createSpeed).ConfigureAwait(false);
         }
-        // Todo: Separeta to UpdateOnline, UpdateLocked and UpdateSpeed
         // PUT api/Car/5
         [HttpPut("/api/write/car/online/{id}")]
         [EnableCors("AllowAllOrigins")]
