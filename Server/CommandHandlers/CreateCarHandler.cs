@@ -36,7 +36,7 @@ namespace Server.CommandHandlers
             var carReadNull = new CarReadNull(message.CarId, message.CompanyId)
             {
                 CreationTime = message.CreationTime,
-                ChangeTimeStamp = DateTime.Now.Ticks,
+                ChangeTimeStamp = message.CreateCarTimeStamp,
                 RegNr = message.RegNr,
                 VIN = message.VIN,
                 Locked = message.Locked,

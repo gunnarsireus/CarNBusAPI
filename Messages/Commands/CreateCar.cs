@@ -16,5 +16,6 @@ namespace Messages.Commands
         public bool Online { get; set; }
         public bool Locked { get; set; }
         public int Speed { get; set; }
+        public long  CreateCarTimeStamp { get; set; }
     }
 }

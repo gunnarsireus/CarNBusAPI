@@ -40,7 +40,8 @@ namespace CarNBusAPI.Write.Controllers
                 VIN = carRead.VIN,
                 Locked = carRead.Locked,
                 Online = carRead.Online,
-                Speed = carRead.Speed
+                Speed = carRead.Speed,
+                CreateCarTimeStamp = DateTime.Now.Ticks
             };
             //todo: create messages for Online, Locked and Speed
             var createOnlineStatus = new CreateCarOnlineStatus
@@ -48,7 +49,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 OnlineStatus = carRead.Online,
-                CreateCarOnlineTimeStamp = DateTime.Now.Ticks,
+                CreateCarOnlineTimeStamp = DateTime.Now.Ticks
             };
 
             var createLockedStatus = new CreateCarLockedStatus
@@ -56,7 +57,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 LockedStatus = carRead.Locked,
-                CreateCarLockedTimeStamp = DateTime.Now.Ticks,
+                CreateCarLockedTimeStamp = DateTime.Now.Ticks
             };
 
             var createSpeed = new CreateCarSpeed

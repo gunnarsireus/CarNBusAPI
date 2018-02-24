@@ -24,7 +24,7 @@ namespace Server.CommandHandlers
         public Task Handle(UpdateCarLockedStatus message, IMessageHandlerContext context)
         {
 
-            log.Info("Received UpdateCarLockedStatus");
+            log.Info("Received UpdateCarLockedStatus: " + message.LockedStatus);
 
             var carLockedStatus = new CarLockedStatus
             {
