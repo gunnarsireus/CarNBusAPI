@@ -47,7 +47,7 @@ namespace Server.DAL
                             Online = onlineList.LastOrDefault().Online,
                             Locked = lockedList.LastOrDefault().Locked,
                             LockedTimeStamp = lockedList.LastOrDefault().ChangeTimeStamp,
-                            ChangedTimeStamp = mostRecentTimeStamp
+                            ChangeTimeStamp = mostRecentTimeStamp
                         });
                     }
                 }
@@ -83,7 +83,7 @@ namespace Server.DAL
                             Online = onlineList.LastOrDefault().Online,
                             Locked = lockedList.LastOrDefault().Locked,
                             LockedTimeStamp = lockedList.LastOrDefault().ChangeTimeStamp,
-                            ChangedTimeStamp = mostRecentTimeStamp
+                            ChangeTimeStamp = mostRecentTimeStamp
                         };
                     }
                 }

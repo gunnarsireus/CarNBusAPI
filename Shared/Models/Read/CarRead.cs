@@ -23,7 +23,7 @@ namespace Shared.Models.Read
         public bool Online { get; set; }
         public bool Locked { get; set; }
         public long LockedTimeStamp { get; set; }
-        public long ChangedTimeStamp { get; set; }
+        public long ChangeTimeStamp { get; set; }
         public int Speed { get; set; }
     }
 }

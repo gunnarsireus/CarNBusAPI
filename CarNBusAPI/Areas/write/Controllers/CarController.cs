@@ -48,7 +48,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 OnlineStatus = carRead.Online,
-                CreationTime = carRead.ChangedTimeStamp
+                CreationTime = carRead.ChangeTimeStamp
             };
 
             var createLockedStatus = new CreateCarLockedStatus
@@ -64,7 +64,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 Speed = carRead.Speed,
-                CreationTime = carRead.ChangedTimeStamp
+                CreationTime = carRead.ChangeTimeStamp
             };
 
             _endpointInstance.Send(createCar).ConfigureAwait(false);
