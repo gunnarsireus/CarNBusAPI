@@ -85,7 +85,7 @@ namespace CarNBusAPI.Controllers
                 {
                     CarId = car.CarId,
                     CompanyId = car.CompanyId,
-                    DeleteTimeStamp = DateTime.Now.Ticks
+                    DeleteCarTimeStamp = DateTime.Now.Ticks
                 };
                 _endpointInstance.Send(deleteCar).ConfigureAwait(false);
             }
@@ -93,7 +93,7 @@ namespace CarNBusAPI.Controllers
             {
                 DataId = new Guid(),
                 CompanyId = companyId,
-                DeleteTimeStamp = DateTime.Now.Ticks
+                DeleteCompanyTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

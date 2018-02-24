@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Messages.Commands
 {
@@ -14,6 +13,5 @@ namespace Messages.Commands
 		public string CreationTime { get; set; }
 		public string Name { get; set; }
 		public string Address { get; set; }
-		public ICollection<Guid> Cars { get; set; }
 	}
 }

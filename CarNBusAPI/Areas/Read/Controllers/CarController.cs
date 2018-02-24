@@ -40,7 +40,7 @@ namespace CarNBusAPI.Read.Controllers
                             LockedStatus = false,
                             CarId = car.CarId,
                             CompanyId = car.CompanyId,
-                            LockedTimeStamp = DateTime.Now.Ticks
+                            UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
                         _endpointInstancePriority.Send(message).ConfigureAwait(false);
@@ -77,7 +77,7 @@ namespace CarNBusAPI.Read.Controllers
                         LockedStatus = false,
                         CarId = car.CarId,
                         CompanyId = car.CompanyId,
-                        LockedTimeStamp = DateTime.Now.Ticks
+                        UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                     };
 
                     _endpointInstancePriority.Send(message).ConfigureAwait(false);

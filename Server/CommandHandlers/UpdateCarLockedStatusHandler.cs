@@ -30,7 +30,7 @@ namespace Server.CommandHandlers
             {
                 Locked = message.LockedStatus,
                 CarId = message.CarId,
-                LockedTimeStamp = message.LockedTimeStamp
+                LockedTimeStamp = message.UpdateCarLockedTimeStamp
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
@@ -39,8 +39,8 @@ namespace Server.CommandHandlers
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId)
                 {
                     Locked = message.LockedStatus,
-                    ChangeTimeStamp = message.LockedTimeStamp,
-                    LockedTimeStamp = message.LockedTimeStamp
+                    ChangeTimeStamp = message.UpdateCarLockedTimeStamp,
+                    LockedTimeStamp = message.UpdateCarLockedTimeStamp
                 });
                 unitOfWork.Complete();
             }

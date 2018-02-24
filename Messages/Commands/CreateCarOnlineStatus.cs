@@ -7,6 +7,6 @@ namespace Messages.Commands
         public Guid CarId { get; set; }
         public Guid CompanyId { get; set; }
         public bool OnlineStatus { get; set; }
-        public long CreationTime { get; set; }
+        public long CreateCarOnlineTimeStamp { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace Server.CommandHandlers
             {
                 Speed = message.Speed,
                 CarId = message.CarId,
-                SpeedTimeStamp = message.CreationTime
+                SpeedTimeStamp = message.CreateCarSpeedTimeStamp
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
@@ -41,7 +41,7 @@ namespace Server.CommandHandlers
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId, message.CompanyId)
                 {
                     Speed = message.Speed,
-                    ChangeTimeStamp = message.CreationTime
+                    ChangeTimeStamp = message.CreateCarSpeedTimeStamp
                 });
                 unitOfWork.Complete();
             }

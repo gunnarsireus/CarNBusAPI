@@ -48,7 +48,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 OnlineStatus = carRead.Online,
-                CreationTime = carRead.ChangeTimeStamp
+                CreateCarOnlineTimeStamp = DateTime.Now.Ticks,
             };
 
             var createLockedStatus = new CreateCarLockedStatus
@@ -56,7 +56,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 LockedStatus = carRead.Locked,
-                LockedTimeStamp = carRead.LockedTimeStamp,
+                CreateCarLockedTimeStamp = DateTime.Now.Ticks,
             };
 
             var createSpeed = new CreateCarSpeed
@@ -64,7 +64,7 @@ namespace CarNBusAPI.Write.Controllers
                 CarId = carRead.CarId,
                 CompanyId = carRead.CompanyId,
                 Speed = carRead.Speed,
-                CreationTime = carRead.ChangeTimeStamp
+                CreateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(createCar).ConfigureAwait(false);
@@ -82,7 +82,7 @@ namespace CarNBusAPI.Write.Controllers
                 OnlineStatus = CarRead.Online,
                 CarId = CarRead.CarId,
                 CompanyId = CarRead.CompanyId,
-                OnlineTimeStamp = DateTime.Now.Ticks
+                UpdateCarOnlineTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
@@ -97,7 +97,7 @@ namespace CarNBusAPI.Write.Controllers
                 LockedStatus = CarRead.Locked,
                 CarId = CarRead.CarId,
                 CompanyId = CarRead.CompanyId,
-                LockedTimeStamp = DateTime.Now.Ticks
+                UpdateCarLockedTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstancePriority.Send(message).ConfigureAwait(false);
@@ -112,7 +112,7 @@ namespace CarNBusAPI.Write.Controllers
                 Speed = CarRead.Speed,
                 CarId = CarRead.CarId,
                 CompanyId = CarRead.CompanyId,
-                SpeedTimeStamp = DateTime.Now.Ticks
+                UpdateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);
@@ -128,7 +128,7 @@ namespace CarNBusAPI.Write.Controllers
             {
                 CarId = new Guid(id),
                 CompanyId = oldCar.CompanyId,
-                DeleteTimeStamp = DateTime.Now.Ticks
+                DeleteCarTimeStamp = DateTime.Now.Ticks
             };
             _endpointInstance.Send(message).ConfigureAwait(false);
         }

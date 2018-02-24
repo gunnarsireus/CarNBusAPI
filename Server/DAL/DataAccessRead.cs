@@ -26,18 +26,17 @@ namespace Server.DAL
             var carReads = new List<CarRead>();
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var uniqueCarReadNull = context.CarsReadNull.GroupBy(i => i.CarId).Select(g => g.First()).ToList().Where(o => !(o.Deleted ?? false));
+                var uniqueCarReadNull = context.CarsReadNull.GroupBy(i => i.CarId).Select(g => g.First()).ToList();
                 foreach (var carReadNull in uniqueCarReadNull)
                 {
                     var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, s.ChangeTimeStamp }).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
                     var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
                     var deletedList = context.CarsReadNull.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
                     if (!IsDeleted)
                     {
-                        var mostRecentTimeStamp = new[] { lockedList.LastOrDefault().ChangeTimeStamp, onlineList.LastOrDefault().ChangeTimeStamp, speedList.LastOrDefault().ChangeTimeStamp }.Max();
-                        carReads.Add(new CarRead(carReadNull.CarId)
+                       carReads.Add(new CarRead(carReadNull.CarId)
                         {
                             CompanyId = carReadNull.CompanyId,
                             CreationTime = carReadNull.CreationTime,
@@ -46,8 +45,7 @@ namespace Server.DAL
                             Speed = speedList.LastOrDefault().Speed,
                             Online = onlineList.LastOrDefault().Online,
                             Locked = lockedList.LastOrDefault().Locked,
-                            LockedTimeStamp = lockedList.LastOrDefault().ChangeTimeStamp,
-                            ChangeTimeStamp = mostRecentTimeStamp
+                            LockedTimeStamp = lockedList.LastOrDefault().LockedTimeStamp
                         });
                     }
                 }
@@ -66,13 +64,12 @@ namespace Server.DAL
                 if (carReadNull != null)
                 {
                     var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, s.ChangeTimeStamp }).ToList();
+                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
                     var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
                     var deletedList = context.CarsReadNull.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
                     if (!IsDeleted)
                     {
-                        var mostRecentTimeStamp = new[] { lockedList.LastOrDefault().ChangeTimeStamp, onlineList.LastOrDefault().ChangeTimeStamp, speedList.LastOrDefault().ChangeTimeStamp }.Max();
                         carRead = new CarRead(carId)
                         {
                             CompanyId = carReadNull.CompanyId,
@@ -82,8 +79,7 @@ namespace Server.DAL
                             Speed = speedList.LastOrDefault().Speed,
                             Online = onlineList.LastOrDefault().Online,
                             Locked = lockedList.LastOrDefault().Locked,
-                            LockedTimeStamp = lockedList.LastOrDefault().ChangeTimeStamp,
-                            ChangeTimeStamp = mostRecentTimeStamp
+                            LockedTimeStamp = lockedList.LastOrDefault().LockedTimeStamp
                         };
                     }
                 }

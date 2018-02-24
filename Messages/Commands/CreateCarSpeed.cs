@@ -7,6 +7,6 @@ namespace Messages.Commands
         public Guid CarId { get; set; }
         public Guid CompanyId { get; set; }
         public int Speed { get; set; }
-        public long CreationTime { get; set; }
+        public long CreateCarSpeedTimeStamp { get; set; }
     }
 }

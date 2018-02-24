@@ -41,7 +41,8 @@ namespace Server.CommandHandlers
                 VIN = message.VIN,
                 Locked = message.Locked,
                 Online = message.Online,
-                Speed = message.Speed
+                Speed = message.Speed,
+                Deleted =false              
             };
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))

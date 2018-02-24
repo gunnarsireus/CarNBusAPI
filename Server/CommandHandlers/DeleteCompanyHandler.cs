@@ -30,7 +30,7 @@ namespace Server.CommandHandlers
                 unitOfWork.CompaniesRead.Add(new CompanyRead(message.CompanyId)
                 {
                     Deleted = true,
-                    ChangeTimeStamp = message.DeleteTimeStamp
+                    ChangeTimeStamp = message.DeleteCompanyTimeStamp
                 });
                 unitOfWork.Complete();
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
 namespace Shared.Models.Write
@@ -14,7 +15,7 @@ namespace Shared.Models.Write
         {
             CarId = carId;
         }
-
+        [Key]
         public Guid CarId { get; set; }
         public Guid CompanyId { get; set; }
         public string CreationTime { get; set; }

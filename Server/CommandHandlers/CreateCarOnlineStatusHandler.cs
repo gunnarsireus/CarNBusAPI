@@ -29,7 +29,7 @@ namespace Server.CommandHandlers
             {
                 Online = message.OnlineStatus,
                 CarId = message.CarId,
-                OnlineTimeStamp = message.CreationTime
+                OnlineTimeStamp = message.CreateCarOnlineTimeStamp
             };
 
 
@@ -39,7 +39,7 @@ namespace Server.CommandHandlers
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId, message.CompanyId)
                 {
                     Online = message.OnlineStatus,
-                    ChangeTimeStamp = message.CreationTime
+                    ChangeTimeStamp = message.CreateCarOnlineTimeStamp
                 });
                 unitOfWork.Complete();
             }
