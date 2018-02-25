@@ -39,8 +39,7 @@ namespace Server.CommandHandlers
                 unitOfWork.CarsReadNull.Add(new CarReadNull(message.CarId,message.CompanyId)
                 {
                     Locked = message.LockedStatus,
-                    ChangeTimeStamp = message.UpdateCarLockedTimeStamp,
-                    LockedTimeStamp = message.UpdateCarLockedTimeStamp
+                    ChangeTimeStamp = message.UpdateCarLockedTimeStamp
                 });
                 unitOfWork.Complete();
             }
