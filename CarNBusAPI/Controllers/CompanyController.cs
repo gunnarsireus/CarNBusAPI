@@ -40,19 +40,34 @@ namespace CarNBusAPI.Controllers
 
         // POST api/Company
         [HttpPost]
-        public void AddCompany([FromBody] CompanyRead company)
+        public void AddCompany([FromBody] CompanyRead companyRead)
         {
-            var message = new CreateCompany
+            var createCompany = new CreateCompany
             {
                 DataId = new Guid(),
-                Address = company.Address,
-                Name = company.Name,
-                CreationTime = company.CreationTime,
-                CompanyId = company.CompanyId
+                Address = companyRead.Address,
+                Name = companyRead.Name,
+                CreationTime = companyRead.CreationTime,
+                CompanyId = companyRead.CompanyId,
+                CreateCompanyTimeStamp = DateTime.Now.Ticks
             };
-            // TODO: map object and message
+            var createCompanyName = new CreateCompanyName
+            {
+                CompanyId = companyRead.CompanyId,
+                Name = companyRead.Name,
+                CreateCompanyNameTimeStamp = DateTime.Now.Ticks
+            };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            var createCompanyAddress = new CreateCompanyAddress
+            {
+                CompanyId = companyRead.CompanyId,
+                Address = companyRead.Address,
+                CreateCompanyAddressTimeStamp = DateTime.Now.Ticks
+            };
+
+            _endpointInstance.Send(createCompany).ConfigureAwait(false);
+            _endpointInstance.Send(createCompanyName).ConfigureAwait(false);
+            _endpointInstance.Send(createCompanyAddress).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
