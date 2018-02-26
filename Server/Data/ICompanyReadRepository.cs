@@ -2,7 +2,7 @@
 
 namespace Server.Data
 {
-    public interface ICompanyReadRepository:IRepository<CompanyRead>
+    public interface ICompanyReadRepository:IRepository<CompanyReadNull>
     {
     }
 }

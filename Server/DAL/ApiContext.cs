@@ -11,7 +11,7 @@ namespace Server.DAL
         }
 
         public DbSet<Car> Cars { get; set; }
-        public DbSet<CarReadNull> CarsReadNull { get; set; }
+        public DbSet<CarReadNull> CarReadNulls { get; set; }
         public DbSet<CarOnlineStatus> CarOnlineStatuses { get; set; }
         public DbSet<CarOnlineStatusRead> CarOnlineStatusesRead { get; set; }
         public DbSet<CarLockedStatus> CarLockedStatuses { get; set; }
@@ -19,6 +19,10 @@ namespace Server.DAL
         public DbSet<CarSpeed> CarSpeeds { get; set; }
         public DbSet<CarSpeedRead> CarSpeedsRead { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<CompanyRead> CompaniesRead { get; set; }
+        public DbSet<CompanyReadNull> CompanyReadNulls { get; set; }
+        public DbSet<CompanyName> CompanyNames { get; set; }
+        public DbSet<CompanyNameRead> CompanyNamesRead { get; set; }
+        public DbSet<CompanyAddress> CompanyAddresses { get; set; }
+        public DbSet<CompanyAddressRead> CompanyAddressesRead { get; set; }
     }
 }

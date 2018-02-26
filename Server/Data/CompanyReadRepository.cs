@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Server.Data
 {
-	public class CompanyReadRepository : Repository<CompanyRead>, ICompanyReadRepository
+	public class CompanyReadRepository : Repository<CompanyReadNull>, ICompanyReadRepository
 	{
 		public CompanyReadRepository(ApiContext context) : base(context)
 		{

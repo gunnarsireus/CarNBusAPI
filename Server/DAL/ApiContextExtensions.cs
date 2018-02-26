@@ -13,7 +13,7 @@ namespace Server.DAL
             {
                 var companyId = Guid.NewGuid();
                 context.Companies.Add(new Company(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
-                context.CompaniesRead.Add(new CompanyRead(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
+                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
 
                 var carId = Guid.NewGuid();
                 var car = new Car(carId)
@@ -56,7 +56,7 @@ namespace Server.DAL
 
                 companyId = Guid.NewGuid();
                 context.Companies.Add(new Company(companyId) { Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
-                context.CompaniesRead.Add(new CompanyRead(companyId) { Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
+                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
 
                 carId = Guid.NewGuid();
                 car = new Car(carId)
@@ -86,7 +86,7 @@ namespace Server.DAL
 
                 companyId = Guid.NewGuid();
                 context.Companies.Add(new Company(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
-                context.CompaniesRead.Add(new CompanyRead(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
+                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
 
                 carId = Guid.NewGuid();
                 car = new Car(carId)
@@ -149,7 +149,7 @@ namespace Server.DAL
 
         private static void MapCarToCarRead(ApiContext context, Car car)
         {
-            context.CarsReadNull.Add(new CarReadNull(car.CarId,car.CompanyId)
+            context.CarReadNulls.Add(new CarReadNull(car.CarId,car.CompanyId)
             {
                 CompanyId = car.CompanyId,
                 CreationTime = car.CreationTime,

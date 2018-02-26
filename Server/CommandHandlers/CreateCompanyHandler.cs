@@ -32,20 +32,20 @@ namespace Server.CommandHandlers
                 CompanyId = message.CompanyId,
                 Name = message.Name
             };
+            var companyReadNull = new CompanyReadNull(message.CompanyId)
+            {
+                CreationTime = message.CreationTime,
+                ChangeTimeStamp = message.CreateCompanyTimeStamp,
+                Name = message.Name,
+                Address = message.Address,
+                Deleted = false
+            };
 
 
             using (var unitOfWork = new CarUnitOfWork(new ApiContext(_dbContextOptionsBuilder.Options)))
             {
                 unitOfWork.Companies.Add(company);
-                unitOfWork.CompaniesRead.Add(new CompanyRead(company.CompanyId)
-                {
-                    Address = company.Address,
-                    ChangeTimeStamp = DateTime.Now.Ticks,
-                    CreationTime = company.CreationTime,
-                    Deleted = false,
-                    Name = company.Name,
-                    Id = Guid.NewGuid(),
-                });
+                unitOfWork.CompanyReadNulls.Add(companyReadNull);
                 unitOfWork.Complete();
             }
 

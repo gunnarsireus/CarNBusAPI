@@ -20,7 +20,5 @@ namespace Shared.Models.Read
         public string CreationTime { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public bool Deleted { get; set; }
-        public long ChangeTimeStamp { get; set; }
     }
 }

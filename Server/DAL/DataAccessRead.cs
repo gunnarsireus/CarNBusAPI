@@ -26,13 +26,13 @@ namespace Server.DAL
             var carReads = new List<CarRead>();
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var uniqueCarReadNull = context.CarsReadNull.OrderBy(c => c.ChangeTimeStamp).GroupBy(i => i.CarId).Select(g => g.First()).ToList();
+                var uniqueCarReadNull = context.CarReadNulls.OrderBy(c => c.ChangeTimeStamp).GroupBy(i => i.CarId).Select(g => g.First()).ToList();
                 foreach (var carReadNull in uniqueCarReadNull)
                 {
-                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
-                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
-                    var deletedList = context.CarsReadNull.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
+                    var onlineList = context.CarReadNulls.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
+                    var lockedList = context.CarReadNulls.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
+                    var speedList = context.CarReadNulls.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
+                    var deletedList = context.CarReadNulls.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
                     if (!IsDeleted)
                     {
@@ -60,13 +60,13 @@ namespace Server.DAL
             CarRead carRead = null;
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var carReadNull = context.CarsReadNull.OrderBy(c => c.ChangeTimeStamp).FirstOrDefault(o=>o.CarId==carId);
+                var carReadNull = context.CarReadNulls.OrderBy(c => c.ChangeTimeStamp).FirstOrDefault(o=>o.CarId==carId);
                 if (carReadNull != null)
                 {
-                    var onlineList = context.CarsReadNull.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
-                    var lockedList = context.CarsReadNull.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
-                    var speedList = context.CarsReadNull.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
-                    var deletedList = context.CarsReadNull.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
+                    var onlineList = context.CarReadNulls.Where(w => (w.Online != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Online = s.Online ?? false, s.ChangeTimeStamp }).ToList();
+                    var lockedList = context.CarReadNulls.Where(w => (w.Locked != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Locked = s.Locked ?? false, LockedTimeStamp = s.ChangeTimeStamp }).ToList();
+                    var speedList = context.CarReadNulls.Where(w => (w.Speed != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Speed = s.Speed ?? 0, s.ChangeTimeStamp }).ToList();
+                    var deletedList = context.CarReadNulls.Where(w => (w.Deleted != null && w.CarId == carReadNull.CarId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
                     if (!IsDeleted)
                     {
@@ -93,20 +93,21 @@ namespace Server.DAL
             var CompanyReads = new List<CompanyRead>();
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                var uniqueCompaniesRead = context.CompaniesRead.GroupBy(i => i.CompanyId).Select(g => g.First()).ToList();
-                foreach (var companyRead in uniqueCompaniesRead)
+                var uniqueCompanyReadNull = context.CompanyReadNulls.OrderBy(c => c.ChangeTimeStamp).GroupBy(i => i.CompanyId).Select(g => g.First()).ToList();
+                foreach (var companyReadNull in uniqueCompanyReadNull)
                 {
-                    var deletedList = context.CompaniesRead.Where(w => w.CompanyId == companyRead.CompanyId).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Deleted).ToList();
-                    if (!deletedList.LastOrDefault())
+                    var addressList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
+                    var nameList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Name = s.Name ?? "", s.ChangeTimeStamp }).ToList();
+                    var deletedList = context.CompanyReadNulls.Where(w => (w.Deleted != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
+                    bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
+                    if (!IsDeleted)
                     {
-                        CompanyReads.Add(new CompanyRead(companyRead.CompanyId)
+                        CompanyReads.Add(new CompanyRead(companyReadNull.CompanyId)
                         {
-                            ChangeTimeStamp = companyRead.ChangeTimeStamp,
-                            CompanyId = companyRead.CompanyId,
-                            CreationTime = companyRead.CreationTime,
-                            Address = companyRead.Address,
-                            Name = companyRead.Name,
-                            Deleted = companyRead.Deleted
+                            CompanyId = companyReadNull.CompanyId,
+                            CreationTime = companyReadNull.CreationTime,
+                            Name = nameList.LastOrDefault().Name,
+                            Address = addressList.LastOrDefault().Address
                         });
                     }
                 }
@@ -120,17 +121,25 @@ namespace Server.DAL
             CompanyRead companyRead = null;
             using (var context = new ApiContext(_optionsBuilder.Options))
             {
-                companyRead = context.CompaniesRead.OrderBy(c => c.ChangeTimeStamp).LastOrDefault(o => o.CompanyId == companyId && !o.Deleted);
-                if (companyRead != null)
+                var companyReadNull = context.CompanyReadNulls.OrderBy(c => c.ChangeTimeStamp).FirstOrDefault(o => o.CompanyId == companyId);
+                if (companyReadNull != null)
                 {
-                    var deletedList = context.CompaniesRead.Where(w => w.CompanyId == companyId).OrderBy(c => c.ChangeTimeStamp).Select(s => s.Deleted).ToList();
-                    if (!deletedList.LastOrDefault())
+                    var addressList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
+                    var nameList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Name = s.Name ?? "", s.ChangeTimeStamp }).ToList();
+                    var deletedList = context.CompanyReadNulls.Where(w => (w.Deleted != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
+                    bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
+                    if (!IsDeleted)
                     {
-                        return companyRead;
+                        companyRead = new CompanyRead(companyId)
+                        {
+                            CompanyId = companyReadNull.CompanyId,
+                            CreationTime = companyReadNull.CreationTime,
+                            Name = nameList.LastOrDefault().Name,
+                            Address = addressList.LastOrDefault().Address
+                        };
                     }
                 }
-
-                return null;
+                return companyRead;
             }
         }
     }
