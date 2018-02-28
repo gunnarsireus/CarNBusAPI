@@ -98,7 +98,13 @@ namespace CarNBusAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarNBusApi V1");
             });
 
-            app.UseMvc();
+            app.UseMvc(route =>
+            {
+                route.MapRoute(
+                  name: "areas",
+                  template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            });
 
             app.UseCors("AllowAllOrigins");
         }
