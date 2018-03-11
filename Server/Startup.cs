@@ -70,7 +70,7 @@ namespace Server
 
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID={your_username};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             persistence.SqlDialect<SqlDialect.MsSqlServer>();
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
@@ -97,7 +97,7 @@ namespace Server
 
             var endpointConfigurationPriority = new EndpointConfiguration("CarNBusAPI.ServerPriority");
             var persistencePriority = endpointConfigurationPriority.UsePersistence<SqlPersistence>();
-            var connectionPriority = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID={your_username};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var connectionPriority = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             persistencePriority.SqlDialect<SqlDialect.MsSqlServer>();
             persistencePriority.ConnectionBuilder(
                 connectionBuilder: () =>
