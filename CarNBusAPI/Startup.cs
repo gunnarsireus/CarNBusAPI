@@ -10,6 +10,9 @@ using NServiceBus;
 using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using NServiceBus.Persistence.Sql;
+using System.Data.SqlClient;
+using System;
 
 namespace CarNBusAPI
 {
@@ -33,7 +36,16 @@ namespace CarNBusAPI
         {
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Client");
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
-            endpointConfiguration.UsePersistence<LearningPersistence>();
+            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID={your_username};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            persistence.SqlDialect<SqlDialect.MsSqlServer>();
+            persistence.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new SqlConnection(connection);
+                });
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "CarNBusAPI.Server");
             transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "CarNBusAPI.ServerPriority");
@@ -59,7 +71,7 @@ namespace CarNBusAPI
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
 

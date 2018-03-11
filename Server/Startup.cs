@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Server.CommandHandlers;
+using NServiceBus.Persistence.Sql;
+using System.Data.SqlClient;
 
 namespace Server
 {
@@ -33,7 +35,7 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
             dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
@@ -67,7 +69,16 @@ namespace Server
                 .SingleInstance();
 
             var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
-            endpointConfiguration.UsePersistence<LearningPersistence>();
+            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID={your_username};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            persistence.SqlDialect<SqlDialect.MsSqlServer>();
+            persistence.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new SqlConnection(connection);
+                });
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
             endpointConfiguration.PurgeOnStartup(true);  //Only for demos!!
 
@@ -84,10 +95,18 @@ namespace Server
                     customizations.ExistingLifetimeScope(Container);
                 });
 
-            Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
             var endpointConfigurationPriority = new EndpointConfiguration("CarNBusAPI.ServerPriority");
-            endpointConfigurationPriority.UsePersistence<LearningPersistence>();
+            var persistencePriority = endpointConfigurationPriority.UsePersistence<SqlPersistence>();
+            var connectionPriority = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID={your_username};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            persistencePriority.SqlDialect<SqlDialect.MsSqlServer>();
+            persistencePriority.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new SqlConnection(connectionPriority);
+                });
+            var subscriptionsPriority = persistence.SubscriptionSettings();
+            subscriptionsPriority.CacheFor(TimeSpan.FromMinutes(1));
+
             var transportPriority = endpointConfigurationPriority.UseTransport<LearningTransport>();
             endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
 
@@ -103,7 +122,7 @@ namespace Server
                 {
                     customizations.ExistingLifetimeScope(Container);
                 });
-
+            Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
             Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
             return new AutofacServiceProvider(Container);
         }
