@@ -76,7 +76,7 @@ namespace Server
             subscriptions.CacheFor(TimeSpan.FromMinutes(1));
 
             var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=u6UlmCvk4muPIStmGWmLmYXwk9LQdX+HECgrSQxg0AkDZB4IBs2kUu9z6Ih4LlyU4Ren9VtVWKT232cyahex8Q==;EndpointSuffix=core.windows.net";
+            var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=u6UlmCvk4muPIStmGWmLmYXwk9LQdX+HECgrSQxg0AkDZB4IBs2kUu9z6Ih4LlyU4Ren9VtVWKT232cyahex8Q==";
 
             persistence.SqlDialect<SqlDialect.MsSqlServer>();
             persistence.ConnectionBuilder(
