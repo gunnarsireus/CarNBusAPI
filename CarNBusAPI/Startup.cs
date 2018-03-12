@@ -13,7 +13,7 @@ using Autofac.Extensions.DependencyInjection;
 using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
 using System;
-using Microsoft.WindowsAzure.Storage;
+using NServiceBus.Features;
 
 namespace CarNBusAPI
 {
@@ -37,6 +37,8 @@ namespace CarNBusAPI
         {
             var endpointConfiguration = new EndpointConfiguration("carnbusapi-client");
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+            endpointConfiguration.DisableFeature<TimeoutManager>();
+            endpointConfiguration.DisableFeature<MessageDrivenSubscriptions>();
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.SendFailedMessagesTo("error");
 

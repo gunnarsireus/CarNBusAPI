@@ -13,6 +13,7 @@ using System.IO;
 using Server.CommandHandlers;
 using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
+using NServiceBus.Features;
 using Microsoft.WindowsAzure.Storage;
 
 namespace Server
@@ -68,6 +69,8 @@ namespace Server
                 .SingleInstance();
 
             var endpointConfiguration = new EndpointConfiguration("carnbusapi-server");
+            endpointConfiguration.DisableFeature<TimeoutManager>();
+            endpointConfiguration.DisableFeature<MessageDrivenSubscriptions>();
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.SendFailedMessagesTo("error");
@@ -88,8 +91,6 @@ namespace Server
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(storageConnection);
 
-            endpointConfiguration.PurgeOnStartup(true);  //Only for demos!!
-
             endpointConfiguration.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
@@ -104,6 +105,8 @@ namespace Server
                 });
 
             var endpointConfigurationPriority = new EndpointConfiguration("carnbusapi-serverpriority");
+            endpointConfigurationPriority.DisableFeature<TimeoutManager>();
+            endpointConfigurationPriority.DisableFeature<MessageDrivenSubscriptions>();
             endpointConfigurationPriority.UseSerialization<NewtonsoftSerializer>();
             endpointConfigurationPriority.EnableInstallers();
             endpointConfigurationPriority.SendFailedMessagesTo("error");
@@ -121,7 +124,6 @@ namespace Server
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                             .ConnectionString(storageConnection);
 
-            endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
             endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
