@@ -13,6 +13,7 @@ using System.IO;
 using Server.CommandHandlers;
 using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Server
 {
@@ -59,8 +60,6 @@ namespace Server
             builder.RegisterType<UpdateCarSpeedHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             builder.RegisterType<UpdateCompanyHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
 
-
-
             Container = builder.Build();
 
             IEndpointInstance endpoint = null;
@@ -68,18 +67,27 @@ namespace Server
                 .As<IEndpointInstance>()
                 .SingleInstance();
 
-            var endpointConfiguration = new EndpointConfiguration("CarNBusAPI.Server");
+            var endpointConfiguration = new EndpointConfiguration("carnbusapi-server");
+            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+            endpointConfiguration.EnableInstallers();
+            endpointConfiguration.SendFailedMessagesTo("error");
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
+
             var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=u6UlmCvk4muPIStmGWmLmYXwk9LQdX+HECgrSQxg0AkDZB4IBs2kUu9z6Ih4LlyU4Ren9VtVWKT232cyahex8Q==;EndpointSuffix=core.windows.net";
+
             persistence.SqlDialect<SqlDialect.MsSqlServer>();
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
                 {
                     return new SqlConnection(connection);
                 });
-            var subscriptions = persistence.SubscriptionSettings();
-            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
-            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+
+            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
+                                        .ConnectionString(storageConnection);
+
             endpointConfiguration.PurgeOnStartup(true);  //Only for demos!!
 
             endpointConfiguration.Conventions().DefiningCommandsAs(t =>
@@ -95,21 +103,25 @@ namespace Server
                     customizations.ExistingLifetimeScope(Container);
                 });
 
-            var endpointConfigurationPriority = new EndpointConfiguration("CarNBusAPI.ServerPriority");
+            var endpointConfigurationPriority = new EndpointConfiguration("carnbusapi-serverpriority");
+            endpointConfigurationPriority.UseSerialization<NewtonsoftSerializer>();
+            endpointConfigurationPriority.EnableInstallers();
+            endpointConfigurationPriority.SendFailedMessagesTo("error");
             var persistencePriority = endpointConfigurationPriority.UsePersistence<SqlPersistence>();
-            var connectionPriority = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var subscriptionsPriority = persistencePriority.SubscriptionSettings();
+            subscriptionsPriority.CacheFor(TimeSpan.FromMinutes(1));
+
             persistencePriority.SqlDialect<SqlDialect.MsSqlServer>();
             persistencePriority.ConnectionBuilder(
                 connectionBuilder: () =>
                 {
-                    return new SqlConnection(connectionPriority);
+                    return new SqlConnection(connection);
                 });
-            var subscriptionsPriority = persistence.SubscriptionSettings();
-            subscriptionsPriority.CacheFor(TimeSpan.FromMinutes(1));
 
-            var transportPriority = endpointConfigurationPriority.UseTransport<LearningTransport>();
+            var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
+                                            .ConnectionString(storageConnection);
+            transportPriority.UseAccountAliasesInsteadOfConnectionStrings();
             endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
-
             endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
