@@ -120,7 +120,7 @@ namespace Server
 
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                             .ConnectionString(storageConnection);
-            transportPriority.UseAccountAliasesInsteadOfConnectionStrings();
+
             endpointConfigurationPriority.PurgeOnStartup(true);  //Only for demos!!
             endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
