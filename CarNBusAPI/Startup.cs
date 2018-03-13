@@ -69,6 +69,9 @@ namespace CarNBusAPI
                     t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.PurgeOnStartup(true);
+            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
+            var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
+            endpointConfiguration.LicensePath(dbLocation + "License.xml");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();
@@ -84,9 +87,10 @@ namespace CarNBusAPI
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
-            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
+
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
 
             services.AddSingleton(EndpointInstance);
             services.AddMvc();

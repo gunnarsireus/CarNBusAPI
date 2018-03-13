@@ -38,7 +38,8 @@ namespace Server
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+            var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
+            dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
@@ -136,9 +137,11 @@ namespace Server
                 {
                     customizations.ExistingLifetimeScope(Container);
                 });
-            endpointConfiguration.PurgeOnStartup(true);
+
+            endpointConfiguration.LicensePath(dbLocation + "License.xml");
             Endpoint.Start(endpointConfiguration);
             endpointConfigurationPriority.PurgeOnStartup(true);
+            endpointConfigurationPriority.LicensePath(dbLocation + "License.xml");
             Endpoint.Start(endpointConfigurationPriority);
             return new AutofacServiceProvider(Container);
         }
