@@ -2,6 +2,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore;
 using System.IO;
+using System;
 
 namespace Server
 {
@@ -11,7 +12,13 @@ namespace Server
 		public static void Main(string[] args)
 		{
 			CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-			BuildWebHost(args).Run();
+            FileStream filestream = new FileStream("out.txt", FileMode.Create);
+            var streamwriter = new StreamWriter(filestream);
+            streamwriter.AutoFlush = true;
+            Console.SetOut(streamwriter);
+            Console.SetError(streamwriter);
+            Console.WriteLine("Directory.GetCurrentDirectory(): " + Directory.GetCurrentDirectory());
+            BuildWebHost(args).Run();
 		}
 
 		static IWebHost BuildWebHost(string[] args) =>

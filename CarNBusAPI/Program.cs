@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +12,13 @@ namespace CarNBusAPI
 	    public static void Main(string[] args)
 	    {
 		    CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-		    var builder = new ConfigurationBuilder()
+            FileStream filestream = new FileStream("out.txt", FileMode.Create);
+            var streamwriter = new StreamWriter(filestream);
+            streamwriter.AutoFlush = true;
+            Console.SetOut(streamwriter);
+            Console.SetError(streamwriter);
+            Console.WriteLine("Directory.GetCurrentDirectory(): " + Directory.GetCurrentDirectory());
+            var builder = new ConfigurationBuilder()
 			    .SetBasePath(Directory.GetCurrentDirectory())
 			    .AddJsonFile("appsettings.json");
 

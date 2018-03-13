@@ -69,9 +69,14 @@ namespace CarNBusAPI
                     t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.PurgeOnStartup(true);
+            var a = Directory.GetCurrentDirectory();
             var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(serverFolder))
+            {
+                serverFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+            }
             var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
-
+            Console.WriteLine("CarNbusAPI dbLocation + License.xml: " + dbLocation + "License.xml");
             endpointConfiguration.LicensePath(dbLocation + "License.xml");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

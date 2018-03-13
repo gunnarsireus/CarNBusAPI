@@ -37,8 +37,14 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
+            var a = Directory.GetCurrentDirectory();
             var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(serverFolder))
+            {
+                serverFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+            }
             var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
+            Console.WriteLine("Server dbLocation" + dbLocation);
             dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
@@ -138,6 +144,7 @@ namespace Server
                     customizations.ExistingLifetimeScope(Container);
                 });
 
+            Console.WriteLine("Server dbLocation + License.xml: " + dbLocation + "License.xml");
             endpointConfiguration.LicensePath(dbLocation + "License.xml");
             Endpoint.Start(endpointConfiguration);
             endpointConfigurationPriority.PurgeOnStartup(true);
