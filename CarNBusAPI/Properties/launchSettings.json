@@ -24,15 +24,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:63485/"
-    },
-    "CarNBusAPI": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Debug"
-      },
-      "applicationUrl": "http://carnbusapi.azurewebsites.net/"
     }
   }
 }
