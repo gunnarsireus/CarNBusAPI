@@ -39,13 +39,12 @@ namespace Server
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
             var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(dbLocation)) { Directory.CreateDirectory(dbLocation); }
             dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddDbContext<ApiContext>(options =>
-                    options.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db"));
+                    options.UseSqlite("DataSource=" + dbLocation + "Car.db"));
 
             var builder = new ContainerBuilder();
             builder.Populate(services);

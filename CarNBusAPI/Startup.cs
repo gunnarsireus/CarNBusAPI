@@ -69,7 +69,7 @@ namespace CarNBusAPI
                     t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.PurgeOnStartup(true);
-            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
             var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
             if (!Directory.Exists(dbLocation)) { Directory.CreateDirectory(dbLocation); }
             endpointConfiguration.LicensePath(dbLocation + "License.xml");
