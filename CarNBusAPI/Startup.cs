@@ -14,6 +14,8 @@ using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
 using System;
 using NServiceBus.Features;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace CarNBusAPI
 {

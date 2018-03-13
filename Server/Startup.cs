@@ -38,7 +38,7 @@ namespace Server
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
             var a = Directory.GetCurrentDirectory();
-            var serverFolder = Directory.GetParent(Directory.GetParent((Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString() + Path.DirectorySeparatorChar;
+            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
             if (!Directory.Exists(serverFolder))
             {
                 serverFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
