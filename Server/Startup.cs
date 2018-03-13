@@ -124,7 +124,7 @@ namespace Server
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                             .ConnectionString(storageConnection);
 
-            endpointConfigurationPriority.Conventions().DefiningCommandsAs(t =>
+            endpointConfigurationPriority.Conventions().DefiningMessagesAs(t =>
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     (t.Namespace.EndsWith("Commands")))
                 .DefiningEventsAs(t =>
@@ -136,8 +136,8 @@ namespace Server
                 {
                     customizations.ExistingLifetimeScope(Container);
                 });
-            Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-            Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
+            Endpoint.Start(endpointConfiguration);
+            Endpoint.Start(endpointConfigurationPriority);
             return new AutofacServiceProvider(Container);
         }
 
