@@ -68,6 +68,7 @@ namespace CarNBusAPI
                     t.Namespace != null && t.Namespace.StartsWith("Messages") &&
                     t.Namespace.EndsWith("Events"));
 
+            endpointConfiguration.PurgeOnStartup(true);
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();

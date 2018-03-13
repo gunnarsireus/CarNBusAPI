@@ -96,7 +96,7 @@ namespace Server.DAL
                 var uniqueCompanyReadNull = context.CompanyReadNulls.OrderBy(c => c.ChangeTimeStamp).GroupBy(i => i.CompanyId).Select(g => g.First()).ToList();
                 foreach (var companyReadNull in uniqueCompanyReadNull)
                 {
-                    var addressList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
+                    var addressList = context.CompanyReadNulls.Where(w => (w.Address != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
                     var nameList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Name = s.Name ?? "", s.ChangeTimeStamp }).ToList();
                     var deletedList = context.CompanyReadNulls.Where(w => (w.Deleted != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;
@@ -124,7 +124,7 @@ namespace Server.DAL
                 var companyReadNull = context.CompanyReadNulls.OrderBy(c => c.ChangeTimeStamp).FirstOrDefault(o => o.CompanyId == companyId);
                 if (companyReadNull != null)
                 {
-                    var addressList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
+                    var addressList = context.CompanyReadNulls.Where(w => (w.Address != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Address = s.Address ?? "", s.ChangeTimeStamp }).ToList();
                     var nameList = context.CompanyReadNulls.Where(w => (w.Name != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Name = s.Name ?? "", s.ChangeTimeStamp }).ToList();
                     var deletedList = context.CompanyReadNulls.Where(w => (w.Deleted != null && w.CompanyId == companyReadNull.CompanyId)).OrderBy(c => c.ChangeTimeStamp).Select(s => new { Deleted = s.Deleted ?? false, s.ChangeTimeStamp }).ToList();
                     bool IsDeleted = (!deletedList.Any()) ? false : deletedList.LastOrDefault().Deleted;

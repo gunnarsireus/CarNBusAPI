@@ -12,9 +12,11 @@ namespace Server.DAL
             if (!context.Cars.Any() || !context.Companies.Any())
             {
                 var companyId = Guid.NewGuid();
-                context.Companies.Add(new Company(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
-                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" });
-
+                var company = new Company(companyId) { Name = "Charlies Gravel Transports Ltd.", Address = "Concrete Road 8, 111 11 Newcastle" };
+                context.Companies.Add(company);
+                MapCompanyToCompanyReadNulls(context, company);
+                CreateAddress(context, company);
+                CreateName(context, company);
                 var carId = Guid.NewGuid();
                 var car = new Car(carId)
                 {
@@ -23,7 +25,7 @@ namespace Server.DAL
                     RegNr = "ABC123"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
@@ -36,7 +38,7 @@ namespace Server.DAL
                     RegNr = "DEF456"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
@@ -49,14 +51,17 @@ namespace Server.DAL
                     RegNr = "GHI789"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
 
                 companyId = Guid.NewGuid();
-                context.Companies.Add(new Company(companyId) { Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
-                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" });
+                company = new Company(companyId){ Name = "Jonnies Bulk Ltd.", Address = "Balk Road 12, 222 22 London" };
+                context.Companies.Add(company);
+                MapCompanyToCompanyReadNulls(context, company);
+                CreateAddress(context, company);
+                CreateName(context, company);
 
                 carId = Guid.NewGuid();
                 car = new Car(carId)
@@ -66,7 +71,7 @@ namespace Server.DAL
                     RegNr = "JKL012"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
@@ -79,14 +84,17 @@ namespace Server.DAL
                     RegNr = "MNO345"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
 
                 companyId = Guid.NewGuid();
-                context.Companies.Add(new Company(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
-                context.CompanyReadNulls.Add(new CompanyReadNull(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" });
+                company = new Company(companyId) { Name = "Harolds Road Transports Ltd.", Address = "Budget Avenue 1, 333 33 Birmingham" };
+                context.Companies.Add(company);
+                MapCompanyToCompanyReadNulls(context, company);
+                CreateAddress(context, company);
+                CreateName(context, company);
 
                 carId = Guid.NewGuid();
                 car = new Car(carId)
@@ -96,7 +104,7 @@ namespace Server.DAL
                     RegNr = "PQR678"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
@@ -109,7 +117,7 @@ namespace Server.DAL
                     RegNr = "STU901"
                 };
                 context.Cars.Add(car);
-                MapCarToCarRead(context, car);
+                MapCarToCarReadNulls(context, car);
                 CreateLockedStatus(context, car);
                 CreateOnlineStatus(context, car);
                 CreateSpeed(context, car);
@@ -147,7 +155,7 @@ namespace Server.DAL
             context.CarSpeedsRead.Add(new CarSpeedRead { Speed = 567, CarId = car.CarId, SpeedTimeStamp = 0 });
         }
 
-        private static void MapCarToCarRead(ApiContext context, Car car)
+        private static void MapCarToCarReadNulls(ApiContext context, Car car)
         {
             context.CarReadNulls.Add(new CarReadNull(car.CarId,car.CompanyId)
             {
@@ -159,6 +167,27 @@ namespace Server.DAL
                 Online = true,
                 Speed = 567
             });
+        }
+
+        private static void MapCompanyToCompanyReadNulls(ApiContext context, Company company)
+        {
+            context.CompanyReadNulls.Add(new CompanyReadNull(company.CompanyId)
+            {
+                CompanyId = company.CompanyId,
+                CreationTime = company.CreationTime,
+                Address = company.Address,
+                Name = company.Name
+            });
+        }
+
+        private static void CreateAddress(ApiContext context, Company company)
+        {
+            context.CompanyAddresses.Add(new CompanyAddress { Address = company.Address, CompanyId = company.CompanyId,  AddressTimeStamp = 0 });
+        }
+
+        private static void CreateName(ApiContext context, Company company)
+        {
+            context.CompanyNames.Add(new CompanyName { Name = company.Name, CompanyId = company.CompanyId, NameTimeStamp = 0 });
         }
     }
 }

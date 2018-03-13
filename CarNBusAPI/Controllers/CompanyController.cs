@@ -7,6 +7,7 @@ using NServiceBus;
 using Messages.Commands;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 
 namespace CarNBusAPI.Controllers
 {
@@ -71,17 +72,36 @@ namespace CarNBusAPI.Controllers
         }
 
         // PUT api/Company/5
-        [HttpPut("{id}")]
-        public void UpdateCompany([FromBody] CompanyRead company)
+        [EnableCors("AllowAllOrigins")]
+        [HttpPut("/api/company/name/{id}")]
+        public void UpdateCompanyName([FromBody] CompanyRead company)
         {
-            if (GetCompany(company.CompanyId.ToString()) == null) return;
-            var message = new UpdateCompany
+            var oldCompany = GetCompany(company.CompanyId.ToString());
+            if (oldCompany == null) return;
+            var message = new UpdateCompanyName
             {
                 DataId = new Guid(),
-                Id = company.CompanyId,
+                CompanyId = company.CompanyId,
+                Name = company.Name,
+                UpdateCompanyNameTimeStamp = DateTime.Now.Ticks
+            };
+
+            _endpointInstance.Send(message).ConfigureAwait(false);
+        }
+
+        // PUT api/Company/5
+        [EnableCors("AllowAllOrigins")]
+        [HttpPut("/api/company/address/{id}")]
+        public void UpdateCompanyAddress([FromBody] CompanyRead company)
+        {
+            var oldCompany = GetCompany(company.CompanyId.ToString());
+            if (oldCompany == null) return;
+            var message = new UpdateCompanyAddress
+            {
+                DataId = new Guid(),
+                CompanyId = company.CompanyId,
                 Address = company.Address,
-                CreationTime = company.CreationTime,
-                Name = company.Name
+                UpdateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
             _endpointInstance.Send(message).ConfigureAwait(false);

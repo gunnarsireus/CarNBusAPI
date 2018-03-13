@@ -59,8 +59,8 @@ namespace Server
             builder.RegisterType<UpdateCarLockedStatusHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             builder.RegisterType<UpdateCarOnlineStatusHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             builder.RegisterType<UpdateCarSpeedHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
-            builder.RegisterType<UpdateCompanyHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
-
+            builder.RegisterType<UpdateCompanyAddressHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
+            builder.RegisterType<UpdateCompanyNameHandler>().AsSelf().WithParameter("dbContextOptionsBuilder", dbContextOptionsBuilder);
             Container = builder.Build();
 
             IEndpointInstance endpoint = null;
@@ -136,7 +136,9 @@ namespace Server
                 {
                     customizations.ExistingLifetimeScope(Container);
                 });
+            endpointConfiguration.PurgeOnStartup(true);
             Endpoint.Start(endpointConfiguration);
+            endpointConfigurationPriority.PurgeOnStartup(true);
             Endpoint.Start(endpointConfigurationPriority);
             return new AutofacServiceProvider(Container);
         }
