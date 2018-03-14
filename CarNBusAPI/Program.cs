@@ -13,6 +13,11 @@ namespace CarNBusAPI
 	    internal static void Main(string[] args)
 	    {
             CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+            FileStream filestream = new FileStream("out1.txt", FileMode.Create);
+            var streamwriter = new StreamWriter(filestream);
+            streamwriter.AutoFlush = true;
+            Console.SetOut(streamwriter);
+            Console.SetError(streamwriter);
             var builder = new ConfigurationBuilder()
 			    .SetBasePath(Directory.GetCurrentDirectory())
 			    .AddJsonFile("appsettings.json");

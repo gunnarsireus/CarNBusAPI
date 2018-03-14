@@ -11,7 +11,12 @@ namespace Server
 	{
 		public static void Main(string[] args)
 		{
-			CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+            CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+            FileStream filestream = new FileStream("out2.txt", FileMode.Create);
+            var streamwriter = new StreamWriter(filestream);
+            streamwriter.AutoFlush = true;
+            Console.SetOut(streamwriter);
+            Console.SetError(streamwriter);
             BuildWebHost(args).Run();
 		}
 
