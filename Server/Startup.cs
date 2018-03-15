@@ -71,8 +71,8 @@ namespace Server
                 .SingleInstance();
 
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-server");
-            string sqlConnection, storageConnection;
-            CreatePersistenceAndTransport(endpointConfiguration);
+
+            Helpers.CreatePersistenceAndTransport(out TransportExtensions<AzureStorageQueueTransport> transport, endpointConfiguration);
 
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
@@ -82,8 +82,8 @@ namespace Server
 
             var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-serverpriority");
 
-            CreatePersistenceAndTransport(endpointConfigurationPriority);
- 
+            Helpers.CreatePersistenceAndTransport(out TransportExtensions<AzureStorageQueueTransport> transportPriority, endpointConfigurationPriority);
+
             endpointConfigurationPriority.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
                 {
@@ -92,23 +92,6 @@ namespace Server
             Endpoint.Start(endpointConfiguration);
             Endpoint.Start(endpointConfigurationPriority);
             return new AutofacServiceProvider(Container);
-        }
-
-        private static void CreatePersistenceAndTransport(EndpointConfiguration endpointConfiguration)
-        {
-            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            var subscriptions = persistence.SubscriptionSettings();
-            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
-
-           persistence.SqlDialect<SqlDialect.MsSqlServer>();
-            persistence.ConnectionBuilder(
-                connectionBuilder: () =>
-                {
-                    return new SqlConnection(Helpers.GetSqlConnection());
-                });
-
-            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                                        .ConnectionString(Helpers.GetStorageConnection());
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)

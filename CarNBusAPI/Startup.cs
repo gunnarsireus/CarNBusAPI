@@ -34,19 +34,7 @@ namespace CarNBusAPI
         {
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
 
-            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                            .ConnectionString(Helpers.GetStorageConnection());
-
-            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            var subscriptions = persistence.SubscriptionSettings();
-            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
-
-            persistence.SqlDialect<SqlDialect.MsSqlServer>();
-            persistence.ConnectionBuilder(
-                connectionBuilder: () =>
-                {
-                    return new SqlConnection(Helpers.GetSqlConnection());
-                });
+            Helpers.CreatePersistenceAndTransport(out TransportExtensions<AzureStorageQueueTransport> transport, endpointConfiguration);
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "carnbusapi-server");
             transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "carnbusapi-serverpriority");
