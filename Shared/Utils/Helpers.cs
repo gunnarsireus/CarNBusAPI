@@ -65,5 +65,15 @@ namespace Shared.Utils
             endpointConfiguration.SendFailedMessagesTo("error");
             return endpointConfiguration;
         }
+
+        public static string GetSqlConnection()
+        {
+            return "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        }
+
+        public static string GetStorageConnection()
+        {
+            return "DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=XGoQFAa/nGH7/lCC2NuEL2X4OLZWzCDS4+h8iAb0AFKmk+g3zXfkdHT/1lV0nWLVHbQkVfeZGl6mWTMKm9LMQg==;EndpointSuffix=core.windows.net";
+        }
     }
 }

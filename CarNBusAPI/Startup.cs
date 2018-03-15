@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-using Server.DAL;
 using Messages.Commands;
 using NServiceBus;
-using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
 using System;
-using NServiceBus.Features;
-using System.Reflection;
-using System.Diagnostics;
 using Shared.Utils;
 
 namespace CarNBusAPI
@@ -40,11 +34,8 @@ namespace CarNBusAPI
         {
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
 
-            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=u6UlmCvk4muPIStmGWmLmYXwk9LQdX+HECgrSQxg0AkDZB4IBs2kUu9z6Ih4LlyU4Ren9VtVWKT232cyahex8Q==";
-
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                            .ConnectionString(storageConnection);
+                            .ConnectionString(Helpers.GetStorageConnection());
 
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
             var subscriptions = persistence.SubscriptionSettings();
@@ -54,7 +45,7 @@ namespace CarNBusAPI
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
                 {
-                    return new SqlConnection(connection);
+                    return new SqlConnection(Helpers.GetSqlConnection());
                 });
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "carnbusapi-server");
@@ -72,7 +63,6 @@ namespace CarNBusAPI
             Container = containerBuilder.Build();
             services.AddSingleton(EndpointInstance);
             services.AddSingleton(ConfigurationRoot);
-            services.AddSingleton(EndpointInstance);
             services.AddMvc();
 
             // Register the Swagger generator, defining one or more Swagger documents

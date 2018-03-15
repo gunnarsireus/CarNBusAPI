@@ -27,23 +27,22 @@ namespace Server
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            ConfigurationRoot = builder.Build();
         }
 
         IContainer Container { get; set; }
-        IConfigurationRoot Configuration { get; set; }
+        IConfigurationRoot ConfigurationRoot { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            var dbLocation = Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]);
-            Console.WriteLine("Server dbLocation" + dbLocation);
+            var dbLocation = Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]);
+            Console.WriteLine("Server dbLocation: " + dbLocation);
             var dataSource = "DataSource=" + dbLocation + "Car.db";
             dbContextOptionsBuilder.UseSqlite(dataSource);
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(ConfigurationRoot);
 
             services.AddDbContext<ApiContext>(options =>
                     options.UseSqlite(dataSource));
@@ -70,24 +69,10 @@ namespace Server
             builder.Register(c => endpoint)
                 .As<IEndpointInstance>()
                 .SingleInstance();
-            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]), "carnbusapi-server");
-            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            var subscriptions = persistence.SubscriptionSettings();
-            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
 
-            var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=XGoQFAa/nGH7/lCC2NuEL2X4OLZWzCDS4+h8iAb0AFKmk+g3zXfkdHT/1lV0nWLVHbQkVfeZGl6mWTMKm9LMQg==;EndpointSuffix=core.windows.net";
-
-            persistence.SqlDialect<SqlDialect.MsSqlServer>();
-            persistence.ConnectionBuilder(
-                connectionBuilder: () =>
-                {
-                    return new SqlConnection(connection);
-                });
-
-            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                                        .ConnectionString(storageConnection);
-
+            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-server");
+            string sqlConnection, storageConnection;
+            CreatePersistenceAndTransport(endpointConfiguration);
 
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
@@ -95,22 +80,10 @@ namespace Server
                     customizations.ExistingLifetimeScope(Container);
                 });
 
-            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]), "carnbusapi-serverpriority");
+            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-serverpriority");
 
-            var persistencePriority = endpointConfigurationPriority.UsePersistence<SqlPersistence>();
-            var subscriptionsPriority = persistencePriority.SubscriptionSettings();
-            subscriptionsPriority.CacheFor(TimeSpan.FromMinutes(1));
-
-            persistencePriority.SqlDialect<SqlDialect.MsSqlServer>();
-            persistencePriority.ConnectionBuilder(
-                connectionBuilder: () =>
-                {
-                    return new SqlConnection(connection);
-                });
-
-            var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
-                                            .ConnectionString(storageConnection);
-
+            CreatePersistenceAndTransport(endpointConfigurationPriority);
+ 
             endpointConfigurationPriority.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
                 {
@@ -121,9 +94,26 @@ namespace Server
             return new AutofacServiceProvider(Container);
         }
 
+        private static void CreatePersistenceAndTransport(EndpointConfiguration endpointConfiguration)
+        {
+            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.CacheFor(TimeSpan.FromMinutes(1));
+
+           persistence.SqlDialect<SqlDialect.MsSqlServer>();
+            persistence.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new SqlConnection(Helpers.GetSqlConnection());
+                });
+
+            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
+                                        .ConnectionString(Helpers.GetStorageConnection());
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(ConfigurationRoot.GetSection("Logging"));
             loggerFactory.AddDebug();
             appLifetime.ApplicationStopped.Register(() => Container.Dispose());
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
