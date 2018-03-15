@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Models.Read;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Shared.Utils;
 
 namespace Server.DAL
 {
@@ -12,11 +13,10 @@ namespace Server.DAL
     {
         public DataAccessRead(IConfigurationRoot configuration)
         {
-            Configuration = configuration;
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
-            _optionsBuilder.UseSqlite("DataSource=" + serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar + "Car.db");
+            ConfigurationRoot = configuration;
+            _optionsBuilder.UseSqlite("DataSource=" + Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]) + "Car.db");
         }
-        IConfigurationRoot Configuration { get; set; }
+        IConfigurationRoot ConfigurationRoot { get; set; }
 
         private readonly DbContextOptionsBuilder<ApiContext> _optionsBuilder = new DbContextOptionsBuilder<ApiContext>();
 

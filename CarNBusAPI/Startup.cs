@@ -16,6 +16,7 @@ using System;
 using NServiceBus.Features;
 using System.Reflection;
 using System.Diagnostics;
+using Shared.Utils;
 
 namespace CarNBusAPI
 {
@@ -29,20 +30,15 @@ namespace CarNBusAPI
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            ConfigurationRoot = builder.Build();
         }
         IEndpointInstance EndpointInstance { get; set; }
         Autofac.IContainer Container { get; set; }
-        IConfigurationRoot Configuration { get; set; }
+        IConfigurationRoot ConfigurationRoot { get; set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var endpointConfiguration = new EndpointConfiguration("carnbusapi-client");
-            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
-            endpointConfiguration.DisableFeature<TimeoutManager>();
-            endpointConfiguration.DisableFeature<MessageDrivenSubscriptions>();
-            endpointConfiguration.EnableInstallers();
-            endpointConfiguration.SendFailedMessagesTo("error");
+            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
 
             var connection = "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             var storageConnection = @"DefaultEndpointsProtocol=https;AccountName=carnbusstorage;AccountKey=u6UlmCvk4muPIStmGWmLmYXwk9LQdX+HECgrSQxg0AkDZB4IBs2kUu9z6Ih4LlyU4Ren9VtVWKT232cyahex8Q==";
@@ -63,23 +59,6 @@ namespace CarNBusAPI
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "carnbusapi-server");
             transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "carnbusapi-serverpriority");
-            endpointConfiguration.Conventions().DefiningMessagesAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
-
-            endpointConfiguration.PurgeOnStartup(true);
-            var a = Directory.GetCurrentDirectory();
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(serverFolder))
-            {
-                serverFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            }
-            var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
-            Console.WriteLine("CarNbusAPI dbLocation + License.xml: " + dbLocation + "License.xml");
-            endpointConfiguration.LicensePath(dbLocation + "License.xml");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();
@@ -92,14 +71,7 @@ namespace CarNBusAPI
 
             Container = containerBuilder.Build();
             services.AddSingleton(EndpointInstance);
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
-
-
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
-
+            services.AddSingleton(ConfigurationRoot);
             services.AddSingleton(EndpointInstance);
             services.AddMvc();
 

@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.0.1" />
     <PackageReference Include="NServiceBus" Version="7.0.0-beta0012" />
+    <PackageReference Include="NServiceBus.NewtonSoft.Json" Version="1.2.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 

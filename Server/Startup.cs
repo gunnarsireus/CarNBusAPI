@@ -15,6 +15,7 @@ using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
 using NServiceBus.Features;
 using Microsoft.WindowsAzure.Storage;
+using Shared.Utils;
 
 namespace Server
 {
@@ -37,20 +38,15 @@ namespace Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ApiContext>();
-            var a = Directory.GetCurrentDirectory();
-            var serverFolder = Directory.GetParent(Directory.GetCurrentDirectory()).ToString() + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(serverFolder))
-            {
-                serverFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            }
-            var dbLocation = serverFolder + Configuration["AppSettings:DbLocation"] + Path.DirectorySeparatorChar;
+            var dbLocation = Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]);
             Console.WriteLine("Server dbLocation" + dbLocation);
-            dbContextOptionsBuilder.UseSqlite("DataSource=" + dbLocation + "Car.db");
+            var dataSource = "DataSource=" + dbLocation + "Car.db";
+            dbContextOptionsBuilder.UseSqlite(dataSource);
             services.AddSingleton(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddDbContext<ApiContext>(options =>
-                    options.UseSqlite("DataSource=" + dbLocation + "Car.db"));
+                    options.UseSqlite(dataSource));
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -74,13 +70,7 @@ namespace Server
             builder.Register(c => endpoint)
                 .As<IEndpointInstance>()
                 .SingleInstance();
-
-            var endpointConfiguration = new EndpointConfiguration("carnbusapi-server");
-            endpointConfiguration.DisableFeature<TimeoutManager>();
-            endpointConfiguration.DisableFeature<MessageDrivenSubscriptions>();
-            endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
-            endpointConfiguration.EnableInstallers();
-            endpointConfiguration.SendFailedMessagesTo("error");
+            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]), "carnbusapi-server");
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
             var subscriptions = persistence.SubscriptionSettings();
             subscriptions.CacheFor(TimeSpan.FromMinutes(1));
@@ -98,12 +88,6 @@ namespace Server
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(storageConnection);
 
-            endpointConfiguration.Conventions().DefiningCommandsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
@@ -111,12 +95,8 @@ namespace Server
                     customizations.ExistingLifetimeScope(Container);
                 });
 
-            var endpointConfigurationPriority = new EndpointConfiguration("carnbusapi-serverpriority");
-            endpointConfigurationPriority.DisableFeature<TimeoutManager>();
-            endpointConfigurationPriority.DisableFeature<MessageDrivenSubscriptions>();
-            endpointConfigurationPriority.UseSerialization<NewtonsoftSerializer>();
-            endpointConfigurationPriority.EnableInstallers();
-            endpointConfigurationPriority.SendFailedMessagesTo("error");
+            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]), "carnbusapi-serverpriority");
+
             var persistencePriority = endpointConfigurationPriority.UsePersistence<SqlPersistence>();
             var subscriptionsPriority = persistencePriority.SubscriptionSettings();
             subscriptionsPriority.CacheFor(TimeSpan.FromMinutes(1));
@@ -131,24 +111,12 @@ namespace Server
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                             .ConnectionString(storageConnection);
 
-            endpointConfigurationPriority.Conventions().DefiningMessagesAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    (t.Namespace.EndsWith("Commands")))
-                .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
-                    t.Namespace.EndsWith("Events"));
-
             endpointConfigurationPriority.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
                 {
                     customizations.ExistingLifetimeScope(Container);
                 });
-
-            Console.WriteLine("Server dbLocation + License.xml: " + dbLocation + "License.xml");
-            endpointConfiguration.LicensePath(dbLocation + "License.xml");
             Endpoint.Start(endpointConfiguration);
-            endpointConfigurationPriority.PurgeOnStartup(true);
-            endpointConfigurationPriority.LicensePath(dbLocation + "License.xml");
             Endpoint.Start(endpointConfigurationPriority);
             return new AutofacServiceProvider(Container);
         }

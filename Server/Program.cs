@@ -3,20 +3,17 @@ using System.Globalization;
 using Microsoft.AspNetCore;
 using System.IO;
 using System;
+using Shared.Utils;
 
 namespace Server
 {
 
 	public class Program
 	{
-		public static void Main(string[] args)
+   		internal static void Main(string[] args)
 		{
             CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-            FileStream filestream = new FileStream("out2.txt", FileMode.Create);
-            var streamwriter = new StreamWriter(filestream);
-            streamwriter.AutoFlush = true;
-            Console.SetOut(streamwriter);
-            Console.SetError(streamwriter);
+            Helpers.RedirectConsoleToTextFile("out2.txt");
             BuildWebHost(args).Run();
 		}
 
