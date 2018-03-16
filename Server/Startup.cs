@@ -41,11 +41,13 @@ namespace Server
             var dbLocation = Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]);
             Console.WriteLine("Server dbLocation: " + dbLocation);
             var dataSource = "DataSource=" + dbLocation + "Car.db";
-            dbContextOptionsBuilder.UseSqlite(dataSource);
+            //dbContextOptionsBuilder.UseSqlite(dataSource);
+            dbContextOptionsBuilder.UseSqlServer(Helpers.GetSqlConnection());
             services.AddSingleton(ConfigurationRoot);
 
             services.AddDbContext<ApiContext>(options =>
-                    options.UseSqlite(dataSource));
+                    //options.UseSqlite(dataSource));
+                    options.UseSqlServer(Helpers.GetSqlConnection()));
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
