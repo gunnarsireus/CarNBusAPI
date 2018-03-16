@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messages.Commands
+namespace Shared.Messages.Commands
 {
     public class CreateCompanyAddress
     {

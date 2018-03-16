@@ -6,7 +6,7 @@ using Shared.Models.Read;
 using Shared.Models.Write;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;
-using Messages.Commands;
+using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPI.Write.Controllers

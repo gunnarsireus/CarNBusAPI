@@ -12,7 +12,7 @@ namespace Shared.Utils
     public class Helpers
     {
 
-        static string GetServerFolder()
+        public static string GetServerFolder()
         {
             string serverFolder;
             string exeFolder = "";
@@ -53,10 +53,10 @@ namespace Shared.Utils
             var endpointConfiguration = new EndpointConfiguration(endpointName);
             endpointConfiguration.LicensePath(dbLocation + "License.xml");
             endpointConfiguration.Conventions().DefiningMessagesAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace != null && t.Namespace.StartsWith("Shared.Messages") &&
                     (t.Namespace.EndsWith("Commands")))
                 .DefiningEventsAs(t =>
-                    t.Namespace != null && t.Namespace.StartsWith("Messages") &&
+                    t.Namespace != null && t.Namespace.StartsWith("Shared.Messages") &&
                     t.Namespace.EndsWith("Events"));
 
             endpointConfiguration.PurgeOnStartup(true);

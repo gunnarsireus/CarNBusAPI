@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Messages.Commands;
+using Shared.Messages.Commands;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus;
 using NServiceBus.Logging;

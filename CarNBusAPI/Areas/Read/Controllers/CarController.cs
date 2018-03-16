@@ -5,7 +5,7 @@ using Server.DAL;
 using Shared.Models.Read;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;
-using Messages.Commands;
+using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
 
 namespace CarNBusAPI.Read.Controllers

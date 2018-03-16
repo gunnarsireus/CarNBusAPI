@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace Messages.Commands
+namespace Shared.Messages.Commands
 {
     public class CreateCompany
     {

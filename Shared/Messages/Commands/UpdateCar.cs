@@ -1,7 +1,7 @@
 using NServiceBus;
 using System;
-using Shared.Models;
-namespace Messages.Commands
+using Shared.Models.Write;
+namespace Shared.Messages.Commands
 {
     // What does update mean anyway?
     [Serializable]
@@ -18,6 +18,5 @@ namespace Messages.Commands
 		public string RegNr { get; set; }
         public CarOnlineStatus _CarOnlineStatus { get; set; }
         public CarLockedStatus _CarLockedStatus { get; set; }
-        public CarCompany _CarCompany { get; set; }
     }
 }
