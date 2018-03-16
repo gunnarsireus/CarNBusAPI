@@ -2,10 +2,8 @@
 using NServiceBus.Features;
 using NServiceBus.Persistence.Sql;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Text;
 
 namespace Shared.Utils
 {
@@ -78,15 +76,15 @@ namespace Shared.Utils
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
                 {
-                    return new SqlConnection(Helpers.GetSqlConnection());
+                    return new SqlConnection(GetSqlConnection());
                 });
 
             transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                                        .ConnectionString(Helpers.GetStorageConnection());
+                                        .ConnectionString(GetStorageConnection());
         }
         public static string GetSqlConnection()
         {
-            return "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=dashdocssireus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            return "Server=tcp:sireusdbserver.database.windows.net,1433;Initial Catalog=carnbus;Persist Security Info=False;User ID=sireus;Password=GS1@azure;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         }
 
         public static string GetStorageConnection()
