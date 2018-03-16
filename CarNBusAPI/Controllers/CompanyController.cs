@@ -11,6 +11,17 @@ using Microsoft.AspNetCore.Cors;
 
 namespace CarNBusAPI.Controllers
 {
+    [Route("")]
+    public class DefaultController : Controller
+    {
+        [Route(""), HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public RedirectResult RedirectToSwaggerUi()
+        {
+            return Redirect("/swagger/");
+        }
+    }
+
     [Route("api/[controller]")]
     public class CompanyController : Controller
     {
