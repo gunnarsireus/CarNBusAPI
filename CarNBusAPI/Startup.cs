@@ -7,9 +7,6 @@ using Shared.Messages.Commands;
 using NServiceBus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using NServiceBus.Persistence.Sql;
-using System.Data.SqlClient;
-using System;
 using Shared.Utils;
 
 namespace CarNBusAPI

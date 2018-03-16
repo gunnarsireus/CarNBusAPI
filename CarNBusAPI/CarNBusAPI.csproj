@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.AzureKeyVault.HostingStartup" Version="2.0.2-preview1-final" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
@@ -40,12 +41,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Server\Server.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
+    <Reference Include="Server">
+      <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared">
+      <HintPath>..\..\CarNBusServer\Shared\bin\Debug\netcoreapp2.0\Shared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

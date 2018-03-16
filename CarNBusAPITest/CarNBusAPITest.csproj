@@ -28,6 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Shared">
+      <HintPath>..\..\CarNBusServer\Shared\bin\Debug\netcoreapp2.0\Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.5" />
   </ItemGroup>
 
