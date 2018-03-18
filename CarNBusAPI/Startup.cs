@@ -11,10 +11,8 @@ using Shared.Utils;
 
 namespace CarNBusAPI
 {
-
     public class Startup
     {
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -23,6 +21,7 @@ namespace CarNBusAPI
                 .AddEnvironmentVariables();
             ConfigurationRoot = builder.Build();
         }
+
         IEndpointInstance EndpointInstance { get; set; }
         Autofac.IContainer Container { get; set; }
         IConfigurationRoot ConfigurationRoot { get; set; }

@@ -21,7 +21,8 @@ namespace CarNBusAPI.Controllers
 		IConfigurationRoot Configuration { get; set; }
 		// GET api/Car
 		[HttpGet]
-		[EnableCors("AllowAllOrigins")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [EnableCors("AllowAllOrigins")]
 		public string GetAspNetDb()
 		{
             //return Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]) + "AspNet.db";
@@ -29,6 +30,7 @@ namespace CarNBusAPI.Controllers
 
         }
         [HttpPost("/api/aspnetdb/clear")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [EnableCors("AllowAllOrigins")]
         public void ClearDatabase()
         {
