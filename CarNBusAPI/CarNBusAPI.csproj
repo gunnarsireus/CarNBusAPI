@@ -63,4 +63,13 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="App_Data\AspNet.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="App_Data\License.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
