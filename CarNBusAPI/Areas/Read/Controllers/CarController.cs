@@ -27,8 +27,9 @@ namespace CarNBusAPI.Read.Controllers
         [EnableCors("AllowAllOrigins")]
         public IEnumerable<CarRead> GetCars()
         {
-            var cars = _dataAccess.GetCars();
             var list = new List<CarRead>();
+            var cars = _dataAccess.GetCars();
+            if (cars == null) return list;
             foreach (var car in cars)
             {
                 if (car.Locked)

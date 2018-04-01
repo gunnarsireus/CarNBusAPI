@@ -78,6 +78,8 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarOnline([FromBody] CarRead CarRead)
         {
+            var oldCar = GetCar(CarRead.CarId.ToString());
+            if (oldCar == null) return;
             var message = new UpdateCarOnlineStatus
             {
                 OnlineStatus = CarRead.Online,
@@ -93,6 +95,8 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarLocked([FromBody] CarRead CarRead)
         {
+            var oldCar = GetCar(CarRead.CarId.ToString());
+            if (oldCar == null) return;
             var message = new UpdateCarLockedStatus
             {
                 LockedStatus = CarRead.Locked,
@@ -108,6 +112,8 @@ namespace CarNBusAPI.Write.Controllers
         [EnableCors("AllowAllOrigins")]
         public void UpdateCarSpeed([FromBody] CarRead CarRead)
         {
+            var oldCar = GetCar(CarRead.CarId.ToString());
+            if (oldCar == null) return;
             var message = new UpdateCarSpeed
             {
                 Speed = CarRead.Speed,
@@ -125,6 +131,7 @@ namespace CarNBusAPI.Write.Controllers
         public void DeleteCar(string id)
         {
             var oldCar = GetCar(id);
+            if (oldCar == null) return;
             var message = new DeleteCar()
             {
                 CarId = new Guid(id),
