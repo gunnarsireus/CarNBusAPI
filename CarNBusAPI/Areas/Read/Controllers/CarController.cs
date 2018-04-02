@@ -29,7 +29,6 @@ namespace CarNBusAPI.Read.Controllers
         {
             var list = new List<CarRead>();
             var cars = _dataAccess.GetCars();
-            if (cars == null) return list;
             foreach (var car in cars)
             {
                 if (car.Locked)
