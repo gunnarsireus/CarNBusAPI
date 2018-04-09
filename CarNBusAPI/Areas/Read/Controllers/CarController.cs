@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.DAL;
 using Shared.Models.Read;
 using NServiceBus;
+using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
@@ -62,6 +63,61 @@ namespace CarNBusAPI.Read.Controllers
             return list;
         }
 
+        IDictionary<string, int> GetCarsAndQueueLenght()
+        {
+            var list = new Dictionary<string, int>
+            {
+                { "ABC123", 7 },
+                { "DEF456", 3 },
+                { "GHI789", 4 },
+                { "JKL012", 2 },
+                { "MNO345", 9 },
+                { "PQR678", 3 },
+                { "STU901", 3 }
+            };
+            return list;
+        }
+
+        [HttpGet("/api/read/carandqueuelength")]
+        [EnableCors("AllowAllOrigins")]
+        public IEnumerable<CarRead> GetCarsAndQueLength()
+        {
+            var carsAndQueueLength = GetCarsAndQueueLenght();
+            var list = new List<CarRead>();
+            var cars = _dataAccess.GetCars();
+            foreach (var car in cars)
+            {
+                if (car.Locked)
+                {
+                    if (new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now)
+                    {  //Lock timeouted can be ignored and set to false
+                        var message = new UpdateCarLockedStatus
+                        {
+                            LockedStatus = false,
+                            CarId = car.CarId,
+                            CompanyId = car.CompanyId,
+                            UpdateCarLockedTimeStamp = DateTime.Now.Ticks
+                        };
+
+                        _endpointInstancePriority.Send(message).ConfigureAwait(false);
+                        car.Locked = false;
+                    }
+                }
+
+                list.Add(new CarRead(car.CarId)
+                {
+                    CompanyId = car.CompanyId,
+                    CreationTime = car.CreationTime,
+                    Locked = car.Locked,
+                    Online = car.Online,
+                    Speed = car.Speed,
+                    RegNr = car.RegNr,
+                    VIN = car.VIN,
+                    QueueLength = carsAndQueueLength.FirstOrDefault(k => k.Key == car.RegNr).Value
+                });
+            }
+            return list;
+        }
         // GET api/Car/5
         [HttpGet("{id}")]
         [EnableCors("AllowAllOrigins")]
