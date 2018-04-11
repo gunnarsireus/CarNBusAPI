@@ -8,6 +8,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
+using System.Threading.Tasks;
+using System.Text;
+using Newtonsoft.Json;
+using Shared.Utils;
 
 namespace CarNBusAPI.Read.Controllers
 {
@@ -62,10 +68,35 @@ namespace CarNBusAPI.Read.Controllers
             }
             return list;
         }
-
-        IDictionary<string, int> GetCarsAndQueueLenght()
+        static string WriteOutMessage(CloudQueueMessage message)
         {
-            var list = new Dictionary<string, int>
+            var json = message.AsString;
+            var byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (json.StartsWith(json))
+            {
+                json = json.Remove(0, byteOrderMarkUtf8.Length);
+            }
+            dynamic parsedJson = JsonConvert.DeserializeObject(json);
+            var body = (string)parsedJson.Body;
+            byte[] data = Convert.FromBase64String(body);
+            return Encoding.UTF8.GetString(data);
+
+        }
+        static async Task<Dictionary<string, int>> GetCarsAndQueueLenght()
+        {
+            CloudStorageAccount storageAccount = QueueStorage.Common.CreateStorageAccountFromConnectionString(Helpers.GetStorageConnection());
+            CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
+            var queueName = "carnbusapi-server";
+            CloudQueue queue = cloudQueueClient.GetQueueReference(queueName);
+            IEnumerable<CloudQueueMessage> peekedMessages = await queue.PeekMessagesAsync(32);
+            if (peekedMessages != null)
+            {
+                foreach (var msg in peekedMessages.ToList())
+                {
+                    Console.WriteLine("WriteOutMessage(msg): " + WriteOutMessage(msg));
+                }      
+            }
+            return new Dictionary<string, int>
             {
                 { "ABC123", 7 },
                 { "DEF456", 3 },
@@ -75,14 +106,13 @@ namespace CarNBusAPI.Read.Controllers
                 { "PQR678", 3 },
                 { "STU901", 3 }
             };
-            return list;
         }
 
         [HttpGet("/api/read/carandqueuelength")]
         [EnableCors("AllowAllOrigins")]
-        public IEnumerable<CarRead> GetCarsAndQueLength()
+        public async Task<IEnumerable<CarRead>> GetCarsAndQueLengthAsync()
         {
-            var carsAndQueueLength = GetCarsAndQueueLenght();
+            Dictionary<string, int> carsAndQueueLength = await GetCarsAndQueueLenght();
             var list = new List<CarRead>();
             var cars = _dataAccess.GetCars();
             foreach (var car in cars)
@@ -99,7 +129,7 @@ namespace CarNBusAPI.Read.Controllers
                             UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
-                        _endpointInstancePriority.Send(message).ConfigureAwait(false);
+                        await _endpointInstancePriority.Send(message).ConfigureAwait(false);
                         car.Locked = false;
                     }
                 }
