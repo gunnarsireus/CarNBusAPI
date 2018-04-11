@@ -93,7 +93,7 @@ namespace CarNBusAPI.Read.Controllers
             {
                 foreach (var msg in peekedMessages.ToList())
                 {
-                    Console.WriteLine("WriteOutMessage(msg): " + WriteOutMessage(msg));
+                    //Console.WriteLine("WriteOutMessage(msg): " + WriteOutMessage(msg));
                 }      
             }
             return new Dictionary<string, int>

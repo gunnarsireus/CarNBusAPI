@@ -1,0 +1,72 @@
+2018-04-11 21:59:03.119 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 21:59:04.369 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 21:59:05.475 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:32590
+Application started. Press Ctrl+C to shut down.
+2018-04-11 21:59:48.509 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 21:59:49.618 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 21:59:50.646 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:21569
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:04:28.431 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:04:29.793 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:04:31.045 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:17866
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:05:39.171 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:05:40.144 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:05:41.064 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:25701
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:09:03.665 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:09:04.662 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:09:05.645 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:5231
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:12:40.462 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:12:41.650 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:12:42.623 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:18794
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:16:51.901 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:16:53.010 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:16:53.992 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:19052
+Application started. Press Ctrl+C to shut down.
+2018-04-11 22:18:35.213 INFO  DefaultFactory Logging to 'C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\bin\Debug\netcoreapp2.0\' with level Info
+2018-04-11 22:18:35.966 INFO  NServiceBus.LicenseManager Selected active license from C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI\App_Data\License.xml
+License Expiration: 2018-06-13
+
+2018-04-11 22:18:37.002 WARN  NServiceBus.ReceiveComponent All queues owned by the endpoint will be purged on startup.
+Hosting environment: Development
+Content root path: C:\Users\gunna\Documents\GitHub\CarNBusAPI\CarNBusAPI
+Now listening on: http://localhost:4194
+Application started. Press Ctrl+C to shut down.
