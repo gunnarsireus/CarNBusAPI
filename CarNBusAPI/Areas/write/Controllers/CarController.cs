@@ -8,6 +8,7 @@ using NServiceBus;
 using Microsoft.AspNetCore.Cors;
 using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace CarNBusAPI.Write.Controllers
 {
@@ -29,7 +30,7 @@ namespace CarNBusAPI.Write.Controllers
         // POST api/Car
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
-        public void AddCar([FromBody] CarRead carRead)
+        public async Task AddCar([FromBody] CarRead carRead)
         {
             var createCar = new CreateCar
             {
@@ -68,15 +69,15 @@ namespace CarNBusAPI.Write.Controllers
                 CreateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(createCar).ConfigureAwait(false);
-            _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
-            _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
-            _endpointInstance.Send(createSpeed).ConfigureAwait(false);
+            await _endpointInstance.Send(createCar).ConfigureAwait(false);
+            await _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
+            await _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
+            await _endpointInstance.Send(createSpeed).ConfigureAwait(false);
         }
         // PUT api/Car/5
         [HttpPut("/api/write/car/online/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarOnline([FromBody] CarRead CarRead)
+        public async Task UpdateCarOnline([FromBody] CarRead CarRead)
         {
             var oldCar = GetCar(CarRead.CarId.ToString());
             if (oldCar == null) return;
@@ -88,12 +89,12 @@ namespace CarNBusAPI.Write.Controllers
                 UpdateCarOnlineTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/locked/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarLocked([FromBody] CarRead CarRead)
+        public async Task UpdateCarLocked([FromBody] CarRead CarRead)
         {
             var oldCar = GetCar(CarRead.CarId.ToString());
             if (oldCar == null) return;
@@ -105,12 +106,12 @@ namespace CarNBusAPI.Write.Controllers
                 UpdateCarLockedTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstancePriority.Send(message).ConfigureAwait(false);
+            await _endpointInstancePriority.Send(message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/speed/{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void UpdateCarSpeed([FromBody] CarRead CarRead)
+        public async Task UpdateCarSpeed([FromBody] CarRead CarRead)
         {
             var oldCar = GetCar(CarRead.CarId.ToString());
             if (oldCar == null) return;
@@ -122,13 +123,13 @@ namespace CarNBusAPI.Write.Controllers
                 UpdateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         // DELETE api/Car/5
         [HttpDelete("{id}")]
         [EnableCors("AllowAllOrigins")]
-        public void DeleteCar(string id)
+        public async Task DeleteCar(string id)
         {
             var oldCar = GetCar(id);
             if (oldCar == null) return;
@@ -138,7 +139,7 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = oldCar.CompanyId,
                 DeleteCarTimeStamp = DateTime.Now.Ticks
             };
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         CarRead GetCar(string id)

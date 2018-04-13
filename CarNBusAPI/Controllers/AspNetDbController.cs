@@ -6,6 +6,7 @@ using Shared.Utils;
 using Shared.Messages.Commands;
 using System;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace CarNBusAPI.Controllers
 {
@@ -27,19 +28,19 @@ namespace CarNBusAPI.Controllers
 		{
             //return Helpers.GetDbLocation(Configuration["AppSettings:DbLocation"]) + "AspNet.db";
             return Helpers.GetAspNetDbConnection();
-
         }
+
         [HttpPost("/api/aspnetdb/clear")]
         [ApiExplorerSettings(IgnoreApi = true)]
         [EnableCors("AllowAllOrigins")]
-        public void ClearDatabase()
+        public async Task ClearDatabase()
         {
             var message = new ClearDatabase
             {
                 DataId = Guid.NewGuid()
             };
 
-            _endpointInstancePriority.Send(message).ConfigureAwait(false);
+            await _endpointInstancePriority.Send(message).ConfigureAwait(false);
         }
 
     }

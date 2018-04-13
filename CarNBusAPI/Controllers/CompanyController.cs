@@ -8,6 +8,7 @@ using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
+using System.Threading.Tasks;
 
 namespace CarNBusAPI.Controllers
 {
@@ -52,7 +53,7 @@ namespace CarNBusAPI.Controllers
 
         // POST api/Company
         [HttpPost]
-        public void AddCompany([FromBody] CompanyRead companyRead)
+        public async Task AddCompany([FromBody] CompanyRead companyRead)
         {
             var createCompany = new CreateCompany
             {
@@ -77,15 +78,15 @@ namespace CarNBusAPI.Controllers
                 CreateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(createCompany).ConfigureAwait(false);
-            _endpointInstance.Send(createCompanyName).ConfigureAwait(false);
-            _endpointInstance.Send(createCompanyAddress).ConfigureAwait(false);
+            await _endpointInstance.Send(createCompany).ConfigureAwait(false);
+            await _endpointInstance.Send(createCompanyName).ConfigureAwait(false);
+            await _endpointInstance.Send(createCompanyAddress).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
         [EnableCors("AllowAllOrigins")]
         [HttpPut("/api/company/name/{id}")]
-        public void UpdateCompanyName([FromBody] CompanyRead company)
+        public async Task UpdateCompanyName([FromBody] CompanyRead company)
         {
             var oldCompany = GetCompany(company.CompanyId.ToString());
             if (oldCompany == null) return;
@@ -97,13 +98,13 @@ namespace CarNBusAPI.Controllers
                 UpdateCompanyNameTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
         [EnableCors("AllowAllOrigins")]
         [HttpPut("/api/company/address/{id}")]
-        public void UpdateCompanyAddress([FromBody] CompanyRead company)
+        public async Task UpdateCompanyAddress([FromBody] CompanyRead company)
         {
             var oldCompany = GetCompany(company.CompanyId.ToString());
             if (oldCompany == null) return;
@@ -115,12 +116,12 @@ namespace CarNBusAPI.Controllers
                 UpdateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         // DELETE api/Company/5
         [HttpDelete("{id}")]
-        public void DeleteCompany(string id)
+        public async Task DeleteCompany(string id)
         {
             if (GetCompany(id) == null) return;
             var companyId = new Guid(id);
@@ -133,7 +134,7 @@ namespace CarNBusAPI.Controllers
                     CompanyId = car.CompanyId,
                     DeleteCarTimeStamp = DateTime.Now.Ticks
                 };
-                _endpointInstance.Send(deleteCar).ConfigureAwait(false);
+               await _endpointInstance.Send(deleteCar).ConfigureAwait(false);
             }
             var message = new DeleteCompany
             {
@@ -142,7 +143,7 @@ namespace CarNBusAPI.Controllers
                 DeleteCompanyTimeStamp = DateTime.Now.Ticks
             };
 
-            _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
     }
 }
