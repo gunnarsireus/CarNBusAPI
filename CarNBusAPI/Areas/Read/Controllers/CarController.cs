@@ -81,7 +81,11 @@ namespace CarNBusAPI.Read.Controllers
             var body = (string)parsedJson.Body;
             byte[] data = Convert.FromBase64String(body);
             string tmp = Encoding.UTF8.GetString(data);
-            return tmp.Substring(tmp.IndexOf("CarId") + 8, 36);
+            if (tmp.IndexOf("CarId") > -1)
+            {
+                return tmp.Substring(tmp.IndexOf("CarId") + 8, 36);
+            }
+            return Guid.Empty.ToString();
         }
 
         static async Task<Dictionary<string, int>> GetCarsAndQueueLenght()
@@ -100,7 +104,7 @@ namespace CarNBusAPI.Read.Controllers
                     var carId = GetCarIdFromMessage(msg);
                     if (guidQueueLength.Any(a => a.Key == carId))
                     {
-                        guidQueueLength[carId] = guidQueueLength[carId]++;
+                        guidQueueLength[carId]++;
                     }
                     else
                     {
