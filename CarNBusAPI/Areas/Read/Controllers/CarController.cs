@@ -100,8 +100,7 @@ namespace CarNBusAPI.Read.Controllers
                     var carId = GetCarIdFromMessage(msg);
                     if (guidQueueLength.Any(a => a.Key == carId))
                     {
-                        int oldValue = guidQueueLength.First(k => k.Key == carId).Value;
-                        guidQueueLength[carId] = oldValue++;
+                        guidQueueLength[carId] = guidQueueLength[carId]++;
                     }
                     else
                     {
