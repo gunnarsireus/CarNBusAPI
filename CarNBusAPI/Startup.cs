@@ -8,6 +8,7 @@ using NServiceBus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Shared.Utils;
+using NServiceBus.Persistence.Sql;
 
 namespace CarNBusAPI
 {
@@ -29,8 +30,19 @@ namespace CarNBusAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
+            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.CacheFor(System.TimeSpan.FromMinutes(1));
 
-            Helpers.CreatePersistenceAndTransport(out TransportExtensions<AzureStorageQueueTransport> transport, endpointConfiguration);
+            persistence.SqlDialect<SqlDialect.MsSqlServer>();
+            persistence.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new System.Data.SqlClient.SqlConnection(Helpers.GetSqlConnection());
+                });
+
+            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
+                                        .ConnectionString(Helpers.GetStorageConnection());
 
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "carnbusapi-server");
             transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "carnbusapi-serverpriority");
