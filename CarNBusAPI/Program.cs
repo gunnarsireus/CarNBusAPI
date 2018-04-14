@@ -14,7 +14,6 @@ namespace CarNBusAPI
 	    internal static void Main(string[] args)
 	    {
             CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-            Helpers.RedirectConsoleToTextFile("out1.txt");
             var builder = new ConfigurationBuilder()
 			    .SetBasePath(Directory.GetCurrentDirectory())
 			    .AddJsonFile("appsettings.json");

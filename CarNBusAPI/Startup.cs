@@ -51,11 +51,6 @@ namespace CarNBusAPI
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
 
-            IEndpointInstance endpoint = null;
-            containerBuilder.Register(c => endpoint)
-                .As<IEndpointInstance>()
-                .SingleInstance();
-
             Container = containerBuilder.Build();
             services.AddSingleton(EndpointInstance);
             services.AddSingleton(ConfigurationRoot);
