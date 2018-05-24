@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Text;
 using Newtonsoft.Json;
 using Shared.Utils;
+using Shared.Messages.Events;
 
 namespace CarNBusAPI.Read.Controllers
 {
@@ -50,7 +51,7 @@ namespace CarNBusAPI.Read.Controllers
                             UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
-                        await _endpointInstancePriority.Send(message).ConfigureAwait(false);
+                        await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
                         car.Locked = false;
                     }
                 }
@@ -136,7 +137,7 @@ namespace CarNBusAPI.Read.Controllers
                             UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
-                        await _endpointInstancePriority.Send(message).ConfigureAwait(false);
+                        await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
                         car.Locked = false;
                     }
                 }
@@ -178,7 +179,7 @@ namespace CarNBusAPI.Read.Controllers
                         UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                     };
 
-                    await _endpointInstancePriority.Send(message).ConfigureAwait(false);
+                    await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
                     car.Locked = false;
                 }
             }

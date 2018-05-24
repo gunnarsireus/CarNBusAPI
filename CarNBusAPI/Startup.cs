@@ -8,7 +8,7 @@ using NServiceBus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Shared.Utils;
-using NServiceBus.Persistence.Sql;
+using Shared.Messages.Events;
 
 namespace CarNBusAPI
 {
@@ -30,22 +30,14 @@ namespace CarNBusAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
-            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            var subscriptions = persistence.SubscriptionSettings();
-            subscriptions.CacheFor(System.TimeSpan.FromMinutes(1));
-
-            persistence.SqlDialect<SqlDialect.MsSqlServer>();
-            persistence.ConnectionBuilder(
-                connectionBuilder: () =>
-                {
-                    return new System.Data.SqlClient.SqlConnection(Helpers.GetSqlConnection());
-                });
+            endpointConfiguration.UsePersistence<AzureStoragePersistence>()
+                                 .ConnectionString(Helpers.GetStorageConnection());
 
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
 
-            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, destination: "carnbusapi-server");
-            transport.Routing().RouteToEndpoint(messageType: typeof(UpdateCarLockedStatus), destination: "carnbusapi-serverpriority");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly,@namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCarLockedStatus).Assembly,@namespace: "Shared.Messages.Events", destination: "carnbusapi-serverpriority");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();

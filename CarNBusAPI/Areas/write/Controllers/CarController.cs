@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Server.DAL;
 using Shared.Models.Read;
-using Shared.Models.Write;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;
 using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Shared.Messages.Events;
 
 namespace CarNBusAPI.Write.Controllers
 {
@@ -106,7 +105,7 @@ namespace CarNBusAPI.Write.Controllers
                 UpdateCarLockedTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstancePriority.Send(message).ConfigureAwait(false);
+            await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/speed/{id}")]
