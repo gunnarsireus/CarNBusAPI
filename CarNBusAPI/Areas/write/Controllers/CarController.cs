@@ -67,11 +67,18 @@ namespace CarNBusAPI.Write.Controllers
                 Speed = carRead.Speed,
                 CreateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
+            try
+            {
+                await _endpointInstance.Send(createCar).ConfigureAwait(false);
+                await _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
+                await _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
+                await _endpointInstance.Send(createSpeed).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                var a = e.InnerException;
+            }
 
-            await _endpointInstance.Send(createCar).ConfigureAwait(false);
-            await _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
-            await _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
-            await _endpointInstance.Send(createSpeed).ConfigureAwait(false);
         }
         // PUT api/Car/5
         [HttpPut("/api/write/car/online/{id}")]
@@ -88,7 +95,14 @@ namespace CarNBusAPI.Write.Controllers
                 UpdateCarOnlineTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            try
+            {
+                await _endpointInstance.Send(message).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                var a = e.InnerException;
+            }
         }
 
         [HttpPut("/api/write/car/locked/{id}")]
@@ -104,8 +118,15 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = CarRead.CompanyId,
                 UpdateCarLockedTimeStamp = DateTime.Now.Ticks
             };
+            try
+            {
+                await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
+            }
+            catch(Exception e)
+            {
+                var a = e.InnerException;
+            }
 
-            await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/speed/{id}")]
@@ -121,8 +142,15 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = CarRead.CompanyId,
                 UpdateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
+            try
+            {
+                await _endpointInstance.Send(message).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                var a = e.InnerException;
+            }
 
-            await _endpointInstance.Send(message).ConfigureAwait(false);
         }
 
         // DELETE api/Car/5

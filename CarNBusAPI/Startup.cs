@@ -33,16 +33,8 @@ namespace CarNBusAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
-            endpointConfiguration.UsePersistence<AzureStoragePersistence, StorageType.Subscriptions>()
+            endpointConfiguration.UsePersistence<AzureStoragePersistence>()
                            .ConnectionString(Helpers.GetStorageConnection());
-
-            endpointConfiguration.UsePersistence<AzureStoragePersistence, StorageType.Timeouts>()
-           .ConnectionString(Helpers.GetStorageConnection())
-           .CreateSchema(true)
-           .TimeoutManagerDataTableName("TimeoutManager")
-           .TimeoutDataTableName("TimeoutData")
-           .CatchUpInterval(3600)
-           .PartitionKeyScope("2018052400");
 
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
@@ -50,7 +42,7 @@ namespace CarNBusAPI
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
-            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-clientPriority");
+            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-clientpriority");
             endpointConfigurationPriority.UsePersistence<AzureStoragePersistence, StorageType.Subscriptions>()
                            .ConnectionString(Helpers.GetStorageConnection());
 
@@ -65,7 +57,6 @@ namespace CarNBusAPI
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
 
-            transportPriority.Routing().RouteToEndpoint(assembly: typeof(UpdateCarLockedStatus).Assembly,@namespace: "Shared.Messages.Events", destination: "carnbusapi-serverpriority");
             EndpointInstancePriority = Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
 
             var containerBuilder = new ContainerBuilder();
