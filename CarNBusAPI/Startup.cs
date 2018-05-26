@@ -39,7 +39,22 @@ namespace CarNBusAPI
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
 
+            transport.Routing().RouteToEndpoint(assembly: typeof(ClearDatabase).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
             transport.Routing().RouteToEndpoint(assembly: typeof(CreateCar).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCarLockedStatus).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCarOnlineStatus).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCarSpeed).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCompany).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCompanyName).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(CreateCompanyAddress).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(DeleteCar).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(DeleteCompany).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCar).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCarOnlineStatus).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCarSpeed).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCompany).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCompanyAddress).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
+            transport.Routing().RouteToEndpoint(assembly: typeof(UpdateCompanyName).Assembly, @namespace: "Shared.Messages.Commands", destination: "carnbusapi-server");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-clientpriority");
