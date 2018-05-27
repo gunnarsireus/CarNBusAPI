@@ -7,6 +7,7 @@ using Shared.Messages.Commands;
 using System;
 using NServiceBus;
 using System.Threading.Tasks;
+using Shared.Messages.Events;
 
 namespace CarNBusAPI.Controllers
 {
@@ -40,7 +41,7 @@ namespace CarNBusAPI.Controllers
                 DataId = Guid.NewGuid()
             };
 
-            await _endpointInstancePriority.Send(message).ConfigureAwait(false);
+            await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
         }
 
     }

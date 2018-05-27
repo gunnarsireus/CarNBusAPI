@@ -78,9 +78,9 @@ namespace CarNBusAPI.Controllers
                 CreateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send(createCompany).ConfigureAwait(false);
-            await _endpointInstance.Send(createCompanyName).ConfigureAwait(false);
-            await _endpointInstance.Send(createCompanyAddress).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createCompany).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createCompanyName).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createCompanyAddress).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
@@ -98,7 +98,7 @@ namespace CarNBusAPI.Controllers
                 UpdateCompanyNameTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
@@ -116,7 +116,7 @@ namespace CarNBusAPI.Controllers
                 UpdateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
 
         // DELETE api/Company/5
@@ -134,7 +134,7 @@ namespace CarNBusAPI.Controllers
                     CompanyId = car.CompanyId,
                     DeleteCarTimeStamp = DateTime.Now.Ticks
                 };
-               await _endpointInstance.Send(deleteCar).ConfigureAwait(false);
+               await _endpointInstance.Send("carnbusapi-server", deleteCar).ConfigureAwait(false);
             }
             var message = new DeleteCompany
             {
@@ -143,7 +143,7 @@ namespace CarNBusAPI.Controllers
                 DeleteCompanyTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
     }
 }
