@@ -43,7 +43,7 @@ namespace CarNBusAPI.Write.Controllers
                 Speed = carRead.Speed,
                 CreateCarTimeStamp = DateTime.Now.Ticks
             };
-            //todo: create messages for Online, Locked and Speed
+
             var createOnlineStatus = new CreateCarOnlineStatus
             {
                 CarId = carRead.CarId,
@@ -67,10 +67,10 @@ namespace CarNBusAPI.Write.Controllers
                 Speed = carRead.Speed,
                 CreateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
-            await _endpointInstance.Send(createCar).ConfigureAwait(false);
-            await _endpointInstance.Send(createOnlineStatus).ConfigureAwait(false);
-            await _endpointInstance.Send(createLockedStatus).ConfigureAwait(false);
-            await _endpointInstance.Send(createSpeed).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createCar).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createOnlineStatus).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createLockedStatus).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", createSpeed).ConfigureAwait(false);
         }
         // PUT api/Car/5
         [HttpPut("/api/write/car/online/{id}")]
@@ -86,7 +86,7 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = CarRead.CompanyId,
                 UpdateCarOnlineTimeStamp = DateTime.Now.Ticks
             };
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
 
         [HttpPut("/api/write/car/locked/{id}")]
@@ -118,7 +118,7 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = CarRead.CompanyId,
                 UpdateCarSpeedTimeStamp = DateTime.Now.Ticks
             };
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
 
         // DELETE api/Car/5
@@ -134,7 +134,7 @@ namespace CarNBusAPI.Write.Controllers
                 CompanyId = oldCar.CompanyId,
                 DeleteCarTimeStamp = DateTime.Now.Ticks
             };
-            await _endpointInstance.Send(message).ConfigureAwait(false);
+            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
         }
 
         CarRead GetCar(string id)
