@@ -27,13 +27,12 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.0-preview2-final" />
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.0.480" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />
     <PackageReference Include="NServiceBus.Autofac" Version="7.0.0-beta0004" />
     <PackageReference Include="NServiceBus.Azure.Transports.WindowsAzureStorageQueues" Version="8.0.0-rc0001" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0-beta0001" />
-    <PackageReference Include="NServiceBus.Persistence.Sql" Version="4.1.0-beta0001" />
-    <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="4.1.0-beta0001" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.0.0-beta0001" />
+    <PackageReference Include="NServiceBus.Persistence.AzureStorage" Version="2.0.0-rc0001" />
     <PackageReference Include="swashbuckle.AspNetCore" Version="1.1.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
@@ -50,9 +49,11 @@
   <ItemGroup>
     <Reference Include="Server">
       <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Server.dll</HintPath>
+      <Private>true</Private>
     </Reference>
     <Reference Include="Shared">
       <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Shared.dll</HintPath>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 
