@@ -32,18 +32,19 @@ namespace CarNBusAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Console.WriteLine("Create and start Endpoint carnbusapi-client...");
             var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
             endpointConfiguration.UsePersistence<AzureStoragePersistence>()
                            .ConnectionString(Helpers.GetStorageConnection());
-
             var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
+
+            Console.WriteLine("Create and start Endpoint carnbusapi-clientpriority...");
             var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-clientpriority");
             endpointConfigurationPriority.UsePersistence<AzureStoragePersistence, StorageType.Subscriptions>()
                            .ConnectionString(Helpers.GetStorageConnection());
-
             endpointConfigurationPriority.UsePersistence<AzureStoragePersistence, StorageType.Timeouts>()
            .ConnectionString(Helpers.GetStorageConnection())
            .CreateSchema(true)
@@ -51,11 +52,10 @@ namespace CarNBusAPI
            .TimeoutDataTableName("TimeoutDataPriority")
            .CatchUpInterval(3600)
            .PartitionKeyScope("2018052400");
-
             var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
                                         .ConnectionString(Helpers.GetStorageConnection());
-
             EndpointInstancePriority = Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
+
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
