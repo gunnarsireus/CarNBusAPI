@@ -191,7 +191,6 @@ namespace CarNBusAPI.Read.Controllers
                     };
 
                     await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
-                    car.Locked = false;
                 }
             }
 
