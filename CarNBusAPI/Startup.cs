@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-using Shared.Messages.Commands;
 using NServiceBus;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Shared.Utils;
-using Shared.Messages.Events;
 using System;
 using Microsoft.Extensions.Logging;
 
