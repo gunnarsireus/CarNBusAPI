@@ -53,7 +53,7 @@ namespace CarNBusAPI.Read.Controllers
                 if (car.Locked)
                 {
                     if (CarHasBeenLocked20Seconds(car))
-                    {  //Lock timeouted can be ignored and set to false
+                    {  //Lock timeouted and can be set to false
                         var message = new UpdateCarLockedStatus
                         {
                             LockedStatus = false,
@@ -63,7 +63,6 @@ namespace CarNBusAPI.Read.Controllers
                         };
 
                         await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
-                        car.Locked = false;
                     }
                 }
 
@@ -139,7 +138,7 @@ namespace CarNBusAPI.Read.Controllers
                 if (car.Locked)
                 {
                     if (CarHasBeenLocked20Seconds(car))
-                    {  //Lock timeouted can be ignored and set to false
+                    {  //Lock timeouted and can be set to false
                         var message = new UpdateCarLockedStatus
                         {
                             LockedStatus = false,
@@ -149,7 +148,6 @@ namespace CarNBusAPI.Read.Controllers
                         };
 
                         await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
-                        car.Locked = false;
                     }
                 }
                 int tmpLength = 0;
@@ -181,7 +179,7 @@ namespace CarNBusAPI.Read.Controllers
             if (car.Locked)
             {
                 if (CarHasBeenLocked20Seconds(car))
-                {  //Lock timeouted can be ignored and set to false
+                {  //Lock timeouted and can be set to false
                     var message = new UpdateCarLockedStatus
                     {
                         LockedStatus = false,
