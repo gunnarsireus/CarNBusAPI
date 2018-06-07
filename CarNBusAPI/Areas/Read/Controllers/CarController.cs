@@ -6,7 +6,6 @@ using Shared.Models.Read;
 using NServiceBus;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
-using Shared.Messages.Commands;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -24,7 +23,8 @@ namespace CarNBusAPI.Read.Controllers
         readonly IEndpointInstance _endpointInstance;
         readonly IEndpointInstance _endpointInstancePriority;
         readonly DataAccessRead _dataAccess;
-        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfigurationRoot configuration)
+
+        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfiguration configuration)
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
@@ -36,9 +36,9 @@ namespace CarNBusAPI.Read.Controllers
             return guidQueueLength.Any(a => a.Key == carId);
         }
 
-        private static bool CarHasBeenLocked20Seconds(CarRead car)
+        private static bool CarHasBeenLocked40Seconds(CarRead car)
         {
-            return new DateTime(car.LockedTimeStamp).AddMilliseconds(20000) < DateTime.Now;
+            return new DateTime(car.LockedTimeStamp).AddMilliseconds(40000) < DateTime.Now;
         }
 
         // GET api/Car
@@ -52,9 +52,9 @@ namespace CarNBusAPI.Read.Controllers
             {
                 if (car.Locked)
                 {
-                    if (CarHasBeenLocked20Seconds(car))
-                    {  //Lock timeouted and can be set to false
-                        var message = new UpdateCarLockedStatus
+                    if (CarHasBeenLocked40Seconds(car))
+                    {  //Lock timed out and can be ignored and set to false
+                        var updateCarLockedStatus = new UpdateCarLockedStatus
                         {
                             LockedStatus = false,
                             CarId = car.CarId,
@@ -62,7 +62,7 @@ namespace CarNBusAPI.Read.Controllers
                             UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
-                        await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
+                        await _endpointInstancePriority.Publish(updateCarLockedStatus).ConfigureAwait(false);
                     }
                 }
 
@@ -99,47 +99,45 @@ namespace CarNBusAPI.Read.Controllers
             return Guid.Empty.ToString();
         }
 
-        static async Task<Dictionary<string, int>> GetCarsAndQueueLenght()
+        static async Task<Dictionary<string, int>> GetQueueLenghtForEachCar()
         {
-            Dictionary<string, int> guidQueueLength = new Dictionary<string, int>();
+            Dictionary<string, int> queueLengthPerCar = new Dictionary<string, int>();
             CloudStorageAccount storageAccount = QueueStorage.Common.CreateStorageAccountFromConnectionString(Helpers.GetStorageConnection());
             CloudQueueClient cloudQueueClient = storageAccount.CreateCloudQueueClient();
-            var queueName = "carnbusapi-server";
-            CloudQueue queue = cloudQueueClient.GetQueueReference(queueName);
+            CloudQueue queue = cloudQueueClient.GetQueueReference(Helpers.ServerEndpoint);
             IEnumerable<CloudQueueMessage> peekedMessages = await queue.PeekMessagesAsync(32);
-
             if (peekedMessages != null)
             {
                 foreach (var msg in peekedMessages.ToList())
                 {
                     var carId = GetCarIdFromMessage(msg);
-                    if (CarIdAlreadyInQueue(guidQueueLength, carId))
+                    if (CarIdAlreadyInQueue(queueLengthPerCar, carId))
                     {
-                        guidQueueLength[carId]++;
+                        queueLengthPerCar[carId]++;
                     }
                     else
                     {
-                        guidQueueLength.Add(carId, 1);
+                        queueLengthPerCar.Add(carId, 1);
                     }
                 }
             }
-            return guidQueueLength;
+            return queueLengthPerCar;
         }
 
         [HttpGet("/api/read/carandqueuelength")]
         [EnableCors("AllowAllOrigins")]
         public async Task<IEnumerable<CarRead>> GetCarsAndQueLengthAsync()
         {
-            Dictionary<string, int> carsAndQueueLength = await GetCarsAndQueueLenght();
+            Dictionary<string, int> queueLengthForEachCar = await GetQueueLenghtForEachCar();
             var list = new List<CarRead>();
             var cars = _dataAccess.GetCars();
             foreach (var car in cars)
             {
                 if (car.Locked)
                 {
-                    if (CarHasBeenLocked20Seconds(car))
-                    {  //Lock timeouted and can be set to false
-                        var message = new UpdateCarLockedStatus
+                    if (CarHasBeenLocked40Seconds(car))
+                    {  //Lock timed out and can be ignored and set to false
+                        var updateCarLockedStatus = new UpdateCarLockedStatus
                         {
                             LockedStatus = false,
                             CarId = car.CarId,
@@ -147,13 +145,13 @@ namespace CarNBusAPI.Read.Controllers
                             UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                         };
 
-                        await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
+                        await _endpointInstancePriority.Publish(updateCarLockedStatus).ConfigureAwait(false);
                     }
                 }
-                int tmpLength = 0;
-                if (CarIdAlreadyInQueue(carsAndQueueLength, car.CarId.ToString()))
+                int tmpQueueLenghtForCar = 0;
+                if (CarIdAlreadyInQueue(queueLengthForEachCar, car.CarId.ToString()))
                 {
-                    tmpLength = carsAndQueueLength.FirstOrDefault(k => k.Key == car.CarId.ToString()).Value;
+                    tmpQueueLenghtForCar = queueLengthForEachCar.FirstOrDefault(k => k.Key == car.CarId.ToString()).Value;
                 };
 
                 list.Add(new CarRead(car.CarId)
@@ -165,11 +163,12 @@ namespace CarNBusAPI.Read.Controllers
                     Speed = car.Speed,
                     RegNr = car.RegNr,
                     VIN = car.VIN,
-                    QueueLength = tmpLength
+                    QueueLength = tmpQueueLenghtForCar
                 });
             }
             return list;
         }
+
         // GET api/Car/5
         [HttpGet("{id}")]
         [EnableCors("AllowAllOrigins")]
@@ -178,9 +177,9 @@ namespace CarNBusAPI.Read.Controllers
             var car = _dataAccess.GetCar(new Guid(id));
             if (car.Locked)
             {
-                if (CarHasBeenLocked20Seconds(car))
-                {  //Lock timeouted and can be set to false
-                    var message = new UpdateCarLockedStatus
+                if (CarHasBeenLocked40Seconds(car))
+                {  //Lock timed out and can be ignored and set to false
+                    var updateCarLockedStatus = new UpdateCarLockedStatus
                     {
                         LockedStatus = false,
                         CarId = car.CarId,
@@ -188,7 +187,7 @@ namespace CarNBusAPI.Read.Controllers
                         UpdateCarLockedTimeStamp = DateTime.Now.Ticks
                     };
 
-                    await _endpointInstancePriority.Publish(message).ConfigureAwait(false);
+                    await _endpointInstancePriority.Publish(updateCarLockedStatus).ConfigureAwait(false);
                 }
             }
 

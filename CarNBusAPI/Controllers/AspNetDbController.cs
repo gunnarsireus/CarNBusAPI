@@ -9,18 +9,18 @@ using NServiceBus;
 using System.Threading.Tasks;
 using Shared.Messages.Events;
 
-namespace CarNBusAPI.Controllers
+namespace CarNBusCarNBusAPI.Controllers
 {
     [Route("api/[controller]")]
 	public class AspNetDbController : Controller
 	{
         readonly IEndpointInstance _endpointInstancePriority;
-        public AspNetDbController(IEndpointInstance endpointInstancePriority, IConfigurationRoot configuration)
+        public AspNetDbController(IEndpointInstance endpointInstancePriority, IConfiguration configuration)
 		{
 			Configuration = configuration;
             _endpointInstancePriority = endpointInstancePriority;
         }
-		IConfigurationRoot Configuration { get; set; }
+		IConfiguration Configuration { get; set; }
 		// GET api/Car
 		[HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]

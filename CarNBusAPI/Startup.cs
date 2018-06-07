@@ -9,6 +9,7 @@ using Autofac.Extensions.DependencyInjection;
 using Shared.Utils;
 using System;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace CarNBusAPI
 {
@@ -20,40 +21,21 @@ namespace CarNBusAPI
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
-            ConfigurationRoot = builder.Build();
+            Configuration = builder.Build();
         }
 
         IEndpointInstance EndpointInstance { get; set; }
         IEndpointInstance EndpointInstancePriority { get; set; }
         Autofac.IContainer Container { get; set; }
-        IConfigurationRoot ConfigurationRoot { get; set; }
+        IConfiguration Configuration { get; set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Console.WriteLine("Create and start Endpoint carnbusapi-client...");
-            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-client");
-            endpointConfiguration.UsePersistence<AzureStoragePersistence>()
-                           .ConnectionString(Helpers.GetStorageConnection());
-            var transport = endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
-                                        .ConnectionString(Helpers.GetStorageConnection());
+            var endpointConfiguration = Helpers.CreateEndpoint(Helpers.ApiEndpoint, Directory.GetCurrentDirectory() + "\\App_Data");
             EndpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
-
-            Console.WriteLine("Create and start Endpoint carnbusapi-clientpriority...");
-            var endpointConfigurationPriority = Helpers.CreateEndpoint(Helpers.GetDbLocation(ConfigurationRoot["AppSettings:DbLocation"]), "carnbusapi-clientpriority");
-            endpointConfigurationPriority.UsePersistence<AzureStoragePersistence, StorageType.Subscriptions>()
-                           .ConnectionString(Helpers.GetStorageConnection());
-            endpointConfigurationPriority.UsePersistence<AzureStoragePersistence, StorageType.Timeouts>()
-           .ConnectionString(Helpers.GetStorageConnection())
-           .CreateSchema(true)
-           .TimeoutManagerDataTableName("TimeoutManagerPriority")
-           .TimeoutDataTableName("TimeoutDataPriority")
-           .CatchUpInterval(3600)
-           .PartitionKeyScope("2018052400");
-            var transportPriority = endpointConfigurationPriority.UseTransport<AzureStorageQueueTransport>()
-                                        .ConnectionString(Helpers.GetStorageConnection());
+            var endpointConfigurationPriority = Helpers.CreatePriorityEndpointPublisher(Directory.GetCurrentDirectory() + "\\App_Data");
             EndpointInstancePriority = Endpoint.Start(endpointConfigurationPriority).GetAwaiter().GetResult();
-
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
@@ -61,7 +43,7 @@ namespace CarNBusAPI
             Container = containerBuilder.Build();
             services.AddSingleton(EndpointInstance);
             services.AddSingleton(EndpointInstancePriority);
-            services.AddSingleton(ConfigurationRoot);
+            services.AddSingleton(Configuration);
             services.AddMvc();
 
             // Register the Swagger generator, defining one or more Swagger documents
@@ -83,7 +65,7 @@ namespace CarNBusAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             Console.WriteLine("Configure...");
-            loggerFactory.AddConsole(ConfigurationRoot.GetSection("Logging"));
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             appLifetime.ApplicationStopped.Register(() => Container.Dispose());
             if (env.IsDevelopment())

@@ -10,7 +10,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using System.Threading.Tasks;
 
-namespace CarNBusAPI.Controllers
+namespace CarNBusCarNBusAPI.Controllers
 {
     [Route("")]
     public class DefaultController : Controller
@@ -30,7 +30,7 @@ namespace CarNBusAPI.Controllers
         readonly DataAccessWrite _dataAccessWrite;
         readonly DataAccessRead _dataAccessRead;
 
-        public CompanyController(IEndpointInstance endpointInstance, IConfigurationRoot configuration)
+        public CompanyController(IEndpointInstance endpointInstance, IConfiguration configuration)
         {
             _endpointInstance = endpointInstance;
             _dataAccessWrite = new DataAccessWrite(configuration);

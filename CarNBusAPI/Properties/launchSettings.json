@@ -25,7 +25,7 @@
         "ASPNETCORE_ENVIRONMENT": "Release",
         "ASPNETCORE_preventHostingStartup": "True"
       },
-      "applicationUrl": "https://carnbusapi.azurewebsites.net/"
+      "applicationUrl": "https://carnbusCarNBusAPI.azurewebsites.net/"
     }
   }
 }
