@@ -48,10 +48,10 @@
 
   <ItemGroup>
     <Reference Include="Server">
-      <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Server.dll</HintPath>
+      <HintPath>..\..\CarNBusServer\Server\bin\Debug\netstandard2.0\Server.dll</HintPath>
     </Reference>
     <Reference Include="Shared">
-      <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Shared.dll</HintPath>
+      <HintPath>..\..\CarNBusServer\Server\bin\Debug\netstandard2.0\Shared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

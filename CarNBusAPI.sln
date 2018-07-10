@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarNBusAPI", "CarNBusAPI\CarNBusAPI.csproj", "{43BCE2F2-658B-4CFC-97AD-7210A9D67A85}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company", "Company\Company.csproj", "{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,12 @@ Global
 		{43BCE2F2-658B-4CFC-97AD-7210A9D67A85}.Production|Any CPU.Build.0 = Release|Any CPU
 		{43BCE2F2-658B-4CFC-97AD-7210A9D67A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43BCE2F2-658B-4CFC-97AD-7210A9D67A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Production|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Production|Any CPU.Build.0 = Debug|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A42A0D0-4668-422F-94CD-A3DCF8B10BAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
