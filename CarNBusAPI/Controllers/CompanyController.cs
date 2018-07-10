@@ -30,11 +30,11 @@ namespace CarNBusCarNBusAPI.Controllers
         readonly DataAccessWrite _dataAccessWrite;
         readonly DataAccessRead _dataAccessRead;
 
-        public CompanyController(IEndpointInstance endpointInstance, IConfiguration configuration)
+        public CompanyController(IEndpointInstance endpointInstance)
         {
             _endpointInstance = endpointInstance;
-            _dataAccessWrite = new DataAccessWrite(configuration);
-            _dataAccessRead = new DataAccessRead(configuration);
+            _dataAccessWrite = new DataAccessWrite();
+            _dataAccessRead = new DataAccessRead();
         }
 
         // GET api/Company

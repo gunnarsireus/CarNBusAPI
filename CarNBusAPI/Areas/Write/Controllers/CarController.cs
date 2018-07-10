@@ -20,12 +20,12 @@ namespace CarNBusAPI.Write.Controllers
         readonly DataAccessWrite _dataAccessWrite;
         readonly DataAccessRead _dataAccessRead;
 
-        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfiguration configuration)
+        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority)
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
-            _dataAccessWrite = new DataAccessWrite(configuration);
-            _dataAccessRead = new DataAccessRead(configuration);
+            _dataAccessWrite = new DataAccessWrite();
+            _dataAccessRead = new DataAccessRead();
         }
 
         // POST api/Car

@@ -24,11 +24,11 @@ namespace CarNBusAPI.Read.Controllers
         readonly IEndpointInstance _endpointInstancePriority;
         readonly DataAccessRead _dataAccess;
 
-        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority, IConfiguration configuration)
+        public CarController(IEndpointInstance endpointInstance, IEndpointInstance endpointInstancePriority)
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
-            _dataAccess = new DataAccessRead(configuration);
+            _dataAccess = new DataAccessRead();
         }
 
         private static bool CarIdAlreadyInQueue(Dictionary<string, int> guidQueueLength, string carId)

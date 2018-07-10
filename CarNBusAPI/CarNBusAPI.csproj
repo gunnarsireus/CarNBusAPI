@@ -49,11 +49,9 @@
   <ItemGroup>
     <Reference Include="Server">
       <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Server.dll</HintPath>
-      <Private>true</Private>
     </Reference>
     <Reference Include="Shared">
       <HintPath>..\..\CarNBusServer\Server\bin\Debug\netcoreapp2.0\Shared.dll</HintPath>
-      <Private>true</Private>
     </Reference>
   </ItemGroup>
 
