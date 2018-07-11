@@ -10,6 +10,7 @@ using NServiceBus;
 using Shared.Messages.Commands;
 using Shared.Utils;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace AddCompany
 {
@@ -19,9 +20,14 @@ namespace AddCompany
         static readonly IEndpointInstance _endpointInstance = Endpoint.Start(Helpers.CreateEndpoint(Helpers.ApiEndpoint, Directory.GetCurrentDirectory() + "\\App_Data")).GetAwaiter().GetResult();
 
         [FunctionName("AddCompany")]
-        public static void Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Company")]HttpRequest req, [FromBody] CompanyRead companyRead, TraceWriter log)
+        public static void Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Company")]HttpRequest req, TraceWriter log)
         {
-            log.Info("C# HTTP trigger function processed AddCompany.");
+            log.Info("C# HTTP trigger function processed UpdateCompany.");
+            //string company = req.Query["company"];
+
+            string requestBody = new StreamReader(req.Body).ReadToEnd();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            var companyRead = (CompanyRead)data?.company;
 
             var createCompany = new CreateCompany
             {
