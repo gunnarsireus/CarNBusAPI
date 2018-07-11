@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Server.DAL;
+using Shared.DAL;
 using Shared.Models.Read;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;
@@ -24,8 +24,8 @@ namespace CarNBusAPI.Write.Controllers
         {
             _endpointInstance = endpointInstance;
             _endpointInstancePriority = endpointInstancePriority;
-            _dataAccessWrite = new DataAccessWrite(configuration);
-            _dataAccessRead = new DataAccessRead(configuration);
+            _dataAccessWrite = new DataAccessWrite();
+            _dataAccessRead = new DataAccessRead();
         }
 
         // POST api/Car
