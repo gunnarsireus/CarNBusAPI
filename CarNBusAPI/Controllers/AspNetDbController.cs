@@ -15,12 +15,11 @@ namespace CarNBusCarNBusAPI.Controllers
 	public class AspNetDbController : Controller
 	{
         readonly IEndpointInstance _endpointInstancePriority;
-        public AspNetDbController(IEndpointInstance endpointInstancePriority, IConfiguration configuration)
+        public AspNetDbController(IEndpointInstance endpointInstancePriority)
 		{
-			Configuration = configuration;
             _endpointInstancePriority = endpointInstancePriority;
         }
-		IConfiguration Configuration { get; set; }
+
 		// GET api/Car
 		[HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]

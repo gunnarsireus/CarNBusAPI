@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Server.DAL;
+using Shared.DAL;
 using Shared.Models.Read;
 using NServiceBus;
 using Microsoft.AspNetCore.Cors;

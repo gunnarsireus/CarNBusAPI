@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Server.DAL;
+using Shared.DAL;
 using Shared.Models.Read;
 using NServiceBus;
 using System.Linq;

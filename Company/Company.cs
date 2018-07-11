@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
-using Server.DAL;
+using Shared.DAL;
 using System.Collections.Generic;
 using Shared.Models.Read;
 
