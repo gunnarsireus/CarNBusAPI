@@ -5,10 +5,10 @@ using Shared.Models.Read;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus;
 using Shared.Messages.Commands;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using System.Threading.Tasks;
+using Shared.Utils;
 
 namespace CarNBusCarNBusAPI.Controllers
 {
@@ -78,9 +78,9 @@ namespace CarNBusCarNBusAPI.Controllers
                 CreateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send("carnbusapi-server", createCompany).ConfigureAwait(false);
-            await _endpointInstance.Send("carnbusapi-server", createCompanyName).ConfigureAwait(false);
-            await _endpointInstance.Send("carnbusapi-server", createCompanyAddress).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, createCompany).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, createCompanyName).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, createCompanyAddress).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
@@ -98,7 +98,7 @@ namespace CarNBusCarNBusAPI.Controllers
                 UpdateCompanyNameTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, message).ConfigureAwait(false);
         }
 
         // PUT api/Company/5
@@ -116,7 +116,7 @@ namespace CarNBusCarNBusAPI.Controllers
                 UpdateCompanyAddressTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, message).ConfigureAwait(false);
         }
 
         // DELETE api/Company/5
@@ -134,7 +134,7 @@ namespace CarNBusCarNBusAPI.Controllers
                     CompanyId = car.CompanyId,
                     DeleteCarTimeStamp = DateTime.Now.Ticks
                 };
-               await _endpointInstance.Send("carnbusapi-server", deleteCar).ConfigureAwait(false);
+               await _endpointInstance.Send(Helpers.ServerEndpoint, deleteCar).ConfigureAwait(false);
             }
             var message = new DeleteCompany
             {
@@ -143,7 +143,7 @@ namespace CarNBusCarNBusAPI.Controllers
                 DeleteCompanyTimeStamp = DateTime.Now.Ticks
             };
 
-            await _endpointInstance.Send("carnbusapi-server", message).ConfigureAwait(false);
+            await _endpointInstance.Send(Helpers.ServerEndpoint, message).ConfigureAwait(false);
         }
     }
 }
