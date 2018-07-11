@@ -1,30 +1,54 @@
-
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Host;
-using Newtonsoft.Json;
+using Shared.DAL;
+using Shared.Models.Read;
+using System;
+using Microsoft.AspNetCore.Mvc;
+using NServiceBus;
+using Shared.Messages.Commands;
+using Shared.Utils;
+using System.IO;
 
 namespace AddCompany
 {
     public static class AddCompany
     {
+        static readonly DataAccessWrite _dataAccessWrite = new DataAccessWrite();
+        static readonly IEndpointInstance _endpointInstance = Endpoint.Start(Helpers.CreateEndpoint(Helpers.ApiEndpoint, Directory.GetCurrentDirectory() + "\\App_Data")).GetAwaiter().GetResult();
+
         [FunctionName("AddCompany")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequest req, TraceWriter log)
+        public static void Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Company")]HttpRequest req, [FromBody] CompanyRead companyRead, TraceWriter log)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.Info("C# HTTP trigger function processed AddCompany.");
 
-            string name = req.Query["name"];
+            var createCompany = new CreateCompany
+            {
+                DataId = new Guid(),
+                Address = companyRead.Address,
+                Name = companyRead.Name,
+                CreationTime = companyRead.CreationTime,
+                CompanyId = companyRead.CompanyId,
+                CreateCompanyTimeStamp = DateTime.Now.Ticks
+            };
+            var createCompanyName = new CreateCompanyName
+            {
+                CompanyId = companyRead.CompanyId,
+                Name = companyRead.Name,
+                CreateCompanyNameTimeStamp = DateTime.Now.Ticks
+            };
 
-            string requestBody = new StreamReader(req.Body).ReadToEnd();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var createCompanyAddress = new CreateCompanyAddress
+            {
+                CompanyId = companyRead.CompanyId,
+                Address = companyRead.Address,
+                CreateCompanyAddressTimeStamp = DateTime.Now.Ticks
+            };
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+            _endpointInstance.Send(Helpers.ServerEndpoint, createCompany).ConfigureAwait(false);
+            _endpointInstance.Send(Helpers.ServerEndpoint, createCompanyName).ConfigureAwait(false);
+            _endpointInstance.Send(Helpers.ServerEndpoint, createCompanyAddress).ConfigureAwait(false);
         }
     }
 }

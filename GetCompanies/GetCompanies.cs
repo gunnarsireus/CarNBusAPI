@@ -13,7 +13,7 @@ namespace GetCompanies
         static readonly DataAccessRead _dataAccessRead = new DataAccessRead();
 
         [FunctionName("GetCompanies")]
-        public static IEnumerable<CompanyRead> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequest req, TraceWriter log)
+        public static IEnumerable<CompanyRead> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Company")]HttpRequest req, TraceWriter log)
         {
             log.Info("C# HTTP trigger function processed GetCompanyById.");
             return _dataAccessRead.GetCompanies();
